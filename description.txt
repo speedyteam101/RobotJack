@@ -8,4 +8,6 @@ Find the Robot Trigger and transform into a sci-fi combat robot.
   - Plasma Cannon: rapid-fire arm cannon.
   - Missile Barrage: a volley of homing micro-missiles.
   - Thruster Dash: rocket toward the cursor, burning everything in the way.
+  - Energy Absorber: hold to neutralise attacks, pull enemies in and drain them; right click to release it all as a blast dealing 10x the stored energy.
+- Robot Jetpack: lets you fly. While transformed, ramming things with your robot head knocks them away spinning.
 - Abilities grow stronger as you beat bosses.

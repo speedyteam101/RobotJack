@@ -399,6 +399,61 @@ def mod_icon():
     save(img, "icon.png")
 
 
+# ---------------------------------------------------------------- jetpack, absorber, spin
+
+def jetpack_item():
+    img, d = canvas(14, 16)
+    for x0 in (1, 8):
+        d.rounded_rectangle([x0, 1, x0 + 4, 11], radius=2, fill=OUTLINE)
+        d.rounded_rectangle([x0 + 1, 2, x0 + 3, 10], radius=1, fill=STEEL)
+        d.line([x0 + 1, 2, x0 + 1, 9], fill=STEEL_L)
+        d.rectangle([x0 + 1, 11, x0 + 3, 12], fill=STEEL_D)
+        d.point((x0 + 2, 13), fill=ORANGE); d.point((x0 + 2, 14), fill=ORANGE_L)
+    d.rectangle([5, 4, 8, 7], fill=BLUE)
+    d.point((6, 5), fill=CYAN)
+    save(img, "Content/Items/RobotJetpack.png")
+
+
+def jetpack_wings():
+    # Worn on the back like wings: 4 frames stacked vertically, 20x28 each (40x56 in game).
+    # Frame 0 = idle (no flame), 1-3 = flame flicker. Drawn facing right; the pack sits in the middle of the frame.
+    frames = 4
+    img, d = canvas(20, 28 * frames)
+    for f in range(frames):
+        oy = f * 28
+        for x0 in (6, 10):
+            d.rounded_rectangle([x0, oy + 8, x0 + 3, oy + 17], radius=1, fill=OUTLINE)
+            d.rectangle([x0 + 1, oy + 9, x0 + 2, oy + 16], fill=STEEL)
+            d.point((x0 + 1, oy + 9), fill=STEEL_L)
+            d.rectangle([x0 + 1, oy + 17, x0 + 2, oy + 18], fill=STEEL_D)
+            if f > 0:
+                length = [0, 4, 6, 5][f]
+                d.line([x0 + 1, oy + 19, x0 + 1, oy + 18 + length], fill=ORANGE)
+                d.line([x0 + 2, oy + 19, x0 + 2, oy + 18 + length - 1], fill=ORANGE)
+                d.point((x0 + 1, oy + 19), fill=ORANGE_L)
+                d.point((x0 + 2, oy + 19), fill=WHITE)
+        d.rectangle([9, oy + 11, 10, oy + 13], fill=BLUE)
+    save(img, "Content/Items/RobotJetpack_Wings.png")
+
+
+def absorber_icon():
+    img, d = canvas(16, 16)
+    d.ellipse([0, 0, 15, 15], outline=(160, 90, 255, 255))
+    d.ellipse([3, 3, 12, 12], outline=CYAN)
+    d.ellipse([6, 6, 9, 9], fill=WHITE)
+    for (x, y) in [(1, 7), (14, 8), (7, 1), (8, 14)]:
+        d.point((x, y), fill=CYAN)
+    save(img, "Content/Abilities/EnergyAbsorber.png")
+
+
+def spinning_buff():
+    def inner(d):
+        d.arc([3, 3, 12, 12], 200, 520, fill=ORANGE_L)
+        d.polygon([(12, 5), (14, 8), (10, 8)], fill=ORANGE_L)
+        d.ellipse([6, 6, 9, 9], fill=STEEL_L)
+    buff_icon("Content/Buffs/Spinning.png", inner)
+
+
 if __name__ == "__main__":
     robot_sheets()
     robot_trigger()
@@ -407,3 +462,6 @@ if __name__ == "__main__":
     plasma_bolt(); homing_missile(); invisible("Content/Projectiles/ThrusterHitbox.png")
     reticle(); satellite(); beam_strip(); radial_glow(); shock_ring()
     mod_icon()
+    jetpack_item(); jetpack_wings(); absorber_icon(); spinning_buff()
+    for name in ("HeadRam", "AbsorbField", "EnergyBlast", "EnergyEcho"):
+        invisible("Content/Projectiles/%s.png" % name)

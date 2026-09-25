@@ -36,6 +36,15 @@ All ability damage grows as you beat bosses: ×1.3 after Skeletron, then +0.4 af
 | **Plasma Cannon** | 28 | Rapid-fire plasma bolts from your arm cannon (auto-fire, pierces 1 enemy). |
 | **Missile Barrage** | 45 each | Fires a fan of 6 micro-missiles that home in on the nearest enemies and explode. |
 | **Thruster Dash** | 60 (melee) | Rocket toward the cursor with brief invincibility, burning everything you pass through. |
+| **Energy Absorber** | 18 per drain hit | **Hold left click** to open an absorb field around you. While it's up, **every hit you take is neutralised** and its damage is stored as energy. Enemy projectiles (and PvP opponents' projectiles) within ~26 tiles are pulled in and swallowed, also adding energy. Enemies in range are pulled toward you (by their knockback resistance, so most bosses won't budge), and PvP opponents are pulled too. Anything within ~7 tiles is **drained**: it takes damage, which adds to your energy, and players also lose mana. **Right click** to release: an area blast (~35 tiles across) that deals **10× your stored energy** to everything it touches. It also fires back every different attack you absorbed (up to 12 kinds), as glowing copies dealing **10× the damage they had**. Energy caps at 3,000 (a 30,000 damage blast) and is lost when you die. A bar above your head shows how much you have. |
+
+## Robot Jetpack
+
+An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
+
+- **Flight:** 2.5 seconds of thrust (like mid-tier wings), speed 8, with flame and smoke from the nozzles.
+- **Head ram (Robot Jack only):** while you're transformed and wearing it, moving fast (flying, dashing, falling) makes your robot head a weapon. Bumping into an enemy or a PvP opponent deals 40 base melee damage (scales with bosses beaten and melee bonuses) and heavy knockback, bounces you back, and sends them **spinning for as long as the knockback lasts** (longer knockback, longer spin; up to 1.5 s). Targets that ignore knockback, such as most bosses, take the damage but don't spin.
+- **Recipe:** 15 Iron/Lead Bar, 10 Fallen Star, Rocket Boots @ Anvil.
 
 ## Art
 

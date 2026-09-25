@@ -37,6 +37,29 @@ Mods: {
 				DisplayName: Thruster Dash
 				Tooltip: Rocket toward the cursor, burning everything in your path
 			}
+
+			EnergyAbsorber: {
+				DisplayName: Energy Absorber
+				Tooltip:
+					'''
+					Hold left click to open an absorb field:
+					  every attack that hits you is neutralised and stored as energy
+					  enemy projectiles and nearby enemies are pulled in
+					  anything close enough is drained, giving you more energy
+					Right click to release a blast dealing 10x your stored energy to everything nearby,
+					and fire back every attack you absorbed at 10x its damage
+					'''
+			}
+
+			RobotJetpack: {
+				DisplayName: Robot Jetpack
+				Tooltip:
+					'''
+					Allows flight
+					While transformed into Robot Jack, flying into things head-first rams them:
+					damage, heavy knockback, and they spin until the knockback wears off
+					'''
+			}
 		}
 
 		Buffs: {
@@ -49,6 +72,11 @@ Mods: {
 				DisplayName: Satellite Recharging
 				Description: You can't call another Orbital Cannon Strike yet
 			}
+
+			Spinning: {
+				DisplayName: Spinning
+				Description: You got rammed by a robot
+			}
 		}
 
 		Projectiles: {
@@ -56,6 +84,10 @@ Mods: {
 			PlasmaBolt.DisplayName: Plasma Bolt
 			HomingMissile.DisplayName: Micro-Missile
 			ThrusterHitbox.DisplayName: Thruster Flames
+			HeadRam.DisplayName: Robot Head
+			AbsorbField.DisplayName: Absorb Field
+			EnergyBlast.DisplayName: Energy Release
+			EnergyEcho.DisplayName: Absorbed Attack
 		}
 
 		DropConditions: {
