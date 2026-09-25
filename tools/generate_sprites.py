@@ -907,10 +907,111 @@ def titan_icons():
         invisible("Content/Projectiles/%s.png" % name)
 
 
+
+def titan_more_icons():
+    red, blue, purple, pink = (255, 90, 90, 255), (60, 170, 255, 255), (190, 80, 255, 255), (255, 170, 255, 255)
+
+    def drone(d, col, kind):
+        # Small hovering drone: body, the Titan's "head" motif, glowing eye, little thruster.
+        d.rounded_rectangle([3, 4, 12, 11], radius=2, fill=OUTLINE)
+        d.rounded_rectangle([4, 5, 11, 10], radius=1, fill=STEEL)
+        d.line([4, 5, 11, 5], fill=STEEL_L)
+        if kind == "speaker":
+            d.ellipse([5, 5, 10, 10], fill=(40, 40, 46, 255)); d.ellipse([6, 6, 9, 9], outline=col)
+        elif kind == "camera":
+            d.rectangle([11, 6, 14, 9], fill=OUTLINE); d.rectangle([12, 7, 13, 8], fill=col)
+            d.point((6, 7), fill=RED)
+        else:
+            d.rectangle([5, 6, 10, 9], fill=col); d.point((7, 7), fill=WHITE)
+            d.line([6, 4, 5, 2], fill=STEEL_L); d.line([9, 4, 10, 2], fill=STEEL_L)
+        d.rectangle([6, 12, 9, 13], fill=STEEL_D); d.point((7, 14), fill=ORANGE); d.point((8, 14), fill=ORANGE_L)
+        d.line([1, 7, 3, 7], fill=STEEL_D); d.line([12, 7, 14, 7], fill=STEEL_D)   # rotor arms
+
+    # Drone sheet: 3 frames (speaker, camera, TV), 16x16 each -> 32x96.
+    img, d = canvas(16, 48)
+    for i, (col, kind) in enumerate(((red, "speaker"), (blue, "camera"), (purple, "tv"))):
+        frame, fd = canvas(16, 16)
+        drone(fd, col, kind)
+        img.alpha_composite(frame, (0, i * 16))
+    save(img, "Content/Projectiles/TitanDrone.png")
+
+    grenade, gd = canvas(7, 7)
+    gd.ellipse([0, 0, 6, 6], fill=OUTLINE); gd.ellipse([1, 1, 5, 5], fill=STEEL_L)
+    gd.ellipse([2, 2, 4, 4], fill=blue); gd.point((2, 2), fill=WHITE)
+    save(grenade, "Content/Projectiles/FlashGrenade.png")
+
+    def drones_icon(col, kind):
+        def f(d):
+            a, ad = canvas(16, 16); drone(ad, col, kind)
+            small = a.resize((11, 11), Image.NEAREST)
+            d._image.alpha_composite(small, (0, 5)); d._image.alpha_composite(small, (5, 0))
+        return f
+
+    def shield(d):
+        d.ellipse([0, 0, 15, 15], outline=red); d.ellipse([2, 2, 13, 13], outline=(255, 180, 180, 255))
+        d.ellipse([5, 5, 10, 10], fill=OUTLINE); d.ellipse([6, 6, 9, 9], outline=STEEL_L)
+    def quake(d):
+        d.rectangle([0, 13, 15, 15], fill=(120, 80, 45, 255))
+        d.arc([-4, 4, 6, 20], 270, 340, fill=red); d.arc([10, 4, 20, 20], 200, 270, fill=red)
+        d.rectangle([6, 3, 9, 12], fill=STEEL_D); d.rectangle([5, 10, 10, 12], fill=STEEL)
+    def loop(d):
+        for a in range(0, 360, 45):
+            r = math.radians(a)
+            d.line([8 + math.cos(r) * 3, 8 + math.sin(r) * 3, 8 + math.cos(r) * 7, 8 + math.sin(r) * 7], fill=red if a % 90 else WHITE)
+        d.ellipse([6, 6, 9, 9], fill=OUTLINE)
+    def boom_dash(d):
+        d.polygon([(15, 8), (7, 3), (7, 13)], fill=STEEL_L)
+        for x in (1, 4):
+            d.arc([x - 3, 3, x + 3, 13], 90, 270, fill=red)
+    def target(d):
+        d.ellipse([1, 1, 14, 14], outline=red); d.ellipse([5, 5, 10, 10], outline=red)
+        d.line([8, 0, 8, 4], fill=red); d.line([8, 11, 8, 15], fill=red); d.line([0, 8, 4, 8], fill=red); d.line([11, 8, 15, 8], fill=red)
+    def zoom(d):
+        d.rectangle([0, 5, 9, 10], fill=OUTLINE); d.rectangle([1, 6, 8, 9], fill=STEEL)
+        d.ellipse([8, 4, 14, 11], fill=OUTLINE); d.ellipse([9, 5, 13, 10], fill=blue); d.point((10, 6), fill=WHITE)
+        d.line([14, 7, 15, 7], fill=WHITE)
+    def rewind(d):
+        d.polygon([(1, 8), (7, 3), (7, 13)], fill=blue); d.polygon([(8, 8), (14, 3), (14, 13)], fill=blue)
+        d.point((3, 8), fill=WHITE); d.point((10, 8), fill=WHITE)
+    def grenades(d):
+        for (x, y) in ((1, 8), (6, 2), (10, 9)):
+            d.ellipse([x, y, x + 5, y + 5], fill=OUTLINE); d.ellipse([x + 1, y + 1, x + 4, y + 4], fill=STEEL_L)
+            d.point((x + 2, y + 2), fill=blue)
+    def surf(d):
+        d.rectangle([0, 3, 9, 12], fill=OUTLINE); d.rectangle([1, 4, 8, 11], fill=purple)
+        d.line([10, 7, 15, 7], fill=pink); d.polygon([(15, 7), (12, 4), (12, 10)], fill=pink)
+    def blade_dash(d):
+        d.line([2, 13, 14, 1], fill=purple, width=3); d.line([2, 13, 14, 1], fill=WHITE)
+        d.line([0, 9, 4, 9], fill=pink); d.line([1, 12, 4, 12], fill=pink)
+    def field(d):
+        d.ellipse([0, 0, 15, 15], outline=purple)
+        d.line([3, 3, 6, 7, 5, 9, 8, 12], fill=WHITE); d.line([12, 2, 10, 6, 12, 8, 10, 13], fill=pink)
+    def broadcast(d):
+        d.rectangle([0, 3, 6, 11], fill=OUTLINE); d.rectangle([1, 4, 5, 10], fill=purple)
+        d.rectangle([6, 6, 15, 8], fill=(200, 90, 255, 255)); d.line([6, 7, 15, 7], fill=WHITE)
+
+    for name, fn in (("SpeakerDrones", drones_icon(red, "speaker")), ("SonicShieldAbility", shield), ("SubwooferQuake", quake),
+                     ("FeedbackLoop", loop), ("BoomDash", boom_dash),
+                     ("CameraDrones", drones_icon(blue, "camera")), ("TargetLock", target), ("ZoomShot", zoom),
+                     ("Rewind", rewind), ("FlashGrenades", grenades),
+                     ("TVDrones", drones_icon(purple, "tv")), ("ChannelSurf", surf), ("BladeDash", blade_dash),
+                     ("StaticFieldAbility", field), ("BroadcastBeam", broadcast)):
+        ability_icon("Content/Abilities/%s.png" % name, fn)
+
+    def marked(d):
+        d.ellipse([2, 2, 13, 13], outline=red); d.line([8, 1, 8, 5], fill=red); d.line([8, 10, 8, 14], fill=red)
+        d.line([1, 8, 5, 8], fill=red); d.line([10, 8, 14, 8], fill=red); d.point((8, 8), fill=WHITE)
+    buff_icon("Content/Buffs/Marked.png", marked)
+
+    for name in ("SonicShield", "StaticField"):
+        invisible("Content/Projectiles/%s.png" % name)
+
+
 if __name__ == "__main__":
     robot_sheets()
     titan_sheets()
     titan_icons()
+    titan_more_icons()
     robot_trigger()
     orbital_icon(); plasma_icon(); missiles_icon(); thruster_icon()
     robot_form_buff(); orbital_cooldown_buff()

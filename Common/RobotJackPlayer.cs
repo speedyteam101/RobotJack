@@ -60,11 +60,26 @@ namespace RobotJack.Common
 
 		private bool wasSpinning;
 
+		// Ability cooldowns (item type -> ticks left). Local to the owning client.
+		private readonly Dictionary<int, int> cooldowns = new();
+
+		public int CooldownLeft(int itemType) => cooldowns.TryGetValue(itemType, out int ticks) ? ticks : 0;
+
+		public void StartCooldown(int itemType, int ticks) => cooldowns[itemType] = ticks;
+
+		// Titan Camera's Rewind: where the player was and how much life they had, for the last few seconds.
+		public const int RewindTicks = 180;
+		private readonly Vector2[] rewindPosition = new Vector2[RewindTicks];
+		private readonly int[] rewindLife = new int[RewindTicks];
+		private int rewindNext;
+		private int rewindCount;
+
 		public override void ResetEffects() {
 			jetpack = false;
 		}
 
 		public override void UpdateDead() {
+			rewindCount = 0;
 			energy = 0f;
 			recorded.Clear();
 			absorbTimer = 0;
@@ -112,8 +127,52 @@ namespace RobotJack.Common
 				if (absorbTimer > 0) {
 					absorbTimer--;
 				}
+				TickCooldowns();
+				RecordRewind();
 				UpdateAbilityItems();
 				UpdateHeadRam();
+			}
+		}
+
+		// ------------------------------------------------------------------ cooldowns, rewind, teleport
+
+		private readonly List<int> cooldownKeys = new();
+
+		private void TickCooldowns() {
+			cooldownKeys.Clear();
+			cooldownKeys.AddRange(cooldowns.Keys);
+			foreach (int key in cooldownKeys) {
+				if (--cooldowns[key] <= 0) {
+					cooldowns.Remove(key);
+				}
+			}
+		}
+
+		private void RecordRewind() {
+			rewindPosition[rewindNext] = Player.position;
+			rewindLife[rewindNext] = Player.statLife;
+			rewindNext = (rewindNext + 1) % RewindTicks;
+			rewindCount = System.Math.Min(rewindCount + 1, RewindTicks);
+		}
+
+		// The oldest recorded moment (up to 3 seconds ago). False if nothing has been recorded yet.
+		public bool TryGetRewind(out Vector2 position, out int life) {
+			int index = rewindCount < RewindTicks ? 0 : rewindNext;
+			position = rewindPosition[index];
+			life = rewindLife[index];
+			return rewindCount > 0;
+		}
+
+		public void ClearRewind() {
+			rewindCount = 0;
+			rewindNext = 0;
+		}
+
+		// Teleports the local player (position = top-left of the hitbox) and tells the server in multiplayer.
+		public static void TeleportPlayer(Player player, Vector2 position) {
+			player.Teleport(position, 1);
+			if (Main.netMode == NetmodeID.MultiplayerClient) {
+				NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, player.whoAmI, position.X, position.Y, 1);
 			}
 		}
 

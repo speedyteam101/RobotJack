@@ -1,6 +1,9 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RobotJack.Common;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -49,8 +52,43 @@ namespace RobotJack.Content.Abilities
 			return player.GetModPlayer<RobotJackPlayer>().ActiveForm == Form;
 		}
 
+		// Cooldown in ticks after each use (0 = none). Shown in the tooltip and on the inventory slot.
+		public virtual int CooldownTicks => 0;
+
+		// Extra conditions for abilities that use the shared cooldown (checked before the cooldown starts).
+		protected virtual bool CanUseAbility(Player player) => true;
+
 		public override bool CanUseItem(Player player) {
-			return IsAllowed(player);
+			if (!IsAllowed(player)) {
+				return false;
+			}
+			RobotJackPlayer modPlayer = player.GetModPlayer<RobotJackPlayer>();
+			if (modPlayer.CooldownLeft(Type) > 0 || !CanUseAbility(player)) {
+				return false;
+			}
+			if (CooldownTicks > 0) {
+				modPlayer.StartCooldown(Type, CooldownTicks);
+			}
+			return true;
+		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips) {
+			if (CooldownTicks > 0) {
+				tooltips.Add(new TooltipLine(Mod, "RobotCooldown", $"{CooldownTicks / 60f:0.#} second cooldown"));
+			}
+		}
+
+		// Darken the slot and show the seconds left while on cooldown.
+		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+			int left = Main.LocalPlayer.GetModPlayer<RobotJackPlayer>().CooldownLeft(Type);
+			if (left <= 0) {
+				return;
+			}
+			Vector2 size = frame.Size() * scale;
+			Rectangle box = new Rectangle((int)(position.X - size.X / 2f), (int)(position.Y - size.Y / 2f), (int)size.X, (int)size.Y);
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, box, Color.Black * 0.55f);
+			string text = ((left + 59) / 60).ToString();
+			Utils.DrawBorderString(spriteBatch, text, position, Color.White, 0.8f, 0.5f, 0.5f);
 		}
 
 		public override void UpdateInventory(Player player) {

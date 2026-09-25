@@ -162,6 +162,125 @@ Mods: {
 				Tooltip: Spray six homing static orbs
 			}
 
+			SpeakerDrones: {
+				DisplayName: Speaker Drones
+				Tooltip:
+					'''
+					Summon two speaker drones for 15 seconds
+					They orbit you and fire sound waves at enemies
+					'''
+			}
+
+			SonicShieldAbility: {
+				DisplayName: Sonic Shield
+				Tooltip:
+					'''
+					Surround yourself with a bubble of sound for 6 seconds
+					Shatters enemy projectiles, pushes enemies out and hurts them
+					'''
+			}
+
+			SubwooferQuake: {
+				DisplayName: Subwoofer Quake
+				Tooltip: Stomp the ground: two giant sound waves roll out, one each way
+			}
+
+			FeedbackLoop: {
+				DisplayName: Feedback Loop
+				Tooltip: Twelve sound waves burst out in every direction
+			}
+
+			BoomDash: {
+				DisplayName: Boom Dash
+				Tooltip:
+					'''
+					Blast toward the cursor on a burst of bass
+					Confuses everything you plough through
+					'''
+			}
+
+			CameraDrones: {
+				DisplayName: Camera Drones
+				Tooltip:
+					'''
+					Summon two camera drones for 15 seconds
+					They orbit you and shoot plasma bolts at enemies
+					'''
+			}
+
+			TargetLock: {
+				DisplayName: Target Lock
+				Tooltip:
+					'''
+					Lock on to every enemy near the cursor
+					Locked-on enemies take 50% more damage for 8 seconds
+					'''
+			}
+
+			ZoomShot: {
+				DisplayName: Zoom Shot
+				Tooltip: A powerful shot from your zoom lens that pierces up to 6 enemies
+			}
+
+			Rewind: {
+				DisplayName: Rewind
+				Tooltip:
+					'''
+					Jump back to where you were 3 seconds ago
+					Also restores the health you had then, if it was more
+					'''
+			}
+
+			FlashGrenades: {
+				DisplayName: Flash Grenades
+				Tooltip:
+					'''
+					Throw three flash grenades that pop into small camera flashes
+					The flashes confuse and briefly stun enemies (not bosses)
+					'''
+			}
+
+			TVDrones: {
+				DisplayName: TV Drones
+				Tooltip:
+					'''
+					Summon two TV drones for 15 seconds
+					They orbit you and fire homing static orbs at enemies
+					'''
+			}
+
+			ChannelSurf: {
+				DisplayName: Channel Surf
+				Tooltip:
+					'''
+					Teleport to the cursor, if there's room
+					Bursts static orbs out where you leave and where you arrive
+					'''
+			}
+
+			BladeDash: {
+				DisplayName: Blade Dash
+				Tooltip: Dash toward the cursor with an energy blade swing leading the way
+			}
+
+			StaticFieldAbility: {
+				DisplayName: Static Field
+				Tooltip:
+					'''
+					A crackling field surrounds you for 8 seconds
+					Zaps every enemy inside it with lightning
+					'''
+			}
+
+			BroadcastBeam: {
+				DisplayName: Broadcast Beam
+				Tooltip:
+					'''
+					Hold left click to broadcast a purple beam from your screen
+					The beam turns to follow the cursor and stops at blocks
+					'''
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -199,6 +318,11 @@ Mods: {
 				Description: Frozen in place
 			}
 
+			Marked: {
+				DisplayName: Marked
+				Description: Takes 50% more damage
+			}
+
 			OrbitalCannonCooldown: {
 				DisplayName: Satellite Recharging
 				Description: You can't call another Orbital Cannon Strike yet
@@ -226,6 +350,10 @@ Mods: {
 			CameraFlashBurst.DisplayName: Camera Flash
 			EnergyOrb.DisplayName: Energy Orb
 			BladeSwing.DisplayName: Energy Blade
+			TitanDrone.DisplayName: Titan Drone
+			SonicShield.DisplayName: Sonic Shield
+			StaticField.DisplayName: Static Field
+			FlashGrenade.DisplayName: Flash Grenade
 		}
 
 		DropConditions: {

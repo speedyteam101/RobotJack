@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using RobotJack.Common;
-using RobotJack.Content.Abilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -10,16 +9,19 @@ using Terraria.ModLoader;
 
 namespace RobotJack.Content.Projectiles
 {
-	// Titan Camera's Core Laser: a continuous beam from the chest core toward the cursor while left click is held.
-	// It turns toward the cursor smoothly, stops at solid blocks, and hits everything along it every 6 ticks.
+	// A continuous beam toward the cursor while left click is held. It turns toward the cursor smoothly,
+	// stops at solid blocks, and hits everything along it every 6 ticks.
+	// ai[1] = style: 0 = Titan Camera's Core Laser (blue, from the chest core),
+	// 1 = Titan TV's Broadcast Beam (purple, from the screen).
 	public class CoreLaserBeam : ModProjectile
 	{
 		public const float MaxLength = 1400f;
 		public const float BeamWidth = 26f;
 		public const float TurnRate = 0.12f;
 
-		private static readonly Color Outer = new Color(40, 120, 255);
-		private static readonly Color Mid = new Color(90, 200, 255);
+		private bool Broadcast => Projectile.ai[1] == 1f;
+		private Color Outer => Broadcast ? new Color(150, 50, 255) : new Color(40, 120, 255);
+		private Color Mid => Broadcast ? new Color(230, 140, 255) : new Color(90, 200, 255);
 
 		private static Asset<Texture2D> beamTex, glowTex;
 
@@ -58,15 +60,17 @@ namespace RobotJack.Content.Projectiles
 
 		public override bool? CanCutTiles() => false;
 
-		// The chest core, in world coordinates.
-		private static Vector2 CorePosition(Player player) => player.MountedCenter + new Vector2(player.direction * 4f, -8f * player.gravDir);
+		// Where the beam starts: the chest core, or the TV screen.
+		private Vector2 CorePosition(Player player) => Broadcast
+			? player.MountedCenter + new Vector2(player.direction * 6f, -34f * player.gravDir)
+			: player.MountedCenter + new Vector2(player.direction * 4f, -8f * player.gravDir);
 
 		public override void AI() {
 			Player player = Main.player[Projectile.owner];
 
 			if (Projectile.owner == Main.myPlayer) {
 				bool holding = player.channel && !player.noItems && !player.CCed && !player.dead
-					&& player.HeldItem.type == ModContent.ItemType<CoreLaser>() && player.GetModPlayer<RobotJackPlayer>().Transformed;
+					&& player.HeldItem.shoot == Type && player.HeldItem.channel && player.GetModPlayer<RobotJackPlayer>().Transformed;
 				if (!holding) {
 					Projectile.Kill();
 					return;
@@ -105,11 +109,11 @@ namespace RobotJack.Content.Projectiles
 			// Sparks where it hits.
 			Vector2 end = Projectile.Center + dir * length;
 			for (int i = 0; i < 2; i++) {
-				Dust dust = Dust.NewDustPerfect(end, DustID.Electric, -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
+				Dust dust = Dust.NewDustPerfect(end, Broadcast ? DustID.PinkFairy : DustID.Electric, -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
 				dust.noGravity = true;
 			}
 			for (float d = 0; d < length; d += 48f) {
-				Lighting.AddLight(Projectile.Center + dir * d, 0.2f, 0.5f, 1f);
+				Lighting.AddLight(Projectile.Center + dir * d, Mid.ToVector3() * 0.8f);
 			}
 		}
 

@@ -11,10 +11,15 @@ namespace RobotJack.Content.Projectiles
 {
 	// Titan Camera's Camera Flash: a blinding flash around the player. Everything nearby takes damage, is confused,
 	// and (except bosses) is stunned in place for a few seconds.
+	// ai[1] = 1: a Flash Grenade's smaller flash, which stays where it went off.
 	public class CameraFlashBurst : ModProjectile
 	{
-		public const float Radius = 400f;
-		public const int StunTicks = 150;
+		public const float PlayerRadius = 400f;
+		public const float GrenadeRadius = 190f;
+
+		private bool Grenade => Projectile.ai[1] == 1f;
+		private float Radius => Grenade ? GrenadeRadius : PlayerRadius;
+		private int StunTicks => Grenade ? 90 : 150;
 		public const int Lifetime = 30;
 
 		private static Asset<Texture2D> glowTex, ringTex;
@@ -22,7 +27,7 @@ namespace RobotJack.Content.Projectiles
 		private ref float Timer => ref Projectile.ai[0];
 
 		public override void SetStaticDefaults() {
-			ProjectileID.Sets.DrawScreenCheckFluff[Type] = (int)Radius + 400;
+			ProjectileID.Sets.DrawScreenCheckFluff[Type] = (int)PlayerRadius + 400;
 			if (!Main.dedServ) {
 				glowTex = ModContent.Request<Texture2D>("RobotJack/Content/Projectiles/OrbitalGlow");
 				ringTex = ModContent.Request<Texture2D>("RobotJack/Content/Projectiles/OrbitalRing");
@@ -53,9 +58,11 @@ namespace RobotJack.Content.Projectiles
 
 		public override void AI() {
 			Timer++;
-			Player player = Main.player[Projectile.owner];
-			// Flash from the camera lens (front of the head).
-			Projectile.Center = player.MountedCenter + new Vector2(player.direction * 28f, -36f * player.gravDir);
+			if (!Grenade) {
+				// Flash from the camera lens (front of the head).
+				Player player = Main.player[Projectile.owner];
+				Projectile.Center = player.MountedCenter + new Vector2(player.direction * 28f, -36f * player.gravDir);
+			}
 
 			if (Timer == 1) {
 				SoundEngine.PlaySound(SoundID.Camera with { Volume = 1.5f }, Projectile.Center);
