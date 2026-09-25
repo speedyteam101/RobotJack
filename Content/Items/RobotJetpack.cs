@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using RobotJack.Common;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
