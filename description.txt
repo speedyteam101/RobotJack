@@ -11,4 +11,5 @@ Find the Robot Trigger and transform into a sci-fi combat robot.
   - Energy Absorber: hold to neutralise attacks, pull enemies in and drain them; right click to release it all as a blast dealing 10x the stored energy.
   - Gravity Arm: hold to pull enemies toward your cursor.
 - Robot Jetpack: lets you fly. While transformed, ramming things with your robot head knocks them away spinning.
+- Titan forms (Hardmode): Titan Speaker, Titan Camera and Titan TV. Giant forms, each with three abilities of its own: sound waves and bass shockwaves, a core laser and stunning camera flash, hypnotic waves and energy blades.
 - Abilities grow stronger as you beat bosses.

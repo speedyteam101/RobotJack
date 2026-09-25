@@ -467,8 +467,285 @@ def gravity_arm_icon():
     save(img, "Content/Abilities/GravityArm.png")
 
 
+
+# ---------------------------------------------------------------- Titan sheets
+# Titans are drawn on a 40x56 grid per frame (the vanilla frame's real pixel size) and saved 2x,
+# so each frame is 80x112: twice the player's size, matching the Titans' bigger hitbox.
+# Same 20-frame layout as the robot sheets. Feet stand on row 51; the hitbox covers rows 10-51.
+
+TW, TH = 40, 56
+
+TITANS = {
+    "TitanSpeaker": dict(
+        body=(45, 47, 55, 255), body_l=(85, 88, 100, 255), body_d=(25, 26, 32, 255),
+        trim=(170, 175, 185, 255), core=(255, 60, 60, 255), core_glow=(255, 150, 150, 255)),
+    "TitanCamera": dict(
+        body=(35, 45, 70, 255), body_l=(70, 85, 120, 255), body_d=(20, 25, 42, 255),
+        trim=(180, 185, 195, 255), core=(60, 170, 255, 255), core_glow=(170, 230, 255, 255)),
+    "TitanTV": dict(
+        body=(60, 45, 75, 255), body_l=(100, 80, 120, 255), body_d=(35, 25, 45, 255),
+        trim=(190, 170, 200, 255), core=(200, 80, 255, 255), core_glow=(240, 190, 255, 255)),
+}
+
+
+def titan_arm(d, g, ox, oy, frame, back, pal):
+    shoulder = (ox + (15 if back else 24), oy + 22)
+    if frame in ARM_ANGLES:
+        a = math.radians(ARM_ANGLES[frame])
+        hand = (shoulder[0] + round(math.cos(a) * 14), shoulder[1] + round(math.sin(a) * 14))
+    else:
+        swing = 0
+        if 6 <= frame <= 19:
+            swing = round(4 * math.sin(walk_phase(frame)) * (-1 if back else 1))
+        elif frame == 5:
+            swing = -4 if back else 4
+        hand = (shoulder[0] + swing, shoulder[1] + 13)
+    col = pal["body_d"] if back else pal["body"]
+    thick_line(d, shoulder, hand, OUTLINE, 7)
+    thick_line(d, shoulder, hand, col, 4)
+    # Shoulder pad and fist
+    d.rectangle([shoulder[0] - 3, shoulder[1] - 3, shoulder[0] + 3, shoulder[1] + 2], fill=OUTLINE)
+    d.rectangle([shoulder[0] - 2, shoulder[1] - 2, shoulder[0] + 2, shoulder[1] + 1], fill=pal["body_d"] if back else pal["trim"])
+    d.rectangle([hand[0] - 2, hand[1] - 2, hand[0] + 2, hand[1] + 2], fill=OUTLINE)
+    d.rectangle([hand[0] - 1, hand[1] - 1, hand[0] + 1, hand[1] + 1], fill=pal["body_d"] if back else pal["body_l"])
+    if not back:
+        g.point(hand, fill=pal["core_glow"][:3] + (120,))
+
+
+def speaker_head(d, g, ox, y, pal):
+    d.rectangle([ox + 9, y + 2, ox + 31, y + 19], fill=OUTLINE)
+    d.rectangle([ox + 10, y + 3, ox + 30, y + 18], fill=(30, 30, 34, 255))
+    d.line([ox + 10, y + 3, ox + 30, y + 3], fill=(70, 70, 78, 255))
+    # Two woofers, one big, one small (facing the viewer)
+    for (cx, cy, r) in ((ox + 20, y + 12, 5), (ox + 20, y + 5, 1)):
+        d.ellipse([cx - r - 1, cy - r - 1, cx + r + 1, cy + r + 1], fill=pal["trim"])
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(20, 20, 24, 255))
+        d.ellipse([cx - r // 2, cy - r // 2, cx + r // 2, cy + r // 2], fill=(60, 60, 66, 255))
+        g.ellipse([cx - r - 1, cy - r - 1, cx + r + 1, cy + r + 1], outline=pal["core"][:3] + (110,))
+    # Side grille (facing right)
+    for yy in range(y + 5, y + 18, 2):
+        d.line([ox + 28, yy, ox + 29, yy], fill=(55, 55, 62, 255))
+
+
+def camera_head(d, g, ox, y, pal):
+    d.rectangle([ox + 10, y + 5, ox + 29, y + 18], fill=OUTLINE)
+    d.rectangle([ox + 11, y + 6, ox + 28, y + 17], fill=(150, 155, 165, 255))
+    d.line([ox + 11, y + 6, ox + 28, y + 6], fill=(205, 210, 220, 255))
+    d.rectangle([ox + 11, y + 15, ox + 28, y + 17], fill=(95, 100, 110, 255))
+    d.rectangle([ox + 13, y + 2, ox + 19, y + 5], fill=OUTLINE)        # viewfinder
+    d.rectangle([ox + 14, y + 3, ox + 18, y + 5], fill=(60, 62, 70, 255))
+    # Lens sticking out forward
+    d.rectangle([ox + 28, y + 7, ox + 35, y + 16], fill=OUTLINE)
+    d.rectangle([ox + 29, y + 8, ox + 34, y + 15], fill=(40, 42, 48, 255))
+    d.ellipse([ox + 30, y + 9, ox + 35, y + 14], fill=pal["core"])
+    d.point((ox + 32, y + 10), fill=WHITE)
+    g.ellipse([ox + 30, y + 9, ox + 35, y + 14], fill=pal["core_glow"])
+    g.point((ox + 32, y + 10), fill=WHITE)
+    d.point((ox + 13, y + 9), fill=RED)                                # record light
+    g.point((ox + 13, y + 9), fill=(255, 90, 90, 255))
+
+
+def tv_head(d, g, ox, y, pal):
+    # Antennas
+    d.line([ox + 17, y + 3, ox + 13, y - 1], fill=pal["trim"])
+    d.line([ox + 23, y + 3, ox + 27, y - 1], fill=pal["trim"])
+    # CRT body
+    d.rectangle([ox + 8, y + 3, ox + 32, y + 19], fill=OUTLINE)
+    d.rectangle([ox + 9, y + 4, ox + 31, y + 18], fill=(110, 80, 60, 255))
+    d.line([ox + 9, y + 4, ox + 31, y + 4], fill=(150, 115, 90, 255))
+    # Screen
+    d.rectangle([ox + 11, y + 6, ox + 27, y + 16], fill=OUTLINE)
+    d.rectangle([ox + 12, y + 7, ox + 26, y + 15], fill=pal["core"])
+    g.rectangle([ox + 12, y + 7, ox + 26, y + 15], fill=pal["core_glow"][:3] + (200,))
+    # Scanlines and a spiral-ish hypno mark
+    for yy in range(y + 8, y + 16, 2):
+        g.line([ox + 12, yy, ox + 26, yy], fill=(255, 255, 255, 60))
+    g.ellipse([ox + 16, y + 8, ox + 22, y + 14], outline=(255, 255, 255, 230))
+    g.point((ox + 19, y + 11), fill=WHITE)
+    # Knobs
+    d.point((ox + 29, y + 8), fill=GOLD); d.point((ox + 29, y + 11), fill=GOLD)
+
+
+def titan_body_frame(d, g, ox, oy, frame, name, pal):
+    bob = 1 if 6 <= frame <= 19 and abs(math.sin(walk_phase(frame))) > 0.7 else 0
+    y = oy + bob + 1
+    titan_arm(d, g, ox, y, frame, True, pal)
+    # Torso: broad chest tapering to the waist
+    d.polygon([(ox + 10, y + 19), (ox + 30, y + 19), (ox + 27, y + 34), (ox + 13, y + 34)], fill=OUTLINE)
+    d.polygon([(ox + 11, y + 20), (ox + 29, y + 20), (ox + 26, y + 33), (ox + 14, y + 33)], fill=pal["body"])
+    d.line([ox + 11, y + 20, ox + 29, y + 20], fill=pal["body_l"])
+    d.rectangle([ox + 14, y + 31, ox + 26, y + 33], fill=pal["body_d"])  # belt
+    d.line([ox + 20, y + 22, ox + 20, y + 30], fill=pal["body_d"])      # chest plate seam
+    # Chest core
+    d.ellipse([ox + 19, y + 23, ox + 25, y + 29], fill=OUTLINE)
+    d.ellipse([ox + 20, y + 24, ox + 24, y + 28], fill=pal["core"])
+    g.ellipse([ox + 20, y + 24, ox + 24, y + 28], fill=pal["core_glow"])
+    g.point((ox + 22, y + 26), fill=WHITE)
+    # Back thruster
+    d.rectangle([ox + 7, y + 21, ox + 10, y + 31], fill=OUTLINE)
+    d.rectangle([ox + 8, y + 22, ox + 9, y + 30], fill=pal["trim"])
+    g.point((ox + 8, y + 31), fill=ORANGE_L); g.point((ox + 9, y + 31), fill=ORANGE)
+    # Neck
+    d.rectangle([ox + 17, y + 17, ox + 23, y + 20], fill=pal["body_d"])
+    {"TitanSpeaker": speaker_head, "TitanCamera": camera_head, "TitanTV": tv_head}[name](d, g, ox, y, pal)
+    titan_arm(d, g, ox, y, frame, False, pal)
+
+
+def titan_leg(d, hip, foot, pal, back):
+    knee = ((hip[0] + foot[0]) // 2 + 2, (hip[1] + foot[1]) // 2)
+    col = pal["body_d"] if back else pal["body"]
+    ankle = (foot[0], foot[1] - 4)  # stop the thick shin above the boot so it doesn't poke below the ground
+    for a, b in ((hip, knee), (knee, ankle)):
+        thick_line(d, a, b, OUTLINE, 7)
+    for a, b in ((hip, knee), (knee, ankle)):
+        thick_line(d, a, b, col, 4)
+    d.rectangle([knee[0] - 2, knee[1] - 1, knee[0] + 2, knee[1] + 2], fill=pal["trim"] if not back else pal["body_d"])
+    d.rectangle([foot[0] - 3, foot[1] - 2, foot[0] + 5, foot[1]], fill=OUTLINE)
+    d.line([foot[0] - 2, foot[1] - 2, foot[0] + 4, foot[1] - 2], fill=pal["trim"] if not back else pal["body_d"])
+
+
+def titan_legs_frame(d, g, ox, oy, frame, pal):
+    hip_y = oy + 35
+    ground = oy + 51
+    back_hip, front_hip = (ox + 16, hip_y), (ox + 23, hip_y)
+    if frame == 5:
+        back_foot, front_foot = (ox + 12, ground - 4), (ox + 27, ground - 6)
+    elif 6 <= frame <= 19:
+        s = math.sin(walk_phase(frame))
+        front_foot = (ox + 23 + round(6 * s), ground - (2 if s > 0.3 else 0))
+        back_foot = (ox + 16 - round(6 * s), ground - (2 if s < -0.3 else 0))
+    else:
+        back_foot, front_foot = (ox + 16, ground), (ox + 23, ground)
+    titan_leg(d, back_hip, back_foot, pal, True)
+    titan_leg(d, front_hip, front_foot, pal, False)
+    d.rectangle([ox + 13, hip_y - 2, ox + 27, hip_y + 1], fill=OUTLINE)
+    d.rectangle([ox + 14, hip_y - 1, ox + 26, hip_y], fill=pal["body_d"])
+    for foot in (back_foot, front_foot):
+        g.point(foot, fill=(255, 160, 60, 110))
+
+
+def titan_sheets():
+    for name, pal in TITANS.items():
+        body, bd = canvas(TW, TH * FRAMES)
+        body_glow, bg = canvas(TW, TH * FRAMES)
+        legs, ld = canvas(TW, TH * FRAMES)
+        legs_glow, lg = canvas(TW, TH * FRAMES)
+        for f in range(FRAMES):
+            titan_body_frame(bd, bg, 0, f * TH, f, name, pal)
+            titan_legs_frame(ld, lg, 0, f * TH, f, pal)
+        save(body, "Content/Players/%sBody.png" % name)
+        save(body_glow, "Content/Players/%sBody_Glow.png" % name)
+        save(legs, "Content/Players/%sLegs.png" % name)
+        save(legs_glow, "Content/Players/%sLegs_Glow.png" % name)
+
+    # Preview: Robot Jack next to the three Titans (idle, aiming forward and walking), 4x.
+    robot_legs = Image.open("Content/Players/RobotLegs.png")
+    robot_body = Image.open("Content/Players/RobotBody.png")
+    preview = Image.new("RGBA", (80 + 3 * 3 * 80, 112), (35, 40, 55, 255))
+    preview.alpha_composite(robot_legs.crop((0, 0, 40, 56)), (20, 56))
+    preview.alpha_composite(robot_body.crop((0, 0, 40, 56)), (20, 56))
+    x = 80
+    for name in TITANS:
+        legs = Image.open("Content/Players/%sLegs.png" % name)
+        body = Image.open("Content/Players/%sBody.png" % name)
+        for f in (0, 3, 9):
+            preview.alpha_composite(legs.crop((0, f * 112, 80, (f + 1) * 112)), (x, 0))
+            preview.alpha_composite(body.crop((0, f * 112, 80, (f + 1) * 112)), (x, 0))
+            x += 80
+    save(preview, "tools/titan_preview_4x.png", scale=2)
+
+
+
+# ---------------------------------------------------------------- Titan items, abilities and buffs
+
+def titan_core_item(path, head):
+    img, d = canvas(14, 16)
+    # A glowing core in a metal frame with a tiny version of the Titan's head on top.
+    d.ellipse([2, 5, 11, 14], fill=OUTLINE)
+    d.ellipse([3, 6, 10, 13], fill=STEEL)
+    col = {"speaker": (255, 60, 60, 255), "camera": (60, 170, 255, 255), "tv": (200, 80, 255, 255)}[head]
+    d.ellipse([5, 8, 8, 11], fill=col)
+    d.point((6, 9), fill=WHITE)
+    if head == "speaker":
+        d.rectangle([3, 0, 10, 5], fill=OUTLINE); d.ellipse([5, 1, 8, 4], outline=STEEL_L)
+    elif head == "camera":
+        d.rectangle([3, 1, 9, 5], fill=OUTLINE); d.rectangle([4, 2, 8, 4], fill=STEEL_L); d.rectangle([10, 2, 12, 4], fill=col)
+    else:
+        d.line([5, 0, 4, -1], fill=STEEL_L); d.line([8, 0, 9, -1], fill=STEEL_L)
+        d.rectangle([2, 1, 11, 5], fill=OUTLINE); d.rectangle([4, 2, 9, 4], fill=col)
+    save(img, path)
+
+
+def ability_icon(path, draw):
+    img, d = canvas(16, 16)
+    draw(d)
+    save(img, path)
+
+
+def titan_icons():
+    titan_core_item("Content/Items/TitanSpeakerCore.png", "speaker")
+    titan_core_item("Content/Items/TitanCameraCore.png", "camera")
+    titan_core_item("Content/Items/TitanTVCore.png", "tv")
+
+    red, blue, purple, pink = (255, 90, 90, 255), (60, 170, 255, 255), (190, 80, 255, 255), (255, 170, 255, 255)
+
+    def sonic(d):
+        for r in (3, 6, 9):
+            d.arc([7 - r, 8 - r, 7 + r, 8 + r], -50, 50, fill=WHITE if r == 9 else red, width=1)
+        d.rectangle([0, 5, 4, 11], fill=OUTLINE); d.ellipse([1, 6, 3, 10], fill=STEEL_L)
+    def bass(d):
+        d.ellipse([1, 1, 14, 14], outline=red); d.ellipse([4, 4, 11, 11], outline=WHITE)
+        d.ellipse([6, 6, 9, 9], fill=OUTLINE)
+    def barrage(d):
+        for y0 in (2, 7, 12):
+            d.arc([4, y0 - 3, 10, y0 + 3], -60, 60, fill=red)
+            d.arc([8, y0 - 3, 14, y0 + 3], -60, 60, fill=WHITE)
+    def laser(d):
+        d.ellipse([0, 5, 5, 10], fill=blue); d.point((2, 7), fill=WHITE)
+        d.rectangle([5, 6, 15, 9], fill=(40, 120, 255, 255)); d.line([5, 7, 15, 7], fill=WHITE)
+    def flash(d):
+        d.polygon([(8, 0), (10, 6), (16, 8), (10, 10), (8, 16), (6, 10), (0, 8), (6, 6)], fill=WHITE)
+        d.ellipse([6, 6, 9, 9], fill=blue)
+    def lens(d):
+        for (x, y) in ((2, 10), (7, 3), (11, 9)):
+            d.ellipse([x, y, x + 4, y + 4], fill=blue); d.point((x + 1, y + 1), fill=WHITE)
+    def hypno(d):
+        d.rectangle([0, 1, 15, 14], fill=OUTLINE); d.rectangle([1, 2, 14, 13], fill=purple)
+        d.arc([3, 3, 12, 12], 0, 300, fill=WHITE); d.arc([5, 5, 10, 10], 180, 480, fill=pink)
+    def blades(d):
+        d.arc([-6, 0, 14, 20], 270, 360, fill=purple, width=3); d.arc([-6, 0, 14, 20], 275, 355, fill=WHITE, width=1)
+        d.rectangle([0, 12, 3, 15], fill=STEEL)
+    def storm(d):
+        for (x, y) in ((1, 2), (8, 1), (11, 8), (4, 10), (9, 12)):
+            d.ellipse([x, y, x + 3, y + 3], fill=purple); d.point((x + 1, y + 1), fill=pink)
+    for name, fn in (("SonicBoom", sonic), ("BassDrop", bass), ("SpeakerBarrage", barrage),
+                     ("CoreLaser", laser), ("CameraFlash", flash), ("LensBurst", lens),
+                     ("HypnoScreen", hypno), ("EnergyBlades", blades), ("StaticStorm", storm)):
+        ability_icon("Content/Abilities/%s.png" % name, fn)
+
+    def form_buff(path, col):
+        def inner(d):
+            d.rectangle([3, 3, 12, 10], fill=OUTLINE); d.rectangle([4, 4, 11, 9], fill=col)
+            d.rectangle([5, 11, 10, 14], fill=STEEL_D); d.point((7, 12), fill=col)
+        buff_icon(path, inner)
+    form_buff("Content/Buffs/TitanSpeakerForm.png", red)
+    form_buff("Content/Buffs/TitanCameraForm.png", blue)
+    form_buff("Content/Buffs/TitanTVForm.png", purple)
+
+    def stunned(d):
+        for (x, y) in ((3, 4), (8, 2), (12, 5)):
+            d.polygon([(x, y - 2), (x + 1, y), (x + 3, y), (x + 1, y + 1), (x, y + 3), (x - 1, y + 1), (x - 3, y), (x - 1, y)], fill=GOLD)
+        d.ellipse([4, 8, 11, 14], fill=STEEL_L)
+    buff_icon("Content/Buffs/Stunned.png", stunned)
+
+    for name in ("SoundWave", "SpeakerShockwave", "CoreLaserBeam", "CameraFlashBurst", "EnergyOrb", "BladeSwing"):
+        invisible("Content/Projectiles/%s.png" % name)
+
+
 if __name__ == "__main__":
     robot_sheets()
+    titan_sheets()
+    titan_icons()
     robot_trigger()
     orbital_icon(); plasma_icon(); missiles_icon(); thruster_icon()
     robot_form_buff(); orbital_cooldown_buff()

@@ -61,6 +61,107 @@ Mods: {
 					'''
 			}
 
+			TitanSpeakerCore: {
+				DisplayName: Titan Speaker Core
+				Tooltip:
+					'''
+					Use to transform into Titan Speaker; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
+					Titans are twice as big, hitbox included
+					While transformed you get the Titan's own ability items
+					"Turn it up."
+					'''
+			}
+
+			TitanCameraCore: {
+				DisplayName: Titan Camera Core
+				Tooltip:
+					'''
+					Use to transform into Titan Camera; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+					Titans are twice as big, hitbox included
+					While transformed you get the Titan's own ability items
+					"Say cheese."
+					'''
+			}
+
+			TitanTVCore: {
+				DisplayName: Titan TV Core
+				Tooltip:
+					'''
+					Use to transform into Titan TV; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
+					Titans are twice as big, hitbox included
+					While transformed you get the Titan's own ability items
+					"Stay tuned."
+					'''
+			}
+
+			SonicBoom: {
+				DisplayName: Sonic Boom
+				Tooltip:
+					'''
+					Fire a huge sound wave that passes through everything
+					Heavy knockback
+					'''
+			}
+
+			BassDrop: {
+				DisplayName: Bass Drop
+				Tooltip:
+					'''
+					Blast a ring of bass all around you
+					Throws enemies away and confuses them
+					'''
+			}
+
+			SpeakerBarrage: {
+				DisplayName: Speaker Barrage
+				Tooltip: Rapid-fire small sound waves
+			}
+
+			CoreLaser: {
+				DisplayName: Core Laser
+				Tooltip:
+					'''
+					Hold left click to fire a continuous laser from your chest core
+					The beam turns to follow the cursor and stops at blocks
+					'''
+			}
+
+			CameraFlash: {
+				DisplayName: Camera Flash
+				Tooltip:
+					'''
+					A blinding flash that damages and confuses everything nearby
+					Stuns enemies in place for 2.5 seconds (not bosses)
+					'''
+			}
+
+			LensBurst: {
+				DisplayName: Lens Burst
+				Tooltip: Fire three homing energy orbs from your lens
+			}
+
+			HypnoScreen: {
+				DisplayName: Hypno Screen
+				Tooltip:
+					'''
+					Beam three hypnotic waves from your screen
+					Confuses enemies and stuns them briefly (not bosses)
+					'''
+			}
+
+			EnergyBlades: {
+				DisplayName: Energy Blades
+				Tooltip: Swing a giant energy blade in a wide arc
+			}
+
+			StaticStorm: {
+				DisplayName: Static Storm
+				Tooltip: Spray six homing static orbs
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -76,6 +177,26 @@ Mods: {
 			RobotForm: {
 				DisplayName: Robot Jack
 				Description: You are a combat robot
+			}
+
+			TitanSpeakerForm: {
+				DisplayName: Titan Speaker
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
+			}
+
+			TitanCameraForm: {
+				DisplayName: Titan Camera
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+			}
+
+			TitanTVForm: {
+				DisplayName: Titan TV
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
+			}
+
+			Stunned: {
+				DisplayName: Stunned
+				Description: Frozen in place
 			}
 
 			OrbitalCannonCooldown: {
@@ -99,6 +220,12 @@ Mods: {
 			EnergyBlast.DisplayName: Energy Release
 			EnergyEcho.DisplayName: Absorbed Attack
 			GravityWell.DisplayName: Gravity Well
+			SoundWave.DisplayName: Sound Wave
+			SpeakerShockwave.DisplayName: Bass Drop
+			CoreLaserBeam.DisplayName: Core Laser
+			CameraFlashBurst.DisplayName: Camera Flash
+			EnergyOrb.DisplayName: Energy Orb
+			BladeSwing.DisplayName: Energy Blade
 		}
 
 		DropConditions: {

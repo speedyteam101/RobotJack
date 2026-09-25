@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot, and use ability items, headlined by the **Orbital Cannon Strike**.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot, and use ability items, headlined by the **Orbital Cannon Strike**. In Hardmode, craft cores to become one of three giant **Titans**: Titan Speaker, Titan Camera and Titan TV.
 
 ## Installing (from source)
 
@@ -39,12 +39,38 @@ All ability damage except the Orbital Cannon Strike grows as you beat bosses: ×
 | **Energy Absorber** | 18 per drain hit | **Hold left click** to open an absorb field around you. While it's up, **every hit you take is neutralised** and its damage is stored as energy. Enemy projectiles (and PvP opponents' projectiles) within ~26 tiles are pulled in and swallowed, also adding energy. Enemies in range are pulled toward you (by their knockback resistance, so most bosses won't budge), and PvP opponents are pulled too. Anything within ~7 tiles is **drained**: it takes damage, which adds to your energy, and players also lose mana. **Right click** to release: an area blast (~35 tiles across) that deals **10× your stored energy** to everything it touches. It also fires back every different attack you absorbed (up to 12 kinds), as glowing copies dealing **10× the damage they had**. Energy caps at 3,000 (a 30,000 damage blast) and is lost when you die. A bar above your head shows how much you have. |
 | **Gravity Arm** | none | **Hold left click** to open a gravity well that follows your cursor. Every enemy within ~25 tiles of it is pulled toward the cursor (faster when further away) and held in the middle, with tethers and a beam from your arm. It deals no damage: drag enemies into a group, then hit them with something else. Bosses, worm body segments and invincible enemies aren't pulled. |
 
+## Titan forms
+
+Three more forms, each with its own transform item (use to transform, use again to turn back; no time limit or cooldown). Only one form can be active at a time: using any transform item ends the current one. Each Titan has **only its own abilities**, not Robot Jack's.
+
+**Titans are giant:** drawn at twice the player's size, and their hitbox is too (36×84 instead of 20×42, about 2 blocks wide and 5 tall). You won't fit through small gaps. If there isn't room when you transform, you stay normal size until there is. While riding a mount you're normal size. To make up for being easier to hit, Titans are tougher. All Titans also get knockback and fall damage immunity, higher jumps and the hover jets, and the Robot Jetpack head ram works for them too.
+
+| Form | Transform item (Mythril/Orichalcum Anvil) | Stats |
+| --- | --- | --- |
+| **Titan Speaker** | Titan Speaker Core: 12 Hallowed Bar, 10 Soul of Might | +30% damage, +40 defense, 20% damage reduction, +15% speed, +150 max life |
+| **Titan Camera** | Titan Camera Core: 12 Hallowed Bar, 10 Soul of Sight | +35% damage, +15% crit, +30 defense, 15% damage reduction, +20% speed, +100 max life |
+| **Titan TV** | Titan TV Core: 12 Hallowed Bar, 10 Soul of Fright | +30% damage, +30 defense, 15% damage reduction, +35% speed, +100 max life |
+
+Titan ability damage scales with bosses beaten like Robot Jack's.
+
+| Titan | Ability | Base damage | What it does |
+| --- | --- | --- | --- |
+| Speaker | **Sonic Boom** | 80 | A huge sound wave from your speaker head that grows as it flies and passes through everything. Heavy knockback. |
+| Speaker | **Bass Drop** | 120 | A ring of bass bursts out around you: hits everything nearby once, throws it away from you and confuses it. Screen shake. |
+| Speaker | **Speaker Barrage** | 35 | Rapid-fire small sound waves (auto-fire). |
+| Camera | **Core Laser** | 45 every 6 ticks | **Hold left click**: a continuous blue laser from your chest core. It turns to follow the cursor and stops at blocks. |
+| Camera | **Camera Flash** | 60 | A blinding flash from your lens: damages and confuses everything nearby and **stuns** enemies in place for 2.5 s. Bosses aren't stunned. |
+| Camera | **Lens Burst** | 40 ×3 | Three homing blue orbs (auto-fire). |
+| TV | **Hypno Screen** | 30 ×3 | Three hypnotic waves from your screen: confuse enemies for 5 s and stun them for 1.5 s. Bosses aren't stunned. |
+| TV | **Energy Blades** | 90 (melee) | Swing a giant energy blade in a wide arc toward the cursor (auto-swing). |
+| TV | **Static Storm** | 30 ×6 | Spray six homing purple orbs (auto-fire). |
+
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
 
 - **Flight:** 2.5 seconds of thrust (like mid-tier wings), speed 8, with flame and smoke from the nozzles.
-- **Head ram (Robot Jack only):** while you're transformed and wearing it, moving fast (flying, dashing, falling) makes your robot head a weapon. Bumping into an enemy or a PvP opponent deals 40 base melee damage (scales with bosses beaten and melee bonuses) and heavy knockback, bounces you back, and sends them **spinning for as long as the knockback lasts** (longer knockback, longer spin; up to 1.5 s). Targets that ignore knockback, such as most bosses, take the damage but don't spin.
+- **Head ram:** while you're transformed (any form) and wearing it, moving fast (flying, dashing, falling) makes your robot head a weapon. Bumping into an enemy or a PvP opponent deals 40 base melee damage (scales with bosses beaten and melee bonuses) and heavy knockback, bounces you back, and sends them **spinning for as long as the knockback lasts** (longer knockback, longer spin; up to 1.5 s). Targets that ignore knockback, such as most bosses, take the damage but don't spin.
 - **Recipe:** 15 Iron/Lead Bar, 10 Fallen Star, Rocket Boots @ Anvil.
 
 ## Art
@@ -52,4 +78,4 @@ An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
 All sprites are placeholders drawn by `tools/generate_sprites.py` (needs Pillow: `pip install pillow`; run it from this folder).
 Replace any PNG with hand-made art at the same size whenever you like. The robot sheets (`Content/Players/RobotBody*.png`, `RobotLegs*.png`) use the vanilla player sheet layout: 20 frames of 40×56 stacked vertically (0 idle, 1–4 arm aiming up → down, 5 jump, 6–19 walk cycle). The `_Glow` sheets are drawn full-bright on top.
 
-`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames.
+`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/titan_preview_4x.png` shows Robot Jack next to the three Titans. The Titan sheets (`Content/Players/Titan*.png`) use the same layout at twice the size: 80×112 per frame.

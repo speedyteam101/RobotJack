@@ -7,8 +7,8 @@ using Terraria.ModLoader;
 namespace RobotJack.Content.Abilities
 {
 	// Base class for Robot Jack's ability items.
-	// RobotJackPlayer puts these in the player's inventory while transformed and removes them afterwards.
-	// They can't be kept: they vanish when the form ends or when they're dropped in the world.
+	// RobotJackPlayer puts these in the player's inventory while their form is active and removes them afterwards.
+	// They can't be kept: they vanish when the form ends or changes, or when they're dropped in the world.
 	public abstract class RobotAbility : ModItem
 	{
 		// Every ability, in load order.
@@ -42,12 +42,19 @@ namespace RobotJack.Content.Abilities
 			Item.noMelee = true;
 		}
 
+		// Which form grants this ability.
+		public virtual RobotFormType Form => RobotFormType.RobotJack;
+
+		public bool IsAllowed(Player player) {
+			return player.GetModPlayer<RobotJackPlayer>().ActiveForm == Form;
+		}
+
 		public override bool CanUseItem(Player player) {
-			return player.GetModPlayer<RobotJackPlayer>().Transformed;
+			return IsAllowed(player);
 		}
 
 		public override void UpdateInventory(Player player) {
-			if (!player.GetModPlayer<RobotJackPlayer>().Transformed) {
+			if (!IsAllowed(player)) {
 				Item.TurnToAir();
 			}
 		}
