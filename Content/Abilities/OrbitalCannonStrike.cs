@@ -13,6 +13,9 @@ namespace RobotJack.Content.Abilities
 	{
 		public const int CooldownSeconds = 8;
 
+		// Flat damage per hit. Not changed by damage bonuses, boss progression, crits, random spread or enemy defense.
+		public const int Damage = 10_000_000;
+
 		public override void SetDefaults() {
 			base.SetDefaults();
 			Item.width = 32;
@@ -21,11 +24,16 @@ namespace RobotJack.Content.Abilities
 			Item.useTime = 30;
 			Item.useAnimation = 30;
 			Item.noUseGraphic = true;
-			Item.damage = 60; // per hit; the beam hits every 8 ticks for about 80 ticks
+			Item.damage = Damage; // per hit; the beam hits every 8 ticks for about 80 ticks
 			Item.knockBack = 10f;
 			Item.UseSound = SoundID.Item92;
 			Item.shoot = ModContent.ProjectileType<OrbitalStrike>();
 			Item.shootSpeed = 1f;
+		}
+
+		// Ignore every damage bonus (form, armor, accessories, boss progression) so it's always exactly Damage.
+		public override void ModifyWeaponDamage(Player player, ref StatModifier damage) {
+			damage = StatModifier.Default;
 		}
 
 		public override bool CanUseItem(Player player) {

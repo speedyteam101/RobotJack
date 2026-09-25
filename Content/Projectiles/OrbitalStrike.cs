@@ -245,6 +245,13 @@ namespace RobotJack.Content.Projectiles
 			return Vector2.Distance(Projectile.Center, new Vector2(closestX, closestY)) < ImpactRadius * power;
 		}
 
+		// Keep every hit at exactly the Orbital Cannon Strike's damage: no crits, no random spread, no defense.
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+			modifiers.DisableCrit();
+			modifiers.DamageVariationScale *= 0f;
+			modifiers.DefenseEffectiveness *= 0f;
+		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 			target.AddBuff(BuffID.Electrified, 180);
 			target.AddBuff(BuffID.OnFire3, 180);
