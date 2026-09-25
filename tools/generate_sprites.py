@@ -475,139 +475,301 @@ def gravity_arm_icon():
 
 TW, TH = 40, 56
 
+def _shade(c, f):
+    """Scale an RGBA colour's brightness by f."""
+    return tuple(max(0, min(255, int(v * f))) for v in c[:3]) + (255,)
+
+
+def _alpha(c, a):
+    return tuple(c[:3]) + (a,)
+
+
+def make_palette(armor, accent, head_main, head_dark):
+    return dict(
+        hi=_shade(armor, 1.6), light=_shade(armor, 1.25), base=armor, mid=_shade(armor, 0.75), dark=_shade(armor, 0.5),
+        metal_hi=(215, 220, 230, 255), metal=(150, 156, 170, 255), metal_d=(90, 95, 108, 255),
+        accent=accent, accent_l=_shade(accent, 1.35), accent_d=_shade(accent, 0.6),
+        head=head_main, head_hi=_shade(head_main, 1.5), head_d=head_dark,
+    )
+
+
 TITANS = {
-    "TitanSpeaker": dict(
-        body=(45, 47, 55, 255), body_l=(85, 88, 100, 255), body_d=(25, 26, 32, 255),
-        trim=(170, 175, 185, 255), core=(255, 60, 60, 255), core_glow=(255, 150, 150, 255)),
-    "TitanCamera": dict(
-        body=(35, 45, 70, 255), body_l=(70, 85, 120, 255), body_d=(20, 25, 42, 255),
-        trim=(180, 185, 195, 255), core=(60, 170, 255, 255), core_glow=(170, 230, 255, 255)),
-    "TitanTV": dict(
-        body=(60, 45, 75, 255), body_l=(100, 80, 120, 255), body_d=(35, 25, 45, 255),
-        trim=(190, 170, 200, 255), core=(200, 80, 255, 255), core_glow=(240, 190, 255, 255)),
+    "TitanSpeaker": make_palette((52, 54, 64, 255), (255, 55, 55, 255), (34, 34, 40, 255), (18, 18, 22, 255)),
+    "TitanCamera": make_palette((38, 50, 82, 255), (60, 175, 255, 255), (160, 166, 180, 255), (95, 100, 114, 255)),
+    "TitanTV": make_palette((62, 46, 80, 255), (205, 85, 255, 255), (70, 58, 82, 255), (38, 30, 46, 255)),
 }
 
 
+def plate(d, box, pal, base="base", radius=1, bevel=True):
+    """Outlined armour plate with a lit top-left edge and a shaded bottom-right edge."""
+    x0, y0, x1, y1 = box
+    d.rounded_rectangle([x0, y0, x1, y1], radius=radius, fill=OUTLINE)
+    d.rounded_rectangle([x0 + 1, y0 + 1, x1 - 1, y1 - 1], radius=max(0, radius - 1), fill=pal[base])
+    if bevel and x1 - x0 > 3 and y1 - y0 > 3:
+        light = {"base": "light", "mid": "base", "dark": "mid"}.get(base, "light")
+        shadow = {"base": "mid", "mid": "dark", "dark": "dark"}.get(base, "mid")
+        d.line([x0 + 1 + radius // 2, y0 + 1, x1 - 2, y0 + 1], fill=pal[light])
+        d.line([x0 + 1, y0 + 1 + radius // 2, x0 + 1, y1 - 2], fill=pal[light])
+        d.line([x0 + 2, y1 - 1, x1 - 1, y1 - 1], fill=pal[shadow])
+        d.line([x1 - 1, y0 + 2, x1 - 1, y1 - 1], fill=pal[shadow])
+
+
+def limb(d, a, b, width, pal, back):
+    """Thick outlined limb segment with a highlight along its upper edge."""
+    base = pal["mid"] if back else pal["base"]
+    hi = pal["base"] if back else pal["light"]
+    thick_line(d, a, b, OUTLINE, width + 3)
+    thick_line(d, a, b, base, width)
+    off = max(1, width // 3)
+    thick_line(d, (a[0] - off + 1, a[1] - off + 1), (b[0] - off + 1, b[1] - off + 1), hi, 1)
+
+
+def joint(d, p, r, pal, back):
+    d.ellipse([p[0] - r - 1, p[1] - r - 1, p[0] + r + 1, p[1] + r + 1], fill=OUTLINE)
+    d.ellipse([p[0] - r, p[1] - r, p[0] + r, p[1] + r], fill=pal["metal_d"] if back else pal["metal"])
+    if not back:
+        d.point((p[0] - 1, p[1] - 1), fill=pal["metal_hi"])
+
+
+def glow_core(d, g, c, r, pal):
+    """A glowing energy core: dark socket, accent ring, bright centre, soft halo on the glow layer."""
+    cx, cy = c
+    d.ellipse([cx - r - 2, cy - r - 2, cx + r + 2, cy + r + 2], fill=OUTLINE)
+    d.ellipse([cx - r - 1, cy - r - 1, cx + r + 1, cy + r + 1], fill=pal["metal_d"])
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=pal["accent_d"])
+    g.ellipse([cx - r - 2, cy - r - 2, cx + r + 2, cy + r + 2], fill=_alpha(pal["accent"], 70))
+    g.ellipse([cx - r, cy - r, cx + r, cy + r], fill=pal["accent"])
+    if r >= 2:
+        g.ellipse([cx - r + 1, cy - r + 1, cx + r - 1, cy + r - 1], fill=pal["accent_l"])
+    g.point((cx, cy), fill=WHITE)
+    g.point((cx - 1, cy - 1), fill=WHITE)
+
+
+# ---------------------------------------------------------------- heads (facing right)
+
+def speaker_head(d, g, ox, y, pal):
+    # Cabinet
+    plate(d, (ox + 7, y + 1, ox + 33, y + 19), dict(pal, base=pal["head"], light=pal["head_hi"], mid=pal["head_d"]), radius=2)
+    # Recessed front baffle
+    d.rectangle([ox + 10, y + 4, ox + 28, y + 17], fill=pal["head_d"])
+    d.line([ox + 10, y + 17, ox + 28, y + 17], fill=_shade(pal["head"], 1.2))
+    # Main woofer: silver rim, rubber surround, cone, dust cap
+    cx, cy = ox + 19, y + 11
+    for r, col in ((6, pal["metal"]), (5, OUTLINE), (4, (44, 44, 50, 255)), (2, (66, 66, 74, 255)), (1, (110, 110, 120, 255))):
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col)
+    d.point((cx - 5, cy - 3), fill=pal["metal_hi"]); d.point((cx - 4, cy - 4), fill=pal["metal_hi"])
+    d.point((cx - 2, cy - 2), fill=(90, 90, 100, 255))
+    g.ellipse([cx - 7, cy - 7, cx + 7, cy + 7], outline=_alpha(pal["accent"], 150))
+    g.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], outline=_alpha(pal["accent_l"], 90))
+    # Tweeter
+    tx, ty = ox + 26, y + 6
+    d.ellipse([tx - 2, ty - 2, tx + 2, ty + 2], fill=pal["metal"])
+    d.ellipse([tx - 1, ty - 1, tx + 1, ty + 1], fill=OUTLINE)
+    g.point((tx, ty), fill=pal["accent"])
+    # Screw heads in the corners of the baffle
+    for (sx, sy) in ((ox + 11, y + 5), (ox + 27, y + 16), (ox + 11, y + 16)):
+        d.point((sx, sy), fill=pal["metal"])
+    # Side panel with vents (facing right) and an LED strip under the woofer
+    d.rectangle([ox + 29, y + 3, ox + 31, y + 17], fill=_shade(pal["head"], 0.8))
+    for vy in range(y + 5, y + 17, 2):
+        d.line([ox + 29, vy, ox + 31, vy], fill=OUTLINE)
+    for lx in range(ox + 13, ox + 26, 2):
+        g.point((lx, y + 18), fill=pal["accent_l"])
+
+
+def camera_head(d, g, ox, y, pal):
+    headpal = dict(pal, base=pal["head"], light=pal["head_hi"], mid=pal["head_d"], dark=_shade(pal["head_d"], 0.7))
+    # Carry handle on top: a grip on two posts
+    d.rectangle([ox + 12, y + 1, ox + 23, y + 3], fill=OUTLINE)
+    d.line([ox + 13, y + 2, ox + 22, y + 2], fill=pal["metal_d"])
+    d.line([ox + 14, y + 2, ox + 19, y + 2], fill=pal["metal"])
+    for px in (ox + 13, ox + 22):
+        d.rectangle([px - 1, y + 3, px + 1, y + 5], fill=OUTLINE)
+        d.line([px, y + 3, px, y + 5], fill=pal["metal_d"])
+    # Viewfinder at the back
+    plate(d, (ox + 4, y + 6, ox + 10, y + 12), dict(headpal, base=pal["head_d"]), radius=1)
+    d.rectangle([ox + 5, y + 8, ox + 6, y + 10], fill=OUTLINE)
+    # Body
+    plate(d, (ox + 8, y + 5, ox + 29, y + 18), headpal, radius=2)
+    d.rectangle([ox + 10, y + 14, ox + 27, y + 16], fill=pal["head_d"])          # lower band
+    d.line([ox + 10, y + 12, ox + 27, y + 12], fill=pal["accent_d"])             # brand stripe
+    g.line([ox + 10, y + 12, ox + 20, y + 12], fill=_alpha(pal["accent"], 170))
+    # REC light and buttons
+    d.point((ox + 11, y + 8), fill=RED)
+    g.point((ox + 11, y + 8), fill=(255, 110, 110, 255))
+    g.point((ox + 12, y + 8), fill=(255, 80, 80, 90))
+    for bx in (ox + 15, ox + 18):
+        d.rectangle([bx, y + 7, bx + 1, y + 8], fill=pal["metal_d"])
+    # Lens barrel with focus rings
+    d.rectangle([ox + 28, y + 6, ox + 35, y + 17], fill=OUTLINE)
+    for i, col in enumerate((pal["metal_d"], (40, 42, 48, 255), pal["metal"], (40, 42, 48, 255), pal["metal_d"], (30, 32, 38, 255))):
+        d.line([ox + 29 + i, y + 7, ox + 29 + i, y + 16], fill=col)
+    d.line([ox + 29, y + 7, ox + 34, y + 7], fill=pal["metal_hi"])
+    # Glass
+    d.ellipse([ox + 33, y + 7, ox + 38, y + 16], fill=OUTLINE)
+    d.ellipse([ox + 34, y + 8, ox + 37, y + 15], fill=pal["accent_d"])
+    g.ellipse([ox + 32, y + 6, ox + 39, y + 17], fill=_alpha(pal["accent"], 70))
+    g.ellipse([ox + 34, y + 8, ox + 37, y + 15], fill=pal["accent"])
+    g.ellipse([ox + 35, y + 10, ox + 36, y + 13], fill=pal["accent_l"])
+    g.point((ox + 35, y + 9), fill=WHITE); g.point((ox + 35, y + 10), fill=WHITE)
+
+
+def tv_head(d, g, ox, y, pal):
+    headpal = dict(pal, base=pal["head"], light=pal["head_hi"], mid=pal["head_d"], dark=_shade(pal["head_d"], 0.7))
+    # Antennas with glowing tips
+    for (x0, x1) in ((ox + 16, ox + 11), (ox + 22, ox + 27)):
+        d.line([x0, y + 3, x1, y + 0], fill=OUTLINE, width=2)
+        d.line([x0, y + 3, x1, y + 0], fill=pal["metal"])
+        d.point((x1, y + 0), fill=pal["accent_l"])
+        g.point((x1, y + 0), fill=WHITE)
+    d.rectangle([ox + 15, y + 2, ox + 23, y + 4], fill=OUTLINE)
+    d.rectangle([ox + 16, y + 3, ox + 22, y + 3], fill=pal["metal_d"])
+    # Cabinet
+    plate(d, (ox + 5, y + 4, ox + 35, y + 20), headpal, radius=3)
+    # Screen bezel and curved CRT screen
+    d.rounded_rectangle([ox + 8, y + 6, ox + 28, y + 18], radius=3, fill=OUTLINE)
+    d.rounded_rectangle([ox + 9, y + 7, ox + 27, y + 17], radius=2, fill=_shade(pal["accent"], 0.35))
+    # Glowing screen: gradient, scanlines, hypno spiral
+    g.rounded_rectangle([ox + 9, y + 7, ox + 27, y + 17], radius=2, fill=_alpha(pal["accent_d"], 230))
+    g.rounded_rectangle([ox + 11, y + 8, ox + 25, y + 16], radius=2, fill=_alpha(pal["accent"], 235))
+    g.ellipse([ox + 14, y + 9, ox + 22, y + 15], fill=_alpha(pal["accent_l"], 240))
+    # Hypno spiral: an Archimedean spiral squashed to the screen's shape
+    cx, cy = ox + 18, y + 12
+    t = 0.0
+    while t < 4.2 * math.pi:
+        r = 0.55 * t
+        px, py = round(cx + math.cos(t) * r * 1.35), round(cy + math.sin(t) * r * 0.85)
+        if ox + 10 <= px <= ox + 26 and y + 8 <= py <= y + 16:
+            g.point((px, py), fill=WHITE)
+        t += 0.12
+    g.point((cx, cy), fill=WHITE)
+    # Faint scanlines on the dark base only, and a glare in the top-left corner
+    for sy in range(y + 8, y + 17, 2):
+        d.line([ox + 10, sy, ox + 26, sy], fill=_shade(pal["accent"], 0.28))
+    g.point((ox + 11, y + 8), fill=(255, 255, 255, 200)); g.point((ox + 12, y + 8), fill=(255, 255, 255, 140))
+    g.point((ox + 11, y + 9), fill=(255, 255, 255, 120))
+    # Control panel: two knobs and a speaker grille
+    d.rectangle([ox + 29, y + 7, ox + 33, y + 18], fill=pal["head_d"])
+    for ky in (y + 9, y + 13):
+        d.ellipse([ox + 30, ky - 1, ox + 32, ky + 1], fill=pal["metal"])
+        d.point((ox + 30, ky - 1), fill=pal["metal_hi"])
+    for gy in range(y + 16, y + 18):
+        for gx in range(ox + 30, ox + 33, 2):
+            d.point((gx, gy), fill=OUTLINE)
+    g.point((ox + 31, y + 16), fill=pal["accent_l"])
+
+
+HEADS = {"TitanSpeaker": speaker_head, "TitanCamera": camera_head, "TitanTV": tv_head}
+
+
+# ---------------------------------------------------------------- body and legs
+
 def titan_arm(d, g, ox, oy, frame, back, pal):
-    shoulder = (ox + (15 if back else 24), oy + 22)
+    shoulder = (ox + (15 if back else 25), oy + 22)
     if frame in ARM_ANGLES:
         a = math.radians(ARM_ANGLES[frame])
-        hand = (shoulder[0] + round(math.cos(a) * 14), shoulder[1] + round(math.sin(a) * 14))
+        v = (math.cos(a), math.sin(a))
+        elbow = (shoulder[0] + round(v[0] * 7), shoulder[1] + round(v[1] * 7))
+        hand = (shoulder[0] + round(v[0] * 15), shoulder[1] + round(v[1] * 15))
     else:
         swing = 0
         if 6 <= frame <= 19:
             swing = round(4 * math.sin(walk_phase(frame)) * (-1 if back else 1))
         elif frame == 5:
             swing = -4 if back else 4
-        hand = (shoulder[0] + swing, shoulder[1] + 13)
-    col = pal["body_d"] if back else pal["body"]
-    thick_line(d, shoulder, hand, OUTLINE, 7)
-    thick_line(d, shoulder, hand, col, 4)
-    # Shoulder pad and fist
-    d.rectangle([shoulder[0] - 3, shoulder[1] - 3, shoulder[0] + 3, shoulder[1] + 2], fill=OUTLINE)
-    d.rectangle([shoulder[0] - 2, shoulder[1] - 2, shoulder[0] + 2, shoulder[1] + 1], fill=pal["body_d"] if back else pal["trim"])
-    d.rectangle([hand[0] - 2, hand[1] - 2, hand[0] + 2, hand[1] + 2], fill=OUTLINE)
-    d.rectangle([hand[0] - 1, hand[1] - 1, hand[0] + 1, hand[1] + 1], fill=pal["body_d"] if back else pal["body_l"])
+        elbow = (shoulder[0] + swing // 2, shoulder[1] + 7)
+        hand = (shoulder[0] + swing + 1, shoulder[1] + 14)
+    limb(d, shoulder, elbow, 4, pal, back)
+    limb(d, elbow, hand, 5, pal, back)
+    joint(d, elbow, 1, pal, back)
     if not back:
-        g.point(hand, fill=pal["core_glow"][:3] + (120,))
-
-
-def speaker_head(d, g, ox, y, pal):
-    d.rectangle([ox + 9, y + 2, ox + 31, y + 19], fill=OUTLINE)
-    d.rectangle([ox + 10, y + 3, ox + 30, y + 18], fill=(30, 30, 34, 255))
-    d.line([ox + 10, y + 3, ox + 30, y + 3], fill=(70, 70, 78, 255))
-    # Two woofers, one big, one small (facing the viewer)
-    for (cx, cy, r) in ((ox + 20, y + 12, 5), (ox + 20, y + 5, 1)):
-        d.ellipse([cx - r - 1, cy - r - 1, cx + r + 1, cy + r + 1], fill=pal["trim"])
-        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(20, 20, 24, 255))
-        d.ellipse([cx - r // 2, cy - r // 2, cx + r // 2, cy + r // 2], fill=(60, 60, 66, 255))
-        g.ellipse([cx - r - 1, cy - r - 1, cx + r + 1, cy + r + 1], outline=pal["core"][:3] + (110,))
-    # Side grille (facing right)
-    for yy in range(y + 5, y + 18, 2):
-        d.line([ox + 28, yy, ox + 29, yy], fill=(55, 55, 62, 255))
-
-
-def camera_head(d, g, ox, y, pal):
-    d.rectangle([ox + 10, y + 5, ox + 29, y + 18], fill=OUTLINE)
-    d.rectangle([ox + 11, y + 6, ox + 28, y + 17], fill=(150, 155, 165, 255))
-    d.line([ox + 11, y + 6, ox + 28, y + 6], fill=(205, 210, 220, 255))
-    d.rectangle([ox + 11, y + 15, ox + 28, y + 17], fill=(95, 100, 110, 255))
-    d.rectangle([ox + 13, y + 2, ox + 19, y + 5], fill=OUTLINE)        # viewfinder
-    d.rectangle([ox + 14, y + 3, ox + 18, y + 5], fill=(60, 62, 70, 255))
-    # Lens sticking out forward
-    d.rectangle([ox + 28, y + 7, ox + 35, y + 16], fill=OUTLINE)
-    d.rectangle([ox + 29, y + 8, ox + 34, y + 15], fill=(40, 42, 48, 255))
-    d.ellipse([ox + 30, y + 9, ox + 35, y + 14], fill=pal["core"])
-    d.point((ox + 32, y + 10), fill=WHITE)
-    g.ellipse([ox + 30, y + 9, ox + 35, y + 14], fill=pal["core_glow"])
-    g.point((ox + 32, y + 10), fill=WHITE)
-    d.point((ox + 13, y + 9), fill=RED)                                # record light
-    g.point((ox + 13, y + 9), fill=(255, 90, 90, 255))
-
-
-def tv_head(d, g, ox, y, pal):
-    # Antennas
-    d.line([ox + 17, y + 3, ox + 13, y - 1], fill=pal["trim"])
-    d.line([ox + 23, y + 3, ox + 27, y - 1], fill=pal["trim"])
-    # CRT body
-    d.rectangle([ox + 8, y + 3, ox + 32, y + 19], fill=OUTLINE)
-    d.rectangle([ox + 9, y + 4, ox + 31, y + 18], fill=(110, 80, 60, 255))
-    d.line([ox + 9, y + 4, ox + 31, y + 4], fill=(150, 115, 90, 255))
-    # Screen
-    d.rectangle([ox + 11, y + 6, ox + 27, y + 16], fill=OUTLINE)
-    d.rectangle([ox + 12, y + 7, ox + 26, y + 15], fill=pal["core"])
-    g.rectangle([ox + 12, y + 7, ox + 26, y + 15], fill=pal["core_glow"][:3] + (200,))
-    # Scanlines and a spiral-ish hypno mark
-    for yy in range(y + 8, y + 16, 2):
-        g.line([ox + 12, yy, ox + 26, yy], fill=(255, 255, 255, 60))
-    g.ellipse([ox + 16, y + 8, ox + 22, y + 14], outline=(255, 255, 255, 230))
-    g.point((ox + 19, y + 11), fill=WHITE)
-    # Knobs
-    d.point((ox + 29, y + 8), fill=GOLD); d.point((ox + 29, y + 11), fill=GOLD)
+        # Energy line along the forearm
+        g.line([elbow, hand], fill=_alpha(pal["accent"], 170))
+    # Gauntlet
+    d.rounded_rectangle([hand[0] - 3, hand[1] - 3, hand[0] + 3, hand[1] + 3], radius=1, fill=OUTLINE)
+    d.rounded_rectangle([hand[0] - 2, hand[1] - 2, hand[0] + 2, hand[1] + 2], radius=1, fill=pal["mid"] if back else pal["metal"])
+    if not back:
+        d.line([hand[0] - 2, hand[1] - 2, hand[0] + 1, hand[1] - 2], fill=pal["metal_hi"])
+        d.point((hand[0], hand[1] + 1), fill=pal["accent_d"])
+        g.point((hand[0], hand[1] + 1), fill=pal["accent_l"])
+    # Pauldron (big shoulder armour)
+    sx, sy = shoulder
+    if back:
+        plate(d, (sx - 4, sy - 4, sx + 3, sy + 3), pal, base="mid", radius=2)
+    else:
+        plate(d, (sx - 5, sy - 5, sx + 5, sy + 3), pal, radius=3)
+        d.line([sx - 3, sy + 1, sx + 3, sy + 1], fill=pal["accent_d"])
+        g.line([sx - 3, sy + 1, sx + 3, sy + 1], fill=_alpha(pal["accent"], 200))
 
 
 def titan_body_frame(d, g, ox, oy, frame, name, pal):
     bob = 1 if 6 <= frame <= 19 and abs(math.sin(walk_phase(frame))) > 0.7 else 0
     y = oy + bob + 1
     titan_arm(d, g, ox, y, frame, True, pal)
-    # Torso: broad chest tapering to the waist
-    d.polygon([(ox + 10, y + 19), (ox + 30, y + 19), (ox + 27, y + 34), (ox + 13, y + 34)], fill=OUTLINE)
-    d.polygon([(ox + 11, y + 20), (ox + 29, y + 20), (ox + 26, y + 33), (ox + 14, y + 33)], fill=pal["body"])
-    d.line([ox + 11, y + 20, ox + 29, y + 20], fill=pal["body_l"])
-    d.rectangle([ox + 14, y + 31, ox + 26, y + 33], fill=pal["body_d"])  # belt
-    d.line([ox + 20, y + 22, ox + 20, y + 30], fill=pal["body_d"])      # chest plate seam
-    # Chest core
-    d.ellipse([ox + 19, y + 23, ox + 25, y + 29], fill=OUTLINE)
-    d.ellipse([ox + 20, y + 24, ox + 24, y + 28], fill=pal["core"])
-    g.ellipse([ox + 20, y + 24, ox + 24, y + 28], fill=pal["core_glow"])
-    g.point((ox + 22, y + 26), fill=WHITE)
-    # Back thruster
-    d.rectangle([ox + 7, y + 21, ox + 10, y + 31], fill=OUTLINE)
-    d.rectangle([ox + 8, y + 22, ox + 9, y + 30], fill=pal["trim"])
-    g.point((ox + 8, y + 31), fill=ORANGE_L); g.point((ox + 9, y + 31), fill=ORANGE)
-    # Neck
-    d.rectangle([ox + 17, y + 17, ox + 23, y + 20], fill=pal["body_d"])
-    {"TitanSpeaker": speaker_head, "TitanCamera": camera_head, "TitanTV": tv_head}[name](d, g, ox, y, pal)
+
+    # Twin back thrusters
+    for tx in (ox + 5, ox + 8):
+        plate(d, (tx, y + 20, tx + 3, y + 31), pal, base="mid", radius=1, bevel=False)
+        d.rectangle([tx + 1, y + 31, tx + 2, y + 32], fill=pal["metal_d"])
+        g.point((tx + 1, y + 32), fill=ORANGE_L); g.point((tx + 2, y + 32), fill=ORANGE)
+        g.point((tx + 1, y + 33), fill=_alpha(ORANGE, 120))
+
+    # Abdomen segments, then the chest plate over them
+    for i, (x0, x1) in enumerate(((14, 26), (15, 25))):
+        plate(d, (ox + x0, y + 27 + i * 3, ox + x1, y + 30 + i * 3), pal, base="mid", radius=1)
+    # Belt with glowing buckle
+    d.rectangle([ox + 13, y + 32, ox + 27, y + 35], fill=OUTLINE)
+    d.rectangle([ox + 14, y + 33, ox + 26, y + 34], fill=pal["dark"])
+    d.rectangle([ox + 19, y + 32, ox + 22, y + 35], fill=pal["metal"])
+    g.point((ox + 20, y + 33), fill=pal["accent_l"]); g.point((ox + 21, y + 34), fill=pal["accent"])
+    # Chest: broad plate tapering to the waist
+    d.polygon([(ox + 10, y + 19), (ox + 31, y + 19), (ox + 29, y + 28), (ox + 12, y + 28)], fill=OUTLINE)
+    d.polygon([(ox + 11, y + 20), (ox + 30, y + 20), (ox + 28, y + 27), (ox + 13, y + 27)], fill=pal["base"])
+    d.line([ox + 11, y + 20, ox + 30, y + 20], fill=pal["hi"])
+    d.line([ox + 12, y + 21, ox + 29, y + 21], fill=pal["light"])
+    d.line([ox + 13, y + 27, ox + 28, y + 27], fill=pal["mid"])
+    # Pectoral plate seams
+    d.line([ox + 16, y + 22, ox + 16, y + 26], fill=pal["mid"])
+    d.line([ox + 25, y + 22, ox + 26, y + 26], fill=pal["mid"])
+    # Collar and neck cables
+    d.rectangle([ox + 16, y + 16, ox + 25, y + 20], fill=OUTLINE)
+    d.rectangle([ox + 17, y + 17, ox + 24, y + 19], fill=pal["metal_d"])
+    d.line([ox + 18, y + 17, ox + 18, y + 19], fill=pal["dark"]); d.line([ox + 23, y + 17, ox + 23, y + 19], fill=pal["dark"])
+    # Chest core with energy lines running to the shoulders
+    glow_core(d, g, (ox + 21, y + 24), 2, pal)
+    g.line([ox + 18, y + 23, ox + 13, y + 21], fill=_alpha(pal["accent"], 150))
+    g.line([ox + 24, y + 23, ox + 28, y + 21], fill=_alpha(pal["accent"], 150))
+
+    HEADS[name](d, g, ox, y, pal)
     titan_arm(d, g, ox, y, frame, False, pal)
 
 
-def titan_leg(d, hip, foot, pal, back):
+def titan_leg(d, g, hip, foot, pal, back):
     knee = ((hip[0] + foot[0]) // 2 + 2, (hip[1] + foot[1]) // 2)
-    col = pal["body_d"] if back else pal["body"]
-    ankle = (foot[0], foot[1] - 4)  # stop the thick shin above the boot so it doesn't poke below the ground
-    for a, b in ((hip, knee), (knee, ankle)):
-        thick_line(d, a, b, OUTLINE, 7)
-    for a, b in ((hip, knee), (knee, ankle)):
-        thick_line(d, a, b, col, 4)
-    d.rectangle([knee[0] - 2, knee[1] - 1, knee[0] + 2, knee[1] + 2], fill=pal["trim"] if not back else pal["body_d"])
-    d.rectangle([foot[0] - 3, foot[1] - 2, foot[0] + 5, foot[1]], fill=OUTLINE)
-    d.line([foot[0] - 2, foot[1] - 2, foot[0] + 4, foot[1] - 2], fill=pal["trim"] if not back else pal["body_d"])
+    ankle = (foot[0], foot[1] - 4)
+    limb(d, hip, knee, 6, pal, back)       # thigh
+    limb(d, knee, ankle, 5, pal, back)     # shin
+    # Shin guard
+    if not back:
+        mid = ((knee[0] + ankle[0]) // 2, (knee[1] + ankle[1]) // 2)
+        d.line([knee[0] + 2, knee[1] + 2, mid[0] + 2, mid[1] + 1], fill=pal["light"])
+        g.line([mid[0] + 1, mid[1] - 1, mid[0] + 1, mid[1] + 1], fill=_alpha(pal["accent"], 160))
+    # Knee cap
+    plate(d, (knee[0] - 3, knee[1] - 2, knee[0] + 3, knee[1] + 3), pal, base="mid" if back else "base", radius=1)
+    # Boot: heel, sole and a pointed toe (facing right)
+    fx, fy = foot
+    d.polygon([(fx - 4, fy - 4), (fx + 3, fy - 4), (fx + 7, fy - 1), (fx + 7, fy), (fx - 4, fy)], fill=OUTLINE)
+    d.polygon([(fx - 3, fy - 3), (fx + 3, fy - 3), (fx + 6, fy - 1), (fx - 3, fy - 1)], fill=pal["mid"] if back else pal["metal"])
+    if not back:
+        d.line([fx - 3, fy - 3, fx + 2, fy - 3], fill=pal["metal_hi"])
+    d.line([fx - 4, fy, fx + 7, fy], fill=pal["dark"])
+    g.point((fx - 4, fy - 2), fill=_alpha(ORANGE, 140))
 
 
 def titan_legs_frame(d, g, ox, oy, frame, pal):
-    hip_y = oy + 35
+    hip_y = oy + 37
     ground = oy + 51
-    back_hip, front_hip = (ox + 16, hip_y), (ox + 23, hip_y)
+    back_hip, front_hip = (ox + 17, hip_y), (ox + 24, hip_y)
     if frame == 5:
         back_foot, front_foot = (ox + 12, ground - 4), (ox + 27, ground - 6)
     elif 6 <= frame <= 19:
@@ -615,13 +777,13 @@ def titan_legs_frame(d, g, ox, oy, frame, pal):
         front_foot = (ox + 23 + round(6 * s), ground - (2 if s > 0.3 else 0))
         back_foot = (ox + 16 - round(6 * s), ground - (2 if s < -0.3 else 0))
     else:
-        back_foot, front_foot = (ox + 16, ground), (ox + 23, ground)
-    titan_leg(d, back_hip, back_foot, pal, True)
-    titan_leg(d, front_hip, front_foot, pal, False)
-    d.rectangle([ox + 13, hip_y - 2, ox + 27, hip_y + 1], fill=OUTLINE)
-    d.rectangle([ox + 14, hip_y - 1, ox + 26, hip_y], fill=pal["body_d"])
-    for foot in (back_foot, front_foot):
-        g.point(foot, fill=(255, 160, 60, 110))
+        back_foot, front_foot = (ox + 15, ground), (ox + 23, ground)
+    titan_leg(d, g, back_hip, back_foot, pal, True)
+    titan_leg(d, g, front_hip, front_foot, pal, False)
+    # Hip armour skirt
+    plate(d, (ox + 12, hip_y - 3, ox + 29, hip_y + 2), pal, base="mid", radius=1)
+    plate(d, (ox + 21, hip_y - 2, ox + 28, hip_y + 4), pal, radius=1)
+    d.line([ox + 14, hip_y, ox + 19, hip_y], fill=pal["dark"])
 
 
 def titan_sheets():
@@ -638,19 +800,22 @@ def titan_sheets():
         save(legs, "Content/Players/%sLegs.png" % name)
         save(legs_glow, "Content/Players/%sLegs_Glow.png" % name)
 
-    # Preview: Robot Jack next to the three Titans (idle, aiming forward and walking), 4x.
-    robot_legs = Image.open("Content/Players/RobotLegs.png")
-    robot_body = Image.open("Content/Players/RobotBody.png")
-    preview = Image.new("RGBA", (80 + 3 * 3 * 80, 112), (35, 40, 55, 255))
-    preview.alpha_composite(robot_legs.crop((0, 0, 40, 56)), (20, 56))
-    preview.alpha_composite(robot_body.crop((0, 0, 40, 56)), (20, 56))
+    # Preview: Robot Jack next to the three Titans (idle, aiming forward, aiming up and walking),
+    # with the glow layers on top like in game. Saved 2x (4x the pixel-art scale).
+    def layered(prefix, f, w, h):
+        cell = Image.new("RGBA", (w, h), CLEAR)
+        for part in ("Legs", "Legs_Glow", "Body", "Body_Glow"):
+            sheet = Image.open("Content/Players/%s%s.png" % (prefix, part))
+            cell.alpha_composite(sheet.crop((0, f * h, w, (f + 1) * h)))
+        return cell
+
+    frames = (0, 3, 1, 9)
+    preview = Image.new("RGBA", (80 + 3 * len(frames) * 80, 112), (28, 32, 46, 255))
+    preview.alpha_composite(layered("Robot", 0, 40, 56), (20, 56))
     x = 80
     for name in TITANS:
-        legs = Image.open("Content/Players/%sLegs.png" % name)
-        body = Image.open("Content/Players/%sBody.png" % name)
-        for f in (0, 3, 9):
-            preview.alpha_composite(legs.crop((0, f * 112, 80, (f + 1) * 112)), (x, 0))
-            preview.alpha_composite(body.crop((0, f * 112, 80, (f + 1) * 112)), (x, 0))
+        for f in frames:
+            preview.alpha_composite(layered(name, f, 80, 112), (x, 0))
             x += 80
     save(preview, "tools/titan_preview_4x.png", scale=2)
 
