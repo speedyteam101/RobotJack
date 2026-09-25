@@ -1,0 +1,8 @@
+displayName = Robot Jack
+author = speedyteam101
+version = 0.1.0
+homepage = https://github.com/speedyteam101/RobotJack
+hideCode = false
+hideResources = false
+includeSource = true
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, tools\*, *.md
