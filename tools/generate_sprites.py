@@ -454,6 +454,19 @@ def spinning_buff():
     buff_icon("Content/Buffs/Spinning.png", inner)
 
 
+
+def gravity_arm_icon():
+    img, d = canvas(16, 16)
+    # Robot forearm reaching up-right, with a small gravity well at the palm.
+    d.line([1, 14, 7, 8], fill=OUTLINE, width=4)
+    d.line([1, 14, 7, 8], fill=STEEL, width=2)
+    d.rectangle([6, 7, 9, 10], fill=OUTLINE); d.point((8, 8), fill=CYAN)
+    d.ellipse([8, 0, 15, 7], outline=(170, 80, 255, 255))
+    d.ellipse([10, 2, 13, 5], fill=(110, 255, 190, 255))
+    d.point((11, 3), fill=WHITE)
+    save(img, "Content/Abilities/GravityArm.png")
+
+
 if __name__ == "__main__":
     robot_sheets()
     robot_trigger()
@@ -462,6 +475,6 @@ if __name__ == "__main__":
     plasma_bolt(); homing_missile(); invisible("Content/Projectiles/ThrusterHitbox.png")
     reticle(); satellite(); beam_strip(); radial_glow(); shock_ring()
     mod_icon()
-    jetpack_item(); jetpack_wings(); absorber_icon(); spinning_buff()
-    for name in ("HeadRam", "AbsorbField", "EnergyBlast", "EnergyEcho"):
+    jetpack_item(); jetpack_wings(); absorber_icon(); spinning_buff(); gravity_arm_icon()
+    for name in ("HeadRam", "AbsorbField", "EnergyBlast", "EnergyEcho", "GravityWell"):
         invisible("Content/Projectiles/%s.png" % name)

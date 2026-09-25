@@ -51,6 +51,16 @@ Mods: {
 					'''
 			}
 
+			GravityArm: {
+				DisplayName: Gravity Arm
+				Tooltip:
+					'''
+					Hold left click to open a gravity well at your cursor
+					Enemies near it are pulled toward the cursor and held there
+					Bosses are too heavy to move
+					'''
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -88,6 +98,7 @@ Mods: {
 			AbsorbField.DisplayName: Absorb Field
 			EnergyBlast.DisplayName: Energy Release
 			EnergyEcho.DisplayName: Absorbed Attack
+			GravityWell.DisplayName: Gravity Well
 		}
 
 		DropConditions: {
