@@ -108,10 +108,14 @@ namespace RobotJack.Content.Abilities
 {
 	// ---- More Titan Camera abilities ----
 
-	// Summon two camera drones that orbit you for 15 seconds and shoot plasma bolts at enemies.
-	public class CameraDrones : RobotAbility
+	// Summon an army of six Titan Camera soldiers for 20 seconds. They march along the ground, chase down enemies,
+	// hit what they run into and shoot at enemies in range.
+	public class CameraArmy : RobotAbility
 	{
+		public const int Soldiers = 6;
+
 		public override RobotFormType Form => RobotFormType.TitanCamera;
+		public override int CooldownTicks => 30 * 60;
 
 		public override void SetDefaults() {
 			base.SetDefaults();
@@ -121,18 +125,20 @@ namespace RobotJack.Content.Abilities
 			Item.useTime = 30;
 			Item.useAnimation = 30;
 			Item.noUseGraphic = true;
-			Item.DamageType = DamageClass.Magic;
-			Item.damage = 40;
+			Item.DamageType = DamageClass.Summon;
+			Item.damage = 45;
+			Item.knockBack = 4f;
 			Item.UseSound = SoundID.Item44;
-			Item.shoot = ModContent.ProjectileType<TitanDrone>();
+			Item.shoot = ModContent.ProjectileType<ArmySoldier>();
 			Item.shootSpeed = 1f;
 		}
 
-		protected override bool CanUseAbility(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
-
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-			for (int i = 0; i < 2; i++) {
-				Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, damage, 0f, player.whoAmI, ai0: 1f, ai1: i);
+			// Line up on both sides of the Titan, dropping in from just above.
+			for (int i = 0; i < Soldiers; i++) {
+				float offset = (i - (Soldiers - 1) / 2f) * 36f;
+				Vector2 spawn = player.Bottom + new Vector2(offset, -40f);
+				Projectile.NewProjectile(source, spawn, new Vector2(0f, 2f), type, damage, knockback, player.whoAmI, ai0: 1f, ai1: i);
 			}
 			return false;
 		}

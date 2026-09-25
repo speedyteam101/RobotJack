@@ -162,12 +162,12 @@ Mods: {
 				Tooltip: Spray six homing static orbs
 			}
 
-			SpeakerDrones: {
-				DisplayName: Speaker Drones
+			SpeakerArmy: {
+				DisplayName: Speaker Army
 				Tooltip:
 					'''
-					Summon two speaker drones for 15 seconds
-					They orbit you and fire sound waves at enemies
+					Summon an army of six speaker soldiers for 20 seconds
+					They march along the ground, chase down enemies and shoot at them
 					'''
 			}
 
@@ -199,12 +199,12 @@ Mods: {
 					'''
 			}
 
-			CameraDrones: {
-				DisplayName: Camera Drones
+			CameraArmy: {
+				DisplayName: Camera Army
 				Tooltip:
 					'''
-					Summon two camera drones for 15 seconds
-					They orbit you and shoot plasma bolts at enemies
+					Summon an army of six camera soldiers for 20 seconds
+					They march along the ground, chase down enemies and shoot at them
 					'''
 			}
 
@@ -240,12 +240,12 @@ Mods: {
 					'''
 			}
 
-			TVDrones: {
-				DisplayName: TV Drones
+			TVArmy: {
+				DisplayName: TV Army
 				Tooltip:
 					'''
-					Summon two TV drones for 15 seconds
-					They orbit you and fire homing static orbs at enemies
+					Summon an army of six TV soldiers for 20 seconds
+					They march along the ground, chase down enemies and shoot at them
 					'''
 			}
 
@@ -350,7 +350,7 @@ Mods: {
 			CameraFlashBurst.DisplayName: Camera Flash
 			EnergyOrb.DisplayName: Energy Orb
 			BladeSwing.DisplayName: Energy Blade
-			TitanDrone.DisplayName: Titan Drone
+			ArmySoldier.DisplayName: Army Soldier
 			SonicShield.DisplayName: Sonic Shield
 			StaticField.DisplayName: Static Field
 			FlashGrenade.DisplayName: Flash Grenade

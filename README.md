@@ -60,7 +60,7 @@ Each Titan has **8 abilities**. They all go into your inventory when you transfo
 | Speaker | **Sonic Boom** | 80 | A huge sound wave from your speaker head that grows as it flies and passes through everything. Heavy knockback. |
 | Speaker | **Bass Drop** | 120 | A ring of bass bursts out around you: hits everything nearby once, throws it away from you and confuses it. Screen shake. |
 | Speaker | **Speaker Barrage** | 35 | Rapid-fire small sound waves (auto-fire). |
-| Speaker | **Speaker Drones** | 40 per shot | Two speaker drones orbit you for 15 s and fire sound waves at the nearest enemy they can see. |
+| Speaker | **Speaker Army** | 45 (summon) | Summon **six speaker-headed soldiers** for 20 s. They march along the ground, jump over obstacles, chase the nearest enemy, hit what they run into and fire small sound waves at enemies in range. **30 s cooldown.** |
 | Speaker | **Sonic Shield** | 30 | A bubble of sound around you for 6 s: shatters enemy projectiles that touch it, pushes enemies out and hurts them. **20 s cooldown.** |
 | Speaker | **Subwoofer Quake** | 95 | Stomp: two giant sound waves roll out along the ground, one each way. |
 | Speaker | **Feedback Loop** | 50 ×12 | Twelve sound waves burst out in every direction. |
@@ -68,7 +68,7 @@ Each Titan has **8 abilities**. They all go into your inventory when you transfo
 | Camera | **Core Laser** | 45 every 6 ticks | **Hold left click**: a continuous blue laser from your chest core. It turns to follow the cursor and stops at blocks. |
 | Camera | **Camera Flash** | 60 | A blinding flash from your lens: damages and confuses everything nearby and **stuns** enemies in place for 2.5 s. Bosses aren't stunned. |
 | Camera | **Lens Burst** | 40 ×3 | Three homing blue orbs (auto-fire). |
-| Camera | **Camera Drones** | 40 per shot | Two camera drones orbit you for 15 s and shoot plasma bolts at enemies. |
+| Camera | **Camera Army** | 45 (summon) | Summon **six camera-headed soldiers** for 20 s that march, chase and fight like the Speaker Army, shooting plasma bolts. **30 s cooldown.** |
 | Camera | **Target Lock** | none | Lock on to every enemy near the cursor: a red reticle marks them, and they take **50% more damage** from everything for 8 s (except the Orbital Cannon Strike, which always does exactly its damage). |
 | Camera | **Zoom Shot** | 220 | A big, fast plasma shot from your zoom lens that pierces up to 6 enemies. |
 | Camera | **Rewind** | none | Jump back to where you were 3 seconds ago, and get back the health you had then if it was more. **20 s cooldown.** |
@@ -76,7 +76,7 @@ Each Titan has **8 abilities**. They all go into your inventory when you transfo
 | TV | **Hypno Screen** | 30 ×3 | Three hypnotic waves from your screen: confuse enemies for 5 s and stun them for 1.5 s. Bosses aren't stunned. |
 | TV | **Energy Blades** | 90 (melee) | Swing a giant energy blade in a wide arc toward the cursor (auto-swing). |
 | TV | **Static Storm** | 30 ×6 | Spray six homing purple orbs (auto-fire). |
-| TV | **TV Drones** | 40 per shot | Two TV drones orbit you for 15 s and fire homing static orbs at enemies. |
+| TV | **TV Army** | 45 (summon) | Summon **six TV-headed soldiers** for 20 s that march, chase and fight like the Speaker Army, firing homing static orbs. **30 s cooldown.** |
 | TV | **Channel Surf** | 35 per orb | Teleport to the cursor (up to ~56 tiles away, only if there's room), bursting five static orbs out where you leave and five where you arrive. |
 | TV | **Blade Dash** | 100 (melee) | Dash toward the cursor with an energy blade swing leading the way. |
 | TV | **Static Field** | 40 | A crackling field around you for 8 s that zaps every enemy inside with lightning three times a second. **15 s cooldown.** |

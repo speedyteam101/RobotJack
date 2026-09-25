@@ -911,40 +911,79 @@ def titan_icons():
 def titan_more_icons():
     red, blue, purple, pink = (255, 90, 90, 255), (60, 170, 255, 255), (190, 80, 255, 255), (255, 170, 255, 255)
 
-    def drone(d, col, kind):
-        # Small hovering drone: body, the Titan's "head" motif, glowing eye, little thruster.
-        d.rounded_rectangle([3, 4, 12, 11], radius=2, fill=OUTLINE)
-        d.rounded_rectangle([4, 5, 11, 10], radius=1, fill=STEEL)
-        d.line([4, 5, 11, 5], fill=STEEL_L)
+    def soldier(d, ox, oy, frame, kind, col):
+        """A small suited soldier with a mini Titan head, facing right. Cell 16x22; feet on row 21."""
+        suit, suit_l, suit_d = (40, 42, 50, 255), (70, 74, 86, 255), (24, 25, 30, 255)
+        bob = 1 if frame in (1, 2) else 0
+        y = oy + bob
+        # Legs: 0 idle, 1/2 walk (legs apart, swapped), 3 jump (tucked)
+        legs = {0: ((6, 21), (9, 21)), 1: ((4, 21), (11, 21)), 2: ((11, 21), (4, 21)), 3: ((5, 19), (10, 20))}[frame]
+        for k, (fx, fy) in enumerate(legs):
+            hip = (ox + (7 if k == 0 else 9), y + 15)
+            foot = (ox + fx, oy + fy)
+            d.line([hip, foot], fill=OUTLINE, width=3)
+            d.line([hip, foot], fill=suit_d if k == 0 else suit)
+            d.line([foot[0] - 1, foot[1], foot[0] + 2, foot[1]], fill=OUTLINE)
+        # Body: suit jacket with a white shirt and a tie in the Titan's colour
+        d.rectangle([ox + 5, y + 9, ox + 11, y + 15], fill=OUTLINE)
+        d.rectangle([ox + 6, y + 10, ox + 10, y + 14], fill=suit)
+        d.line([ox + 6, y + 10, ox + 10, y + 10], fill=suit_l)
+        d.line([ox + 8, y + 10, ox + 8, y + 12], fill=WHITE)
+        d.point((ox + 8, y + 11), fill=col)
+        # Arm, swinging with the walk
+        hand = {0: (10, 15), 1: (12, 14), 2: (9, 15), 3: (12, 11)}[frame]
+        d.line([ox + 9, y + 10, ox + hand[0], y + hand[1]], fill=OUTLINE, width=2)
+        d.point((ox + hand[0], y + hand[1]), fill=STEEL_L)
+        # Head
         if kind == "speaker":
-            d.ellipse([5, 5, 10, 10], fill=(40, 40, 46, 255)); d.ellipse([6, 6, 9, 9], outline=col)
+            d.rectangle([ox + 4, y + 1, ox + 12, y + 8], fill=OUTLINE)
+            d.rectangle([ox + 5, y + 2, ox + 11, y + 7], fill=(34, 34, 40, 255))
+            d.ellipse([ox + 6, y + 3, ox + 10, y + 7], fill=STEEL)
+            d.ellipse([ox + 7, y + 4, ox + 9, y + 6], fill=(30, 30, 34, 255))
+            d.point((ox + 10, y + 2), fill=col)
         elif kind == "camera":
-            d.rectangle([11, 6, 14, 9], fill=OUTLINE); d.rectangle([12, 7, 13, 8], fill=col)
-            d.point((6, 7), fill=RED)
+            d.rectangle([ox + 4, y + 2, ox + 11, y + 8], fill=OUTLINE)
+            d.rectangle([ox + 5, y + 3, ox + 10, y + 7], fill=(160, 166, 180, 255))
+            d.line([ox + 5, y + 3, ox + 10, y + 3], fill=(215, 220, 230, 255))
+            d.rectangle([ox + 11, y + 3, ox + 14, y + 7], fill=OUTLINE)
+            d.rectangle([ox + 12, y + 4, ox + 13, y + 6], fill=col)
+            d.point((ox + 6, y + 4), fill=RED)
         else:
-            d.rectangle([5, 6, 10, 9], fill=col); d.point((7, 7), fill=WHITE)
-            d.line([6, 4, 5, 2], fill=STEEL_L); d.line([9, 4, 10, 2], fill=STEEL_L)
-        d.rectangle([6, 12, 9, 13], fill=STEEL_D); d.point((7, 14), fill=ORANGE); d.point((8, 14), fill=ORANGE_L)
-        d.line([1, 7, 3, 7], fill=STEEL_D); d.line([12, 7, 14, 7], fill=STEEL_D)   # rotor arms
+            d.line([ox + 7, y + 1, ox + 5, y - 0], fill=STEEL_L); d.line([ox + 10, y + 1, ox + 12, y - 0], fill=STEEL_L)
+            d.rectangle([ox + 3, y + 1, ox + 13, y + 8], fill=OUTLINE)
+            d.rectangle([ox + 4, y + 2, ox + 12, y + 7], fill=(70, 58, 82, 255))
+            d.rectangle([ox + 5, y + 3, ox + 10, y + 6], fill=col)
+            d.point((ox + 7, y + 4), fill=WHITE); d.point((ox + 8, y + 5), fill=(255, 220, 255, 255))
+            d.point((ox + 11, y + 4), fill=GOLD)
 
-    # Drone sheet: 3 frames (speaker, camera, TV), 16x16 each -> 32x96.
-    img, d = canvas(16, 48)
-    for i, (col, kind) in enumerate(((red, "speaker"), (blue, "camera"), (purple, "tv"))):
-        frame, fd = canvas(16, 16)
-        drone(fd, col, kind)
-        img.alpha_composite(frame, (0, i * 16))
-    save(img, "Content/Projectiles/TitanDrone.png")
+    # Army soldier sheet: one column per Titan (speaker, camera, TV), four rows (idle, walk 1, walk 2, jump).
+    # 16x22 cells -> 32x44 in game, 96x176 in total.
+    kinds = ((red, "speaker"), (blue, "camera"), (purple, "tv"))
+    img, d = canvas(16 * 3, 22 * 4)
+    for c, (col, kind) in enumerate(kinds):
+        for f in range(4):
+            soldier(d, c * 16, f * 22 + 1, f, kind, col)
+    save(img, "Content/Projectiles/ArmySoldier.png")
 
     grenade, gd = canvas(7, 7)
     gd.ellipse([0, 0, 6, 6], fill=OUTLINE); gd.ellipse([1, 1, 5, 5], fill=STEEL_L)
     gd.ellipse([2, 2, 4, 4], fill=blue); gd.point((2, 2), fill=WHITE)
     save(grenade, "Content/Projectiles/FlashGrenade.png")
 
-    def drones_icon(col, kind):
+    def army_icon(col, kind):
+        # Two soldiers: a darker one behind, one in front.
         def f(d):
-            a, ad = canvas(16, 16); drone(ad, col, kind)
-            small = a.resize((11, 11), Image.NEAREST)
-            d._image.alpha_composite(small, (0, 5)); d._image.alpha_composite(small, (5, 0))
+            cell, cd = canvas(16, 22)
+            soldier(cd, 0, 1, 0, kind, col)
+            small = cell.resize((11, 15), Image.NEAREST)
+            dark = Image.eval(small, lambda v: v)  # copy
+            px = dark.load()
+            for yy in range(dark.height):
+                for xx in range(dark.width):
+                    r, g_, b, a = px[xx, yy]
+                    px[xx, yy] = (r * 6 // 10, g_ * 6 // 10, b * 6 // 10, a)
+            d._image.alpha_composite(dark, (5, 0))
+            d._image.alpha_composite(small, (0, 1))
         return f
 
     def shield(d):
@@ -990,11 +1029,11 @@ def titan_more_icons():
         d.rectangle([0, 3, 6, 11], fill=OUTLINE); d.rectangle([1, 4, 5, 10], fill=purple)
         d.rectangle([6, 6, 15, 8], fill=(200, 90, 255, 255)); d.line([6, 7, 15, 7], fill=WHITE)
 
-    for name, fn in (("SpeakerDrones", drones_icon(red, "speaker")), ("SonicShieldAbility", shield), ("SubwooferQuake", quake),
+    for name, fn in (("SpeakerArmy", army_icon(red, "speaker")), ("SonicShieldAbility", shield), ("SubwooferQuake", quake),
                      ("FeedbackLoop", loop), ("BoomDash", boom_dash),
-                     ("CameraDrones", drones_icon(blue, "camera")), ("TargetLock", target), ("ZoomShot", zoom),
+                     ("CameraArmy", army_icon(blue, "camera")), ("TargetLock", target), ("ZoomShot", zoom),
                      ("Rewind", rewind), ("FlashGrenades", grenades),
-                     ("TVDrones", drones_icon(purple, "tv")), ("ChannelSurf", surf), ("BladeDash", blade_dash),
+                     ("TVArmy", army_icon(purple, "tv")), ("ChannelSurf", surf), ("BladeDash", blade_dash),
                      ("StaticFieldAbility", field), ("BroadcastBeam", broadcast)):
         ability_icon("Content/Abilities/%s.png" % name, fn)
 
