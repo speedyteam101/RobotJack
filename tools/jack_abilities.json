@@ -1,0 +1,202 @@
+{
+ "FlameBlaster": [
+  "Blaze",
+  "Bolt",
+  "Rapid fireballs that burst into small explosions"
+ ],
+ "InfernoBeam": [
+  "Blaze",
+  "Beam",
+  "Hold left click: a roaring stream of fire from your arm cannon"
+ ],
+ "Eruption": [
+  "Blaze",
+  "Eruption",
+  "Five fire geysers burst out of the ground across the cursor"
+ ],
+ "MeteorShower": [
+  "Blaze",
+  "Rain",
+  "Call down seven meteors that explode where they land"
+ ],
+ "HeatNova": [
+  "Blaze",
+  "Blast",
+  "A wave of heat bursts out around you"
+ ],
+ "BlazeDash": [
+  "Blaze",
+  "Dash",
+  "Rocket toward the cursor in a trail of fire"
+ ],
+ "FlameRing": [
+  "Blaze",
+  "Orbit",
+  "Five fireballs circle you for 10 seconds"
+ ],
+ "OverheatBoost": [
+  "Blaze",
+  "Power",
+  "Overheat for 10 seconds: +30% damage and every hit sets enemies ablaze"
+ ],
+ "IceShards": [
+  "Frost",
+  "Bolt",
+  "Fire three piercing ice shards"
+ ],
+ "FreezeRay": [
+  "Frost",
+  "Beam",
+  "Hold left click: a freezing beam from your arm cannon"
+ ],
+ "GlacierSpikes": [
+  "Frost",
+  "Eruption",
+  "Five ice spires burst out of the ground across the cursor, freezing enemies"
+ ],
+ "Hailstorm": [
+  "Frost",
+  "Rain",
+  "A storm of hail pelts the area around the cursor"
+ ],
+ "Blizzard": [
+  "Frost",
+  "Aura",
+  "A blizzard swirls around you for 8 seconds, freezing enemies inside"
+ ],
+ "FrostNova": [
+  "Frost",
+  "Blast",
+  "A burst of cold around you that freezes enemies in place (not bosses)"
+ ],
+ "IceOrbit": [
+  "Frost",
+  "Orbit",
+  "Four ice shards circle you for 10 seconds"
+ ],
+ "CryoArmorBoost": [
+  "Frost",
+  "Power",
+  "Cryo Armor for 10 seconds: +25 defense and 20% damage reduction"
+ ],
+ "ArcPistol": [
+  "Volt",
+  "Bolt",
+  "Very fast piercing electric bolts"
+ ],
+ "LightningBeam": [
+  "Volt",
+  "Beam",
+  "Hold left click: a crackling lightning beam from your arm cannon"
+ ],
+ "ThunderStrike": [
+  "Volt",
+  "Eruption",
+  "Three lightning bolts strike the ground across the cursor"
+ ],
+ "StormCall": [
+  "Volt",
+  "Rain",
+  "Call a storm of electric bolts down onto the cursor"
+ ],
+ "TeslaField": [
+  "Volt",
+  "Aura",
+  "A tesla field surrounds you for 8 seconds, shocking enemies inside"
+ ],
+ "StaticDischarge": [
+  "Volt",
+  "Blast",
+  "Discharge a burst of static around you"
+ ],
+ "VoltDash": [
+  "Volt",
+  "Dash",
+  "Zip toward the cursor at lightning speed"
+ ],
+ "OverchargeBoost": [
+  "Volt",
+  "Power",
+  "Overcharge for 10 seconds: +40% movement speed and +25% attack speed"
+ ],
+ "ShadowOrbs": [
+  "Shadow",
+  "Bolt",
+  "Four homing shadow orbs"
+ ],
+ "VoidBeam": [
+  "Shadow",
+  "Beam",
+  "Hold left click: a beam of pure void from your arm cannon"
+ ],
+ "ShadowSpikes": [
+  "Shadow",
+  "Eruption",
+  "Five shadow tendrils burst out of the ground across the cursor"
+ ],
+ "DarkRain": [
+  "Shadow",
+  "Rain",
+  "Dark orbs rain down onto the cursor"
+ ],
+ "VoidPulse": [
+  "Shadow",
+  "Blast",
+  "A pulse of void energy bursts out around you"
+ ],
+ "ShadowStep": [
+  "Shadow",
+  "Dash",
+  "Step through the shadows toward the cursor, invincible for longer"
+ ],
+ "PhantomBlades": [
+  "Shadow",
+  "Orbit",
+  "Six phantom blades circle you for 10 seconds"
+ ],
+ "VampiricShroudBoost": [
+  "Shadow",
+  "Power",
+  "Vampiric Shroud for 10 seconds: your hits steal life"
+ ],
+ "StarShot": [
+  "Nova",
+  "Bolt",
+  "Five homing stars"
+ ],
+ "SupernovaBeam": [
+  "Nova",
+  "Beam",
+  "Hold left click: a blazing starlight beam from your arm cannon"
+ ],
+ "CometPillars": [
+  "Nova",
+  "Eruption",
+  "Seven pillars of starlight burst out of the ground across the cursor"
+ ],
+ "Starfall": [
+  "Nova",
+  "Rain",
+  "Call down falling stars that explode where they land"
+ ],
+ "BigBang": [
+  "Nova",
+  "Blast",
+  "A colossal explosion of starlight around you. 10 second cooldown"
+ ],
+ "CometDash": [
+  "Nova",
+  "Dash",
+  "Streak toward the cursor like a comet"
+ ],
+ "Constellation": [
+  "Nova",
+  "Orbit",
+  "Eight stars circle you for 10 seconds"
+ ],
+ "CelestialBlessingBoost": [
+  "Nova",
+  "Power",
+  "Celestial Blessing for 10 seconds: +10 health per second and +15% damage"
+ ]
+}

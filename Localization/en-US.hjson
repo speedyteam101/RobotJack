@@ -281,6 +281,271 @@ Mods: {
 					'''
 			}
 
+			BlazeTrigger: {
+				DisplayName: Blaze Trigger
+				Tooltip:
+					'''
+					Use to transform into Blaze Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+					Immune to burning and lava; walk safely on hot blocks
+					While transformed you get Blaze Jack's eight ability items
+					Crafted from a Robot Trigger, which you keep
+					"Fire it up."
+					'''
+			}
+
+			FrostTrigger: {
+				DisplayName: Frost Trigger
+				Tooltip:
+					'''
+					Use to transform into Frost Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+					Immune to cold; no slipping on ice
+					While transformed you get Frost Jack's eight ability items
+					Crafted from a Robot Trigger, which you keep
+					"Chill out."
+					'''
+			}
+
+			VoltTrigger: {
+				DisplayName: Volt Trigger
+				Tooltip:
+					'''
+					Use to transform into Volt Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+					Much faster, +10% attack speed, immune to Electrified
+					While transformed you get Volt Jack's eight ability items
+					Crafted from a Robot Trigger, which you keep
+					"Fully charged."
+					'''
+			}
+
+			ShadowTrigger: {
+				DisplayName: Shadow Trigger
+				Tooltip:
+					'''
+					Use to transform into Shadow Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{5}% crit chance
+					Chance to dodge attacks, immune to Shadowflame
+					While transformed you get Shadow Jack's eight ability items
+					Crafted from a Robot Trigger, which you keep
+					"Step into the dark."
+					'''
+			}
+
+			NovaTrigger: {
+				DisplayName: Nova Trigger
+				Tooltip:
+					'''
+					Use to transform into Nova Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+					+5 health per second
+					While transformed you get Nova Jack's eight ability items
+					Crafted from a Robot Trigger, which you keep
+					"Born from a dying star."
+					'''
+			}
+
+			FlameBlaster: {
+				DisplayName: Flame Blaster
+				Tooltip: Rapid fireballs that burst into small explosions
+			}
+
+			InfernoBeam: {
+				DisplayName: Inferno Beam
+				Tooltip: Hold left click: a roaring stream of fire from your arm cannon
+			}
+
+			Eruption: {
+				DisplayName: Eruption
+				Tooltip: Five fire geysers burst out of the ground across the cursor
+			}
+
+			MeteorShower: {
+				DisplayName: Meteor Shower
+				Tooltip: Call down seven meteors that explode where they land
+			}
+
+			HeatNova: {
+				DisplayName: Heat Nova
+				Tooltip: A wave of heat bursts out around you
+			}
+
+			BlazeDash: {
+				DisplayName: Blaze Dash
+				Tooltip: Rocket toward the cursor in a trail of fire
+			}
+
+			FlameRing: {
+				DisplayName: Flame Ring
+				Tooltip: Five fireballs circle you for 10 seconds
+			}
+
+			OverheatBoost: {
+				DisplayName: Overheat
+				Tooltip: Overheat for 10 seconds: +30% damage and every hit sets enemies ablaze
+			}
+
+			IceShards: {
+				DisplayName: Ice Shards
+				Tooltip: Fire three piercing ice shards
+			}
+
+			FreezeRay: {
+				DisplayName: Freeze Ray
+				Tooltip: Hold left click: a freezing beam from your arm cannon
+			}
+
+			GlacierSpikes: {
+				DisplayName: Glacier Spikes
+				Tooltip: Five ice spires burst out of the ground across the cursor, freezing enemies
+			}
+
+			Hailstorm: {
+				DisplayName: Hailstorm
+				Tooltip: A storm of hail pelts the area around the cursor
+			}
+
+			Blizzard: {
+				DisplayName: Blizzard
+				Tooltip: A blizzard swirls around you for 8 seconds, freezing enemies inside
+			}
+
+			FrostNova: {
+				DisplayName: Frost Nova
+				Tooltip: A burst of cold around you that freezes enemies in place (not bosses)
+			}
+
+			IceOrbit: {
+				DisplayName: Ice Orbit
+				Tooltip: Four ice shards circle you for 10 seconds
+			}
+
+			CryoArmorBoost: {
+				DisplayName: Cryo Armor
+				Tooltip: Cryo Armor for 10 seconds: +25 defense and 20% damage reduction
+			}
+
+			ArcPistol: {
+				DisplayName: Arc Pistol
+				Tooltip: Very fast piercing electric bolts
+			}
+
+			LightningBeam: {
+				DisplayName: Lightning Beam
+				Tooltip: Hold left click: a crackling lightning beam from your arm cannon
+			}
+
+			ThunderStrike: {
+				DisplayName: Thunder Strike
+				Tooltip: Three lightning bolts strike the ground across the cursor
+			}
+
+			StormCall: {
+				DisplayName: Storm Call
+				Tooltip: Call a storm of electric bolts down onto the cursor
+			}
+
+			TeslaField: {
+				DisplayName: Tesla Field
+				Tooltip: A tesla field surrounds you for 8 seconds, shocking enemies inside
+			}
+
+			StaticDischarge: {
+				DisplayName: Static Discharge
+				Tooltip: Discharge a burst of static around you
+			}
+
+			VoltDash: {
+				DisplayName: Volt Dash
+				Tooltip: Zip toward the cursor at lightning speed
+			}
+
+			OverchargeBoost: {
+				DisplayName: Overcharge
+				Tooltip: Overcharge for 10 seconds: +40% movement speed and +25% attack speed
+			}
+
+			ShadowOrbs: {
+				DisplayName: Shadow Orbs
+				Tooltip: Four homing shadow orbs
+			}
+
+			VoidBeam: {
+				DisplayName: Void Beam
+				Tooltip: Hold left click: a beam of pure void from your arm cannon
+			}
+
+			ShadowSpikes: {
+				DisplayName: Shadow Spikes
+				Tooltip: Five shadow tendrils burst out of the ground across the cursor
+			}
+
+			DarkRain: {
+				DisplayName: Dark Rain
+				Tooltip: Dark orbs rain down onto the cursor
+			}
+
+			VoidPulse: {
+				DisplayName: Void Pulse
+				Tooltip: A pulse of void energy bursts out around you
+			}
+
+			ShadowStep: {
+				DisplayName: Shadow Step
+				Tooltip: Step through the shadows toward the cursor, invincible for longer
+			}
+
+			PhantomBlades: {
+				DisplayName: Phantom Blades
+				Tooltip: Six phantom blades circle you for 10 seconds
+			}
+
+			VampiricShroudBoost: {
+				DisplayName: Vampiric Shroud
+				Tooltip: Vampiric Shroud for 10 seconds: your hits steal life
+			}
+
+			StarShot: {
+				DisplayName: Star Shot
+				Tooltip: Five homing stars
+			}
+
+			SupernovaBeam: {
+				DisplayName: Supernova Beam
+				Tooltip: Hold left click: a blazing starlight beam from your arm cannon
+			}
+
+			CometPillars: {
+				DisplayName: Comet Pillars
+				Tooltip: Seven pillars of starlight burst out of the ground across the cursor
+			}
+
+			Starfall: {
+				DisplayName: Starfall
+				Tooltip: Call down falling stars that explode where they land
+			}
+
+			BigBang: {
+				DisplayName: Big Bang
+				Tooltip: A colossal explosion of starlight around you
+			}
+
+			CometDash: {
+				DisplayName: Comet Dash
+				Tooltip: Streak toward the cursor like a comet
+			}
+
+			Constellation: {
+				DisplayName: Constellation
+				Tooltip: Eight stars circle you for 10 seconds
+			}
+
+			CelestialBlessingBoost: {
+				DisplayName: Celestial Blessing
+				Tooltip: Celestial Blessing for 10 seconds: +10 health per second and +15% damage
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -323,6 +588,56 @@ Mods: {
 				Description: Takes 50% more damage
 			}
 
+			BlazeJackForm: {
+				DisplayName: Blaze Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+			}
+
+			FrostJackForm: {
+				DisplayName: Frost Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+			}
+
+			VoltJackForm: {
+				DisplayName: Volt Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+			}
+
+			ShadowJackForm: {
+				DisplayName: Shadow Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{5}% crit chance
+			}
+
+			NovaJackForm: {
+				DisplayName: Nova Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+			}
+
+			Overheat: {
+				DisplayName: Overheat
+				Description: +30% damage, hits set enemies ablaze
+			}
+
+			CryoArmor: {
+				DisplayName: Cryo Armor
+				Description: +25 defense and 20% damage reduction
+			}
+
+			Overcharge: {
+				DisplayName: Overcharge
+				Description: +40% movement speed and +25% attack speed
+			}
+
+			VampiricShroud: {
+				DisplayName: Vampiric Shroud
+				Description: Your hits steal life
+			}
+
+			CelestialBlessing: {
+				DisplayName: Celestial Blessing
+				Description: +10 health per second and +15% damage
+			}
+
 			OrbitalCannonCooldown: {
 				DisplayName: Satellite Recharging
 				Description: You can't call another Orbital Cannon Strike yet
@@ -351,6 +666,11 @@ Mods: {
 			EnergyOrb.DisplayName: Energy Orb
 			BladeSwing.DisplayName: Energy Blade
 			ArmySoldier.DisplayName: Army Soldier
+			ElementBolt.DisplayName: Element Bolt
+			ElementBlast.DisplayName: Element Blast
+			ElementPillar.DisplayName: Eruption
+			ElementAura.DisplayName: Element Aura
+			ElementOrbiter.DisplayName: Orbiting Orb
 			SonicShield.DisplayName: Sonic Shield
 			StaticField.DisplayName: Static Field
 			FlashGrenade.DisplayName: Flash Grenade

@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot, and use ability items, headlined by the **Orbital Cannon Strike**. In Hardmode, craft cores to become one of three giant **Titans**: Titan Speaker, Titan Camera and Titan TV.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants), and use ability items, headlined by the **Orbital Cannon Strike**. In Hardmode, craft cores to become one of three giant **Titans**: Titan Speaker, Titan Camera and Titan TV.
 
 ## Installing (from source)
 
@@ -41,6 +41,42 @@ All ability damage except the Orbital Cannon Strike grows as you beat bosses: ×
 | **Thruster Dash** | 60 (melee) | Rocket toward the cursor with brief invincibility, burning everything you pass through. |
 | **Energy Absorber** | 18 per drain hit | **Hold left click** to open an absorb field around you. While it's up, **every hit you take is neutralised** and its damage is stored as energy. Enemy projectiles (and PvP opponents' projectiles) within ~26 tiles are pulled in and swallowed, also adding energy. Enemies in range are pulled toward you (by their knockback resistance, so most bosses won't budge), and PvP opponents are pulled too. Anything within ~7 tiles is **drained**: it takes damage, which adds to your energy, and players also lose mana. **Right click** to release: an area blast (~35 tiles across) that deals **10× your stored energy** to everything it touches. It also fires back every different attack you absorbed (up to 12 kinds), as glowing copies dealing **10× the damage they had**. Energy caps at 3,000 (a 30,000 damage blast) and is lost when you die. A bar above your head shows how much you have. |
 | **Gravity Arm** | none | **Hold left click** to open a gravity well that follows your cursor. Every enemy within ~25 tiles of it is pulled toward the cursor (faster when further away) and held in the middle, with tethers and a beam from your arm. It deals no damage: drag enemies into a group, then hit them with something else. Bosses, worm body segments and invincible enemies aren't pulled. |
+
+## Robot Jack variants
+
+Five elemental versions of Robot Jack. They're the same size as Robot Jack, with their own colors, a signature detail (flame crest, ice spikes, lightning antenna, horns, halo) and **eight abilities each**. Each variant's trigger is **crafted from a Robot Trigger, which you keep**, so you can still be normal Robot Jack. Transforming shows the pillar-of-light effect in the variant's color, and fast movement leaves afterimages in that color.
+
+| Variant | Transform item | Stats | Perk |
+| --- | --- | --- | --- |
+| **Blaze Jack** | Blaze Trigger: Robot Trigger + 12 Hellstone Bar @ Anvil (pre-Hardmode) | +30% damage, +18 defense, 10% DR, +30% speed | Immune to burning and lava; walk safely on hot blocks |
+| **Frost Jack** | Frost Trigger: Robot Trigger + 50 Ice Block + 5 Fallen Star @ Anvil (pre-Hardmode) | +25% damage, +30 defense, 15% DR, +25% speed | Immune to cold; no slipping on ice |
+| **Volt Jack** | Volt Trigger: Robot Trigger + 12 Soul of Light + 50 Wire @ Mythril/Orichalcum Anvil (Hardmode) | +30% damage, +18 defense, 10% DR, +60% speed, +10% attack speed | Much faster, +10% attack speed, immune to Electrified |
+| **Shadow Jack** | Shadow Trigger: Robot Trigger + 15 Soul of Night @ Mythril/Orichalcum Anvil (Hardmode) | +40% damage, +10% crit, +20 defense, 10% DR, +35% speed | Chance to dodge attacks, immune to Shadowflame |
+| **Nova Jack** | Nova Trigger: Robot Trigger + 10 Luminite Bar + 20 Fallen Star @ Ancient Manipulator (post-Moon Lord) | +50% damage, +10% crit, +40 defense, 20% DR, +40% speed, +100 max life, +5 HP/s | +5 health per second |
+
+Their abilities are built from these kinds, each in the variant's element (fire sets enemies ablaze, frost gives Frostburn and sometimes freezes, volt electrifies, shadow gives Shadowflame, nova applies Ichor). Every variant has bolts, a beam, an eruption, sky rain, a blast and a power-up; the other two slots differ (see the list below):
+
+| Kind | What it does |
+| --- | --- |
+| Bolts | Fire bolts from your arm cannon (auto-fire). Each variant's differ: exploding fireballs, 3 piercing ice shards, very fast piercing arcs, 4 homing shadow orbs, 5 homing stars. |
+| Beam | Hold left click for a continuous element beam from your arm cannon that follows the cursor. |
+| Eruption | Pillars burst out of the ground in a row across the cursor: fire geysers, freezing ice spires, lightning strikes from the sky, shadow tendrils, starlight pillars. |
+| Sky rain | Bolts rain down onto the cursor: meteors, hail, storm bolts, dark orbs, falling stars. |
+| Blast | An element explosion all around you (Frost Nova also freezes enemies; Nova's Big Bang is huge, with a 10 s cooldown). |
+| Dash | Blaze, Volt, Shadow, Nova: dash toward the cursor, hitting everything on the way (Volt is faster, Shadow Step keeps you invincible longer). |
+| Aura | Frost (Blizzard), Volt (Tesla Field): hurts everything around you for 8 s. 15 s cooldown. |
+| Orbit | Blaze, Frost, Shadow, Nova: orbs or blades circle you for 10 s, hitting what they touch. 12 s cooldown. |
+| Power-up | A 10 s buff (30 s cooldown): Overheat (+30% damage, hits set enemies ablaze), Cryo Armor (+25 defense, 20% DR), Overcharge (+40% speed, +25% attack speed), Vampiric Shroud (hits steal life), Celestial Blessing (+10 HP/s, +15% damage). |
+
+| Variant | Its eight abilities |
+| --- | --- |
+| **Blaze Jack** | Flame Blaster, Inferno Beam, Eruption, Meteor Shower, Heat Nova, Blaze Dash, Flame Ring, Overheat |
+| **Frost Jack** | Ice Shards, Freeze Ray, Glacier Spikes, Hailstorm, Blizzard, Frost Nova, Ice Orbit, Cryo Armor |
+| **Volt Jack** | Arc Pistol, Lightning Beam, Thunder Strike, Storm Call, Tesla Field, Static Discharge, Volt Dash, Overcharge |
+| **Shadow Jack** | Shadow Orbs, Void Beam, Shadow Spikes, Dark Rain, Void Pulse, Shadow Step, Phantom Blades, Vampiric Shroud |
+| **Nova Jack** | Star Shot, Supernova Beam, Comet Pillars, Starfall, Big Bang, Comet Dash, Constellation, Celestial Blessing |
+
+Base damage is higher for the later variants (Volt and Shadow ×2, Nova ×3.5 of Blaze/Frost's), and everything still scales with bosses beaten.
 
 ## Titan forms
 

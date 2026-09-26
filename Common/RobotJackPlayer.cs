@@ -135,6 +135,9 @@ namespace RobotJack.Common
 					absorbTimer--;
 				}
 				TickCooldowns();
+				if (lifeStealCooldown > 0) {
+					lifeStealCooldown--;
+				}
 				RecordRewind();
 				UpdateAbilityItems();
 				UpdateHeadRam();
@@ -256,6 +259,24 @@ namespace RobotJack.Common
 		}
 
 		// Rammed in PvP: this runs on the victim's own client, which then syncs its buffs.
+		// Power-up effects on hits: Overheat sets enemies ablaze, Vampiric Shroud steals life (at most every 10 ticks).
+		private int lifeStealCooldown;
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+			if (Player.HasBuff(ModContent.BuffType<Overheat>())) {
+				target.AddBuff(BuffID.OnFire3, 240);
+			}
+			if (Player.HasBuff(ModContent.BuffType<VampiricShroud>()) && lifeStealCooldown <= 0
+				&& !target.immortal && target.lifeMax > 5 && !target.friendly) {
+				int heal = System.Math.Min(System.Math.Clamp(damageDone / 10, 1, 12), Player.statLifeMax2 - Player.statLife);
+				if (heal > 0) {
+					Player.statLife += heal;
+					Player.HealEffect(heal);
+				}
+				lifeStealCooldown = 10;
+			}
+		}
+
 		public override void OnHurt(Player.HurtInfo info) {
 			if (info.PvP && info.DamageSource != null && info.DamageSource.SourceProjectileType == ModContent.ProjectileType<HeadRam>()) {
 				int spin = Spinning.DurationFor(System.Math.Max(info.Knockback, HeadRam.Knockback * 0.5f));

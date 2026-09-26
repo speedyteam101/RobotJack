@@ -69,7 +69,12 @@ RJ_VISOR = (18, 24, 44, 255)
 SCARF = (225, 45, 55, 255)
 SCARF_L = (255, 110, 110, 255)
 SCARF_D = (140, 20, 35, 255)
-CYAN_HALO = (90, 240, 255, 110)
+RJ_HALO = (90, 240, 255, 110)
+RJ_GLOW = (90, 240, 255, 255)
+RJ_GLOW_D = (30, 150, 200, 255)
+
+# Extra details drawn on top of the body by the variants (None for Robot Jack).
+RJ_DECOR = None
 
 
 def rj_scarf_tail(d, ox, y, frame):
@@ -118,12 +123,12 @@ def rj_arm(d, g, ox, y, frame, back):
         # Navy forearm guard with a glowing strip
         mid = ((shoulder[0] + hand[0]) // 2, (shoulder[1] + hand[1]) // 2)
         d.line([mid, hand], fill=RJ_NAVY_L, width=2)
-        g.line([mid, hand], fill=(90, 240, 255, 150))
+        g.line([mid, hand], fill=RJ_GLOW[:3] + (150,))
     # Fist / arm cannon muzzle
     d.rectangle([hand[0] - 1, hand[1] - 1, hand[0] + 1, hand[1] + 1], fill=OUTLINE)
     d.point(hand, fill=RJ_HI if not back else RJ_D)
     if not back:
-        g.point(hand, fill=CYAN_HALO)
+        g.point(hand, fill=RJ_HALO)
     # Rounded shoulder pad
     sx, sy = shoulder
     d.rectangle([sx - 2, sy - 2, sx + 2, sy + 1], fill=OUTLINE)
@@ -161,10 +166,10 @@ def draw_body_frame(d, g, ox, oy, frame):
     d.point((ox + 10, y + 16), fill=GOLD)
     # Chest core
     d.rectangle([ox + 9, y + 12, ox + 11, y + 14], fill=OUTLINE)
-    d.point((ox + 10, y + 13), fill=CYAN)
-    g.rectangle([ox + 8, y + 11, ox + 12, y + 15], fill=(90, 240, 255, 45))
-    g.point((ox + 9, y + 13), fill=CYAN_HALO); g.point((ox + 11, y + 13), fill=CYAN_HALO)
-    g.point((ox + 10, y + 12), fill=CYAN_HALO); g.point((ox + 10, y + 14), fill=CYAN_HALO)
+    d.point((ox + 10, y + 13), fill=RJ_GLOW)
+    g.rectangle([ox + 8, y + 11, ox + 12, y + 15], fill=RJ_GLOW[:3] + (45,))
+    g.point((ox + 9, y + 13), fill=RJ_HALO); g.point((ox + 11, y + 13), fill=RJ_HALO)
+    g.point((ox + 10, y + 12), fill=RJ_HALO); g.point((ox + 10, y + 14), fill=RJ_HALO)
     g.point((ox + 10, y + 13), fill=WHITE)
 
     # Helmet: rounded white dome with a navy crest and a glowing V visor
@@ -176,23 +181,25 @@ def draw_body_frame(d, g, ox, oy, frame):
     # Crest fin running over the top and an antenna
     d.line([ox + 8, y + 2, ox + 11, y + 2], fill=RJ_NAVY)
     d.line([ox + 7, y + 1, ox + 7, y + 2], fill=RJ_D)
-    d.point((ox + 7, y + 0), fill=CYAN)
+    d.point((ox + 7, y + 0), fill=RJ_GLOW)
     g.point((ox + 7, y + 0), fill=WHITE)
     # Ear piece
     d.rectangle([ox + 6, y + 5, ox + 7, y + 6], fill=RJ_NAVY_L)
-    g.point((ox + 7, y + 5), fill=CYAN_HALO)
+    g.point((ox + 7, y + 5), fill=RJ_HALO)
     # V-shaped visor (facing right): wide on top, narrowing below
     d.rectangle([ox + 9, y + 4, ox + 13, y + 6], fill=RJ_VISOR)
-    d.line([ox + 9, y + 4, ox + 13, y + 4], fill=CYAN_D)
-    d.line([ox + 10, y + 5, ox + 13, y + 5], fill=CYAN)
-    d.point((ox + 12, y + 6), fill=CYAN_D)
-    g.line([ox + 9, y + 4, ox + 13, y + 4], fill=(90, 240, 255, 160))
+    d.line([ox + 9, y + 4, ox + 13, y + 4], fill=RJ_GLOW_D)
+    d.line([ox + 10, y + 5, ox + 13, y + 5], fill=RJ_GLOW)
+    d.point((ox + 12, y + 6), fill=RJ_GLOW_D)
+    g.line([ox + 9, y + 4, ox + 13, y + 4], fill=RJ_GLOW[:3] + (160,))
     g.line([ox + 10, y + 5, ox + 13, y + 5], fill=WHITE)
-    g.point((ox + 12, y + 6), fill=CYAN)
-    g.point((ox + 14, y + 5), fill=(90, 240, 255, 90))                 # glow spilling out of the visor
+    g.point((ox + 12, y + 6), fill=RJ_GLOW)
+    g.point((ox + 14, y + 5), fill=RJ_GLOW[:3] + (90,))                 # glow spilling out of the visor
     # Jaw plate
     d.line([ox + 9, y + 7, ox + 12, y + 7], fill=RJ_MID)
     rj_scarf_knot(d, ox, y)
+    if RJ_DECOR is not None:
+        RJ_DECOR(d, g, ox, y, frame)
 
     rj_arm(d, g, ox, y, frame, back=False)
 
@@ -205,7 +212,7 @@ def draw_leg(d, g, hip, foot, back):
     thick_line(d, hip, knee, RJ_NAVY if back else RJ_NAVY_L, 2)        # navy thigh
     thick_line(d, knee, foot, base, 2)                                 # white shin guard
     if not back:
-        g.point(((knee[0] + foot[0]) // 2, (knee[1] + foot[1]) // 2), fill=(90, 240, 255, 130))
+        g.point(((knee[0] + foot[0]) // 2, (knee[1] + foot[1]) // 2), fill=RJ_GLOW[:3] + (130,))
     # Knee cap
     d.rectangle([knee[0] - 1, knee[1] - 1, knee[0], knee[1]], fill=RJ_HI if not back else RJ_D)
     # Boot with a lighter toe
@@ -1125,8 +1132,189 @@ def titan_more_icons():
         invisible("Content/Projectiles/%s.png" % name)
 
 
+
+# ---------------------------------------------------------------- Robot Jack variants
+# Same body and animation as Robot Jack, recoloured, with a signature detail each.
+
+def _decor_flame(d, g, ox, y, frame):
+    # Flame crest flickering off the top of the helmet.
+    flicker = frame % 3 == 0
+    for i, x in enumerate((8, 10, 12)):
+        top = y + (0 if i == 1 else (0 if flicker and i == 0 else 1))  # never above the frame's top row
+        d.line([ox + x, top, ox + x, y + 2], fill=(255, 140, 40, 255))
+        g.line([ox + x, top, ox + x, y + 2], fill=(255, 200, 80, 220))
+        g.point((ox + x, top), fill=(255, 250, 200, 255))
+
+
+def _decor_ice(d, g, ox, y, frame):
+    # Ice crystal spikes on the helmet and the front shoulder.
+    for (x0, y0, x1, y1) in ((8, 2, 7, 0), (11, 2, 12, 0), (12, 10, 14, 8)):
+        d.line([ox + x0, y + y0, ox + x1, y + y1], fill=(235, 250, 255, 255))
+        g.point((ox + x1, y + y1), fill=(200, 245, 255, 200))
+
+
+def _decor_bolt(d, g, ox, y, frame):
+    # Zig-zag lightning-bolt antenna.
+    pts = [(ox + 7, y + 2), (ox + 8, y + 1), (ox + 7, y + 1), (ox + 8, y + 0)]
+    d.line(pts, fill=(255, 240, 90, 255))
+    g.line(pts, fill=(255, 255, 200, 255))
+
+
+def _decor_horns(d, g, ox, y, frame):
+    # Two small curved horns.
+    for (x0, x1) in ((7, 6), (12, 13)):
+        d.line([ox + x0, y + 2, ox + x1, y + 0], fill=OUTLINE, width=2)
+        d.point((ox + x1, y + 0), fill=(200, 120, 255, 255))
+        g.point((ox + x1, y + 0), fill=(220, 150, 255, 200))
+
+
+def _decor_halo(d, g, ox, y, frame):
+    # A glowing halo floating above the helmet and a star on the chest.
+    g.ellipse([ox + 7, y + 0, ox + 13, y + 2], outline=(255, 235, 150, 255))
+    g.point((ox + 10, y + 13), fill=WHITE)
+    for (dx, dy) in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+        g.point((ox + 10 + dx, y + 13 + dy), fill=(255, 200, 240, 230))
+
+
+JACK_VARIANTS = {
+    "BlazeJack": dict(RJ_HI=(255, 214, 170, 255), RJ=(228, 112, 52, 255), RJ_MID=(170, 70, 38, 255), RJ_D=(110, 40, 28, 255),
+                      RJ_NAVY=(62, 28, 26, 255), RJ_NAVY_L=(118, 50, 38, 255), RJ_VISOR=(40, 14, 10, 255),
+                      RJ_GLOW=(255, 175, 60, 255), RJ_GLOW_D=(200, 90, 20, 255), RJ_HALO=(255, 175, 60, 110),
+                      SCARF=(255, 200, 50, 255), SCARF_L=(255, 240, 150, 255), SCARF_D=(190, 120, 20, 255), RJ_DECOR=_decor_flame),
+    "FrostJack": dict(RJ_HI=(246, 252, 255, 255), RJ=(192, 226, 246, 255), RJ_MID=(130, 180, 215, 255), RJ_D=(80, 120, 165, 255),
+                      RJ_NAVY=(40, 80, 130, 255), RJ_NAVY_L=(80, 140, 200, 255), RJ_VISOR=(14, 30, 50, 255),
+                      RJ_GLOW=(150, 232, 255, 255), RJ_GLOW_D=(70, 160, 220, 255), RJ_HALO=(150, 232, 255, 110),
+                      SCARF=(120, 200, 255, 255), SCARF_L=(210, 240, 255, 255), SCARF_D=(60, 120, 190, 255), RJ_DECOR=_decor_ice),
+    "VoltJack": dict(RJ_HI=(255, 250, 205, 255), RJ=(240, 208, 60, 255), RJ_MID=(190, 150, 30, 255), RJ_D=(120, 90, 20, 255),
+                     RJ_NAVY=(32, 32, 38, 255), RJ_NAVY_L=(72, 72, 84, 255), RJ_VISOR=(20, 20, 10, 255),
+                     RJ_GLOW=(255, 240, 110, 255), RJ_GLOW_D=(210, 170, 30, 255), RJ_HALO=(255, 240, 110, 110),
+                     SCARF=(60, 150, 255, 255), SCARF_L=(150, 210, 255, 255), SCARF_D=(30, 80, 170, 255), RJ_DECOR=_decor_bolt),
+    "ShadowJack": dict(RJ_HI=(150, 128, 180, 255), RJ=(72, 56, 98, 255), RJ_MID=(50, 40, 68, 255), RJ_D=(32, 25, 44, 255),
+                       RJ_NAVY=(22, 16, 32, 255), RJ_NAVY_L=(64, 32, 96, 255), RJ_VISOR=(10, 5, 16, 255),
+                       RJ_GLOW=(195, 95, 255, 255), RJ_GLOW_D=(120, 40, 190, 255), RJ_HALO=(195, 95, 255, 110),
+                       SCARF=(110, 30, 150, 255), SCARF_L=(170, 80, 210, 255), SCARF_D=(55, 12, 80, 255), RJ_DECOR=_decor_horns),
+    "NovaJack": dict(RJ_HI=(255, 255, 238, 255), RJ=(250, 226, 145, 255), RJ_MID=(215, 170, 80, 255), RJ_D=(150, 110, 50, 255),
+                     RJ_NAVY=(90, 40, 112, 255), RJ_NAVY_L=(150, 82, 172, 255), RJ_VISOR=(30, 15, 40, 255),
+                     RJ_GLOW=(255, 150, 225, 255), RJ_GLOW_D=(200, 80, 170, 255), RJ_HALO=(255, 150, 225, 110),
+                     SCARF=(255, 120, 200, 255), SCARF_L=(255, 200, 235, 255), SCARF_D=(180, 60, 140, 255), RJ_DECOR=_decor_halo),
+}
+
+ELEMENT_COLORS = {  # main, core, dark (matches Elements.cs)
+    "Blaze": ((255, 120, 35, 255), (255, 230, 150, 255), (150, 55, 15, 255)),
+    "Frost": ((120, 215, 255, 255), (235, 250, 255, 255), (50, 110, 170, 255)),
+    "Volt": ((255, 230, 70, 255), (255, 255, 220, 255), (150, 120, 20, 255)),
+    "Shadow": ((155, 60, 230, 255), (230, 180, 255, 255), (60, 20, 100, 255)),
+    "Nova": ((255, 130, 215, 255), (255, 245, 200, 255), (150, 60, 130, 255)),
+}
+
+
+def robot_variant_sheets():
+    base = {k: globals()[k] for k in JACK_VARIANTS["BlazeJack"]}
+    preview = Image.new("RGBA", (FRAME_W * 3 * (len(JACK_VARIANTS) + 1), FRAME_H), (28, 32, 46, 255))
+    x = 0
+    for name, pal in [("Robot", base)] + list(JACK_VARIANTS.items()):
+        globals().update(pal)
+        body, bd = canvas(FRAME_W, FRAME_H * FRAMES)
+        body_glow, bg = canvas(FRAME_W, FRAME_H * FRAMES)
+        legs, ld = canvas(FRAME_W, FRAME_H * FRAMES)
+        legs_glow, lg = canvas(FRAME_W, FRAME_H * FRAMES)
+        for f in range(FRAMES):
+            draw_body_frame(bd, bg, 0, f * FRAME_H, f)
+            draw_legs_frame(ld, lg, 0, f * FRAME_H, f)
+        if name != "Robot":
+            save(body, "Content/Players/%sBody.png" % name)
+            save(body_glow, "Content/Players/%sBody_Glow.png" % name)
+            save(legs, "Content/Players/%sLegs.png" % name)
+            save(legs_glow, "Content/Players/%sLegs_Glow.png" % name)
+        for f in (0, 3, 9):
+            for sheet in (legs, legs_glow, body, body_glow):
+                preview.alpha_composite(sheet.crop((0, f * FRAME_H, FRAME_W, (f + 1) * FRAME_H)), (x, 0))
+            x += FRAME_W
+    globals().update(base)
+    save(preview, "tools/jack_variants_preview_6x.png", scale=6)
+
+
+def jack_variant_icons():
+    for element, (main, core, dark) in ELEMENT_COLORS.items():
+        # Transform item: the Robot Trigger shape in the element's colours.
+        img, d = canvas(14, 16)
+        d.rounded_rectangle([3, 5, 10, 15], radius=2, fill=OUTLINE)
+        d.rounded_rectangle([4, 6, 9, 14], radius=1, fill=dark)
+        d.line([4, 6, 4, 14], fill=main)
+        d.rectangle([5, 0, 8, 5], fill=OUTLINE)
+        d.rectangle([6, 1, 7, 4], fill=main)
+        d.point((6, 1), fill=core)
+        d.rectangle([5, 8, 8, 10], fill=OUTLINE)
+        d.point((6, 9), fill=core); d.point((7, 9), fill=main)
+        save(img, "Content/Items/%sTrigger.png" % element)
+
+        # Form buff: a small robot head with the element's visor.
+        def form_inner(d, main=main, core=core, dark=dark):
+            d.rounded_rectangle([3, 3, 12, 11], radius=2, fill=dark)
+            d.rectangle([6, 6, 12, 7], fill=main); d.line([7, 6, 11, 6], fill=core)
+            d.rectangle([5, 12, 10, 14], fill=STEEL_D)
+        buff_icon("Content/Buffs/%sJackForm.png" % element, form_inner)
+
+    # Power-up buffs.
+    def power(path, element, symbol):
+        main, core, dark = ELEMENT_COLORS[element]
+        def inner(d):
+            d.ellipse([2, 2, 13, 13], fill=dark)
+            symbol(d, main, core)
+        buff_icon(path, inner)
+    power("Content/Buffs/Overheat.png", "Blaze", lambda d, m, c: (d.polygon([(7, 3), (10, 8), (8, 12), (5, 12), (4, 8)], fill=m), d.point((7, 9), fill=c)))
+    power("Content/Buffs/CryoArmor.png", "Frost", lambda d, m, c: (d.polygon([(4, 4), (11, 4), (11, 9), (7, 12), (4, 9)], fill=m), d.line([7, 5, 7, 10], fill=c)))
+    power("Content/Buffs/Overcharge.png", "Volt", lambda d, m, c: d.line([(9, 3), (6, 8), (9, 8), (6, 13)], fill=c, width=2))
+    power("Content/Buffs/VampiricShroud.png", "Shadow", lambda d, m, c: (d.polygon([(7, 4), (10, 8), (7, 12), (4, 8)], fill=m), d.point((7, 8), fill=RED)))
+    power("Content/Buffs/CelestialBlessing.png", "Nova", lambda d, m, c: (d.polygon([(7, 3), (8, 6), (11, 7), (8, 8), (7, 11), (6, 8), (3, 7), (6, 6)], fill=c), d.point((7, 7), fill=m)))
+
+    # Ability icons: one symbol per ability template, drawn in the element's colours.
+    def bolt(d, m, c, k):
+        d.line([1, 14, 9, 6], fill=k, width=2); d.ellipse([8, 3, 14, 9], fill=m); d.ellipse([10, 5, 12, 7], fill=c)
+    def beam(d, m, c, k):
+        d.rectangle([0, 5, 5, 11], fill=OUTLINE); d.rectangle([1, 6, 4, 10], fill=STEEL)
+        d.rectangle([5, 6, 15, 10], fill=m); d.line([5, 8, 15, 8], fill=c)
+    def eruption(d, m, c, k):
+        d.rectangle([0, 13, 15, 15], fill=(120, 80, 45, 255))
+        for x in (2, 7, 12):
+            d.rectangle([x - 1, 3 + (x % 3), x + 1, 12], fill=m); d.line([x, 3 + (x % 3), x, 12], fill=c)
+    def rain(d, m, c, k):
+        for (x, y) in ((3, 1), (8, 4), (12, 0), (5, 9)):
+            d.line([x, y, x + 3, y + 5], fill=m, width=2); d.point((x + 3, y + 5), fill=c)
+    def blast(d, m, c, k):
+        d.ellipse([0, 0, 15, 15], outline=m); d.ellipse([3, 3, 12, 12], outline=c); d.ellipse([6, 6, 9, 9], fill=c)
+        for (x, y) in ((1, 7), (14, 8), (7, 1), (8, 14)):
+            d.point((x, y), fill=c)
+    def dash(d, m, c, k):
+        d.polygon([(15, 8), (8, 3), (8, 13)], fill=c)
+        for y in (5, 8, 11):
+            d.line([0, y, 7, y], fill=m)
+    def aura(d, m, c, k):
+        d.ellipse([0, 0, 15, 15], outline=m); d.ellipse([5, 4, 10, 12], fill=STEEL)
+        for (x, y) in ((3, 4), (12, 5), (2, 11), (12, 12)):
+            d.point((x, y), fill=c)
+    def orbit(d, m, c, k):
+        d.ellipse([1, 1, 14, 14], outline=k); d.ellipse([6, 6, 9, 9], fill=STEEL)
+        for (x, y) in ((6, 0), (12, 6), (6, 12), (0, 6)):
+            d.ellipse([x, y, x + 3, y + 3], fill=m); d.point((x + 1, y + 1), fill=c)
+    def power_icon(d, m, c, k):
+        d.ellipse([1, 1, 14, 14], fill=k)
+        d.polygon([(7, 2), (12, 8), (9, 8), (9, 13), (6, 13), (6, 8), (3, 8)], fill=m); d.line([7, 4, 7, 12], fill=c)
+    symbols = {"Bolt": bolt, "Beam": beam, "Eruption": eruption, "Rain": rain, "Blast": blast, "Dash": dash, "Aura": aura, "Orbit": orbit, "Power": power_icon}
+    import json
+    spec = json.load(open("tools/jack_abilities.json"))
+    for name, (element, kind, _tip) in spec.items():
+        main, core, dark = ELEMENT_COLORS[element]
+        ability_icon("Content/Abilities/%s.png" % name, lambda d, f=symbols[kind], m=main, c=core, k=dark: f(d, m, c, k))
+
+    for name in ("ElementBolt", "ElementBlast", "ElementPillar", "ElementAura", "ElementOrbiter"):
+        invisible("Content/Projectiles/%s.png" % name)
+
+
 if __name__ == "__main__":
     robot_sheets()
+    robot_variant_sheets()
+    jack_variant_icons()
     titan_sheets()
     titan_icons()
     titan_more_icons()

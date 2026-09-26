@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using RobotJack.Common;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,7 +7,8 @@ using Terraria.ModLoader;
 namespace RobotJack.Content.Projectiles
 {
 	// Invisible damaging area that follows the player during a dash.
-	// ai[0] = trail style: 0 = rocket fire (Thruster Dash), 1 = sound (Boom Dash), 2 = purple static (Blade Dash).
+	// ai[0] = trail style: 0 = rocket fire (Thruster Dash), 1 = sound (Boom Dash), 2 = purple static (Blade Dash),
+	// 3-7 = a Robot Jack variant's element dash (JackElement + 3).
 	public class ThrusterHitbox : ModProjectile
 	{
 		public override void SetDefaults() {
@@ -29,7 +31,7 @@ namespace RobotJack.Content.Projectiles
 
 			Vector2 back = -player.velocity.SafeNormalize(Vector2.Zero);
 			int style = (int)Projectile.ai[0];
-			int dustType = style switch { 1 => DustID.GemRuby, 2 => DustID.PinkFairy, _ => DustID.Torch };
+			int dustType = style >= 3 ? Elements.Dust(Elements.FromAI(style - 3)) : style switch { 1 => DustID.GemRuby, 2 => DustID.PinkFairy, _ => DustID.Torch };
 			for (int i = 0; i < 4; i++) {
 				Dust fire = Dust.NewDustPerfect(player.Center + back * 14f + Main.rand.NextVector2Circular(6f, 6f), dustType,
 					back * Main.rand.NextFloat(3f, 7f), Scale: 1.8f);
@@ -40,6 +42,10 @@ namespace RobotJack.Content.Projectiles
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+			if (Projectile.ai[0] >= 3f) {
+				ElementFX.Hit(target, Elements.FromAI(Projectile.ai[0] - 3f));
+				return;
+			}
 			switch ((int)Projectile.ai[0]) {
 				case 1:
 					target.AddBuff(BuffID.Confused, 120);

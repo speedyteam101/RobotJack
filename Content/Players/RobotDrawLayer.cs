@@ -28,6 +28,11 @@ namespace RobotJack.Content.Players
 			RobotFormType.TitanSpeaker => "TitanSpeaker",
 			RobotFormType.TitanCamera => "TitanCamera",
 			RobotFormType.TitanTV => "TitanTV",
+			RobotFormType.BlazeJack => "BlazeJack",
+			RobotFormType.FrostJack => "FrostJack",
+			RobotFormType.VoltJack => "VoltJack",
+			RobotFormType.ShadowJack => "ShadowJack",
+			RobotFormType.NovaJack => "NovaJack",
 			_ => "Robot",
 		};
 
@@ -41,9 +46,9 @@ namespace RobotJack.Content.Players
 			Color light = Lighting.GetColor(tile.X, tile.Y) * (1f - drawInfo.shadow);
 			Color glow = Color.White * (1f - drawInfo.shadow);
 
-			// Robot Jack leaves glowing cyan afterimages when moving fast.
-			if (form == RobotFormType.RobotJack && drawInfo.shadow == 0f && player.velocity.Length() > 7f) {
-				DrawAfterimages(ref drawInfo, player, sheet);
+			// Robot Jack and his variants leave glowing afterimages (in their colour) when moving fast.
+			if (form.IsJack() && drawInfo.shadow == 0f && player.velocity.Length() > 7f) {
+				DrawAfterimages(ref drawInfo, player, sheet, form.GlowColor());
 			}
 
 			// Legs first, then body on top, each with a full-bright glow pass (visor, cores, screens, jets).
@@ -53,8 +58,8 @@ namespace RobotJack.Content.Players
 			DrawPart(ref drawInfo, sheet + "Body_Glow", scale, player.bodyFrame, player.bodyPosition, player.bodyRotation, glow);
 		}
 
-		// Faded cyan copies of the robot at its last few positions (additive, so they glow).
-		private static void DrawAfterimages(ref PlayerDrawSet drawInfo, Player player, string sheet) {
+		// Faded copies of the robot at its last few positions (additive, so they glow).
+		private static void DrawAfterimages(ref PlayerDrawSet drawInfo, Player player, string sheet, Color glowColor) {
 			Vector2[] trail = player.GetModPlayer<RobotJackPlayer>().trailPositions;
 			for (int i = trail.Length - 1; i >= 1; i--) {
 				if (trail[i] == Vector2.Zero) {
@@ -65,7 +70,7 @@ namespace RobotJack.Content.Players
 					continue; // too close to see, or a teleport
 				}
 				float fade = 1f - i / (float)trail.Length;
-				Color color = new Color(90, 230, 255, 0) * (0.45f * fade);
+				Color color = new Color(glowColor.R, glowColor.G, glowColor.B, 0) * (0.45f * fade);
 				DrawPart(ref drawInfo, sheet + "Legs", 1, player.legFrame, player.legPosition, player.legRotation, color, shift);
 				DrawPart(ref drawInfo, sheet + "Body", 1, player.bodyFrame, player.bodyPosition, player.bodyRotation, color, shift);
 			}

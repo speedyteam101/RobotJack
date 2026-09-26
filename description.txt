@@ -11,5 +11,6 @@ Find the Robot Trigger and transform into a sci-fi combat robot.
   - Energy Absorber: hold to neutralise attacks, pull enemies in and drain them; right click to release it all as a blast dealing 10x the stored energy.
   - Gravity Arm: hold to pull enemies toward your cursor.
 - Robot Jetpack: lets you fly. While transformed, ramming things with your robot head knocks them away spinning.
+- Five Robot Jack variants: Blaze, Frost, Volt, Shadow and Nova Jack, crafted from the Robot Trigger, each with eight elemental abilities.
 - Titan forms (Hardmode): Titan Speaker, Titan Camera and Titan TV. Giant forms, each with eight abilities of its own: sound waves, bass shockwaves, sonic shields and a summoned army of soldiers; a core laser, stunning flashes, target lock and rewind; hypnotic waves, energy blades, teleporting and lightning fields.
 - Abilities grow stronger as you beat bosses.

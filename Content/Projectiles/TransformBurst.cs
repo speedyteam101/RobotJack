@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using RobotJack.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.CameraModifiers;
@@ -12,11 +13,13 @@ namespace RobotJack.Content.Projectiles
 	// Robot Jack's transformation effect (visual only, no damage). Energy rushes in toward the player,
 	// a pillar of light slams down from the sky onto them, shockwave rings burst out and sparks fly.
 	// ai[1] = 1: the smaller version played when turning back.
+	// ai[2] = colour: 0 = Robot Jack's cyan, 1-5 = a variant's element (JackElement + 1).
 	public class TransformBurst : ModProjectile
 	{
 		public const int Lifetime = 45;
 
-		private static readonly Color Cyan = new Color(90, 230, 255);
+		private Color Cyan => Projectile.ai[2] >= 1f ? Elements.Main(Elements.FromAI(Projectile.ai[2] - 1f)) : new Color(90, 230, 255);
+		private int SparkDust => Projectile.ai[2] >= 1f ? Elements.Dust(Elements.FromAI(Projectile.ai[2] - 1f)) : DustID.Electric;
 		private static Asset<Texture2D> beamTex, glowTex, ringTex;
 
 		private ref float Timer => ref Projectile.ai[0];
@@ -68,14 +71,14 @@ namespace RobotJack.Content.Projectiles
 			if (Timer < 14) {
 				for (int i = 0; i < 4; i++) {
 					Vector2 offset = Main.rand.NextVector2CircularEdge(160f, 160f) * Size;
-					Dust dust = Dust.NewDustPerfect(Projectile.Center + offset, DustID.Electric, -offset / 12f, Scale: 1.1f);
+					Dust dust = Dust.NewDustPerfect(Projectile.Center + offset, SparkDust, -offset / 12f, Scale: 1.1f);
 					dust.noGravity = true;
 				}
 			}
 			// ...then a burst of sparks out of the player.
 			if (Timer == 14) {
 				for (int i = 0; i < (TurningBack ? 20 : 45); i++) {
-					Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Electric, Main.rand.NextVector2CircularEdge(1f, 1f) * Main.rand.NextFloat(3f, 11f) * Size, Scale: 1.4f);
+					Dust dust = Dust.NewDustPerfect(Projectile.Center, SparkDust, Main.rand.NextVector2CircularEdge(1f, 1f) * Main.rand.NextFloat(3f, 11f) * Size, Scale: 1.4f);
 					dust.noGravity = true;
 				}
 				for (int i = 0; i < 12; i++) {
