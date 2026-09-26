@@ -49,6 +49,21 @@ namespace RobotJack.Content.Projectiles
 				new Vector2(width / beam.Width, length / beam.Height), SpriteEffects.None, 0);
 		}
 
+		// The same line, added to a titan sprite list instead of drawn right away.
+		public static void LineTo(System.Collections.Generic.List<Common.Titan.TitanSprite> list, Vector2 from, Vector2 to, float width, Color color) {
+			Vector2 diff = to - from;
+			float length = diff.Length();
+			if (length < 1f) {
+				return;
+			}
+			Texture2D beam = Beam;
+			list.Add(new Common.Titan.TitanSprite {
+				Texture = beam, Position = from, Color = color, Rotation = diff.ToRotation() - MathHelper.PiOver2,
+				Origin = new Vector2(beam.Width / 2f, 0f), Scale = 1f, Effects = SpriteEffects.None,
+				NonUniformScale = new Vector2(width / beam.Width, length / beam.Height),
+			});
+		}
+
 		public static bool CircleHits(Vector2 center, float radius, Rectangle target) {
 			float x = MathHelper.Clamp(center.X, target.Left, target.Right);
 			float y = MathHelper.Clamp(center.Y, target.Top, target.Bottom);
@@ -65,6 +80,7 @@ namespace RobotJack.Content.Projectiles
 		public const int Pierce = 4;     // passes through up to 4 enemies
 		public const int Big = 8;        // drawn bigger
 		public const int Falling = 16;   // ignores blocks until it's near where it was aimed (sky rain)
+		public const int Huge = 32;      // titan-sized: a much bigger bolt and hitbox
 
 		private JackElement Element => Elements.FromAI(Projectile.ai[0]);
 		private int Flags => (int)Projectile.ai[1];
@@ -93,6 +109,11 @@ namespace RobotJack.Content.Projectiles
 			if (Timer == 1 && Has(Pierce)) {
 				Projectile.penetrate = 4;
 			}
+			if (Timer == 1 && Has(Huge)) {
+				Vector2 center = Projectile.Center;
+				Projectile.width = Projectile.height = 44;
+				Projectile.Center = center;
+			}
 			// Sky rain passes through blocks for the first part of its fall, so it can come down from off screen.
 			// Set every tick on every client, since flags in ai[1] are synced but tileCollide isn't.
 			Projectile.tileCollide = !Has(Falling) || Timer > 40;
@@ -105,7 +126,7 @@ namespace RobotJack.Content.Projectiles
 			}
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			if (Main.rand.NextBool(2)) {
-				Dust dust = Dust.NewDustPerfect(Projectile.Center, Elements.Dust(Element), -Projectile.velocity * 0.15f, Scale: Has(Big) ? 1.4f : 1f);
+				Dust dust = Dust.NewDustPerfect(Projectile.Center, Elements.Dust(Element), -Projectile.velocity * 0.15f, Scale: Has(Huge) ? 2f : Has(Big) ? 1.4f : 1f);
 				dust.noGravity = true;
 			}
 			Lighting.AddLight(Projectile.Center, Elements.Main(Element).ToVector3() * 0.5f);
@@ -132,14 +153,14 @@ namespace RobotJack.Content.Projectiles
 			ElementFX.Burst(Projectile.Center, Element, 12, 4f);
 			if (Has(Explode) && Projectile.owner == Main.myPlayer) {
 				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ElementBlast>(),
-					Projectile.damage / 2, 4f, Projectile.owner, ai0: (int)Element, ai1: Has(Big) ? 110f : 70f);
+					Projectile.damage / 2, 4f, Projectile.owner, ai0: (int)Element, ai1: Has(Huge) ? 200f : Has(Big) ? 110f : 70f);
 			}
 		}
 
 		public override bool PreDraw(ref Color lightColor) {
 			Texture2D glow = ElementFX.Glow;
 			Vector2 origin = glow.Size() / 2f;
-			float size = Has(Big) ? 1.6f : 1f;
+			float size = (Has(Big) ? 1.6f : 1f) * (Has(Huge) ? 2.2f : 1f);
 			for (int i = Projectile.oldPos.Length - 1; i >= 0; i--) {
 				if (Projectile.oldPos[i] == Vector2.Zero) {
 					continue;
@@ -246,7 +267,7 @@ namespace RobotJack.Content.Projectiles
 	}
 
 	// An eruption from the ground: a short warning, then a column of the element bursts up and hits everything in it.
-	// ai[0] = element, ai[1] = delay before it erupts (ticks). Spawned on the ground surface.
+	// ai[0] = element, ai[1] = delay before it erupts (ticks), ai[2] = size multiplier (0 = normal). Spawned on the ground surface.
 	// Blaze: fire geyser. Frost: ice spire (freezes). Volt: lightning bolt from the sky. Shadow: void tendril. Nova: star pillar.
 	public class ElementPillar : ModProjectile
 	{
@@ -257,6 +278,9 @@ namespace RobotJack.Content.Projectiles
 
 		private JackElement Element => Elements.FromAI(Projectile.ai[0]);
 		private int Delay => (int)Projectile.ai[1];
+		private float Size => Projectile.ai[2] > 0f ? Projectile.ai[2] : 1f;
+		private float PillarWidth => Width * Size;
+		private float PillarHeight => Height * Size;
 		private ref float Timer => ref Projectile.localAI[0];
 		private float EruptAge => Timer - Delay - WarnTicks;
 		private bool Erupting => EruptAge >= 0f && EruptAge < EruptTicks;
@@ -300,15 +324,15 @@ namespace RobotJack.Content.Projectiles
 				SoundEngine.PlaySound(sound with { Volume = 0.8f }, Projectile.Center);
 				for (int i = 0; i < 25; i++) {
 					Vector2 vel = new Vector2(Main.rand.NextFloat(-3f, 3f), -Main.rand.NextFloat(4f, 14f));
-					Dust.NewDustPerfect(Projectile.Center + new Vector2(Main.rand.NextFloat(-Width / 2f, Width / 2f), 0f), Elements.Dust(Element), vel, Scale: 1.5f).noGravity = true;
+					Dust.NewDustPerfect(Projectile.Center + new Vector2(Main.rand.NextFloat(-PillarWidth / 2f, PillarWidth / 2f), 0f), Elements.Dust(Element), vel, Scale: 1.5f).noGravity = true;
 				}
 			}
 			else if (!Erupting && Timer > Delay && Main.rand.NextBool(2)) {
 				// Warning: sparks bubbling out of the ground.
-				Dust.NewDustPerfect(Projectile.Center + new Vector2(Main.rand.NextFloat(-Width / 2f, Width / 2f), 0f), Elements.Dust(Element), new Vector2(0f, -2f), Scale: 0.9f).noGravity = true;
+				Dust.NewDustPerfect(Projectile.Center + new Vector2(Main.rand.NextFloat(-PillarWidth / 2f, PillarWidth / 2f), 0f), Elements.Dust(Element), new Vector2(0f, -2f), Scale: 0.9f).noGravity = true;
 			}
 			if (Erupting) {
-				Lighting.AddLight(Projectile.Center - new Vector2(0f, Height / 2f), Elements.Main(Element).ToVector3() * 1.2f);
+				Lighting.AddLight(Projectile.Center - new Vector2(0f, PillarHeight / 2f), Elements.Main(Element).ToVector3() * 1.2f);
 			}
 		}
 
@@ -316,7 +340,7 @@ namespace RobotJack.Content.Projectiles
 			if (!Erupting || EruptAge > 10f) {
 				return false;
 			}
-			Rectangle column = new Rectangle((int)(Projectile.Center.X - Width / 2f), (int)(Projectile.Center.Y - Height), (int)Width, (int)Height + 8);
+			Rectangle column = new Rectangle((int)(Projectile.Center.X - PillarWidth / 2f), (int)(Projectile.Center.Y - PillarHeight), (int)PillarWidth, (int)PillarHeight + 8);
 			return column.Intersects(targetHitbox);
 		}
 
@@ -333,7 +357,7 @@ namespace RobotJack.Content.Projectiles
 			if (!Erupting) {
 				if (Timer > Delay) {
 					float warn = (Timer - Delay) / WarnTicks;
-					Main.EntitySpriteDraw(glow, ground, null, ElementFX.Additive(main, 0.7f * warn), 0f, glow.Size() / 2f, new Vector2(Width * 1.6f / glow.Width, 0.25f), SpriteEffects.None, 0);
+					Main.EntitySpriteDraw(glow, ground, null, ElementFX.Additive(main, 0.7f * warn), 0f, glow.Size() / 2f, new Vector2(PillarWidth * 1.6f / glow.Width, 0.25f), SpriteEffects.None, 0);
 				}
 				return false;
 			}
@@ -341,32 +365,32 @@ namespace RobotJack.Content.Projectiles
 			// Shoots up fast, then fades.
 			float grow = MathHelper.Clamp(EruptAge / 5f, 0f, 1f);
 			float fade = 1f - MathHelper.Clamp((EruptAge - 10f) / (EruptTicks - 10f), 0f, 1f);
-			float height = Height * grow;
+			float height = PillarHeight * grow;
 			Vector2 top = ground - new Vector2(0f, height);
 
 			if (Element == JackElement.Volt) {
 				// A jagged lightning bolt from high above down to the ground.
 				Terraria.Utilities.UnifiedRandom rand = new Terraria.Utilities.UnifiedRandom((int)(EruptAge / 3) + Projectile.whoAmI * 31);
-				Vector2 from = ground - new Vector2(0f, 900f);
+				Vector2 from = ground - new Vector2(0f, 900f * Size);
 				const int segments = 12;
 				for (int s = 1; s <= segments; s++) {
-					Vector2 next = Vector2.Lerp(ground - new Vector2(0f, 900f), ground, s / (float)segments);
+					Vector2 next = Vector2.Lerp(ground - new Vector2(0f, 900f * Size), ground, s / (float)segments);
 					if (s < segments) {
-						next.X += rand.NextFloat(-22f, 22f);
+						next.X += rand.NextFloat(-22f, 22f) * Size;
 					}
-					ElementFX.Line(from, next, 16f, ElementFX.Additive(main, fade));
-					ElementFX.Line(from, next, 6f, ElementFX.Additive(Color.White, fade));
+					ElementFX.Line(from, next, 16f * Size, ElementFX.Additive(main, fade));
+					ElementFX.Line(from, next, 6f * Size, ElementFX.Additive(Color.White, fade));
 					from = next;
 				}
 			}
 			else {
-				float width = Width * (Element == JackElement.Frost ? 0.8f : 1f);
+				float width = PillarWidth * (Element == JackElement.Frost ? 0.8f : 1f);
 				ElementFX.Line(top, ground, width * 1.6f, ElementFX.Additive(main, 0.5f * fade));
 				ElementFX.Line(top, ground, width, ElementFX.Additive(main, 0.9f * fade));
 				ElementFX.Line(top, ground, width * 0.4f, ElementFX.Additive(core, fade));
 				Main.EntitySpriteDraw(glow, top, null, ElementFX.Additive(core, fade), 0f, glow.Size() / 2f, width * 1.4f / glow.Width, SpriteEffects.None, 0);
 			}
-			Main.EntitySpriteDraw(glow, ground, null, ElementFX.Additive(main, fade), 0f, glow.Size() / 2f, new Vector2(Width * 2.4f / glow.Width, 0.5f), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, ground, null, ElementFX.Additive(main, fade), 0f, glow.Size() / 2f, new Vector2(PillarWidth * 2.4f / glow.Width, 0.5f), SpriteEffects.None, 0);
 			return false;
 		}
 	}
@@ -376,13 +400,16 @@ namespace RobotJack.Content.Projectiles
 	public class ElementAura : ModProjectile
 	{
 		public const int Lifetime = 480;
-		public const float Radius = 250f;
+		public const float BaseRadius = 250f;
+
+		// Grows to fit around a Shift Titan.
+		private float Radius => System.Math.Max(BaseRadius, Main.player[Projectile.owner].height * 1.1f);
 
 		private JackElement Element => Elements.FromAI(Projectile.ai[0]);
 		private ref float Timer => ref Projectile.localAI[0];
 
 		public override void SetStaticDefaults() {
-			ProjectileID.Sets.DrawScreenCheckFluff[Type] = (int)Radius + 200;
+			ProjectileID.Sets.DrawScreenCheckFluff[Type] = 1200;
 		}
 
 		public override void SetDefaults() {
@@ -484,12 +511,22 @@ namespace RobotJack.Content.Projectiles
 			Timer++;
 			float count = System.Math.Max(Projectile.ai[2], 1f);
 			float angle = Timer * 0.08f + MathHelper.TwoPi * Projectile.ai[1] / count;
-			float radius = OrbitRadius + (float)System.Math.Sin(Timer * 0.05f) * 12f;
+			float orbit = Orbit(player);
+			if (Timer == 1 && orbit > OrbitRadius) {
+				// Titan-sized orbs.
+				Vector2 center = Projectile.Center;
+				Projectile.width = Projectile.height = (int)(22 * orbit / OrbitRadius * 0.5f);
+				Projectile.Center = center;
+			}
+			float radius = orbit + (float)System.Math.Sin(Timer * 0.05f) * 12f;
 			Vector2 target = player.Center + angle.ToRotationVector2() * radius;
 			Projectile.velocity = target - Projectile.Center;
 			Projectile.rotation = angle + MathHelper.PiOver2;
 			Lighting.AddLight(Projectile.Center, Elements.Main(Element).ToVector3() * 0.5f);
 		}
+
+		// Orbits further out around a Shift Titan.
+		private static float Orbit(Player player) => System.Math.Max(OrbitRadius, player.height * 0.7f);
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 			ElementFX.Hit(target, Element);
@@ -499,18 +536,20 @@ namespace RobotJack.Content.Projectiles
 			Texture2D glow = ElementFX.Glow;
 			Vector2 origin = glow.Size() / 2f;
 			float fade = MathHelper.Clamp(Projectile.timeLeft / 30f, 0f, 1f);
+			float size = System.Math.Min(Orbit(Main.player[Projectile.owner]) / OrbitRadius * 0.5f, 3f);
+			size = System.Math.Max(size, 1f);
 			for (int i = Projectile.oldPos.Length - 1; i >= 0; i--) {
 				if (Projectile.oldPos[i] == Vector2.Zero) {
 					continue;
 				}
 				float t = 1f - i / (float)Projectile.oldPos.Length;
 				Vector2 pos = Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition;
-				Main.EntitySpriteDraw(glow, pos, null, ElementFX.Additive(Elements.Main(Element), 0.4f * t * fade), 0f, origin, 0.35f * t, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(glow, pos, null, ElementFX.Additive(Elements.Main(Element), 0.4f * t * fade), 0f, origin, 0.35f * t * size, SpriteEffects.None, 0);
 			}
 			Vector2 center = Projectile.Center - Main.screenPosition;
 			// A blade-like streak along the orbit plus a bright core.
-			Main.EntitySpriteDraw(glow, center, null, ElementFX.Additive(Elements.Main(Element), fade), Projectile.rotation, origin, new Vector2(0.25f, 0.6f), SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(glow, center, null, ElementFX.Additive(Elements.Core(Element), fade), Projectile.rotation, origin, new Vector2(0.12f, 0.3f), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, center, null, ElementFX.Additive(Elements.Main(Element), fade), Projectile.rotation, origin, new Vector2(0.25f, 0.6f) * size, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, center, null, ElementFX.Additive(Elements.Core(Element), fade), Projectile.rotation, origin, new Vector2(0.12f, 0.3f) * size, SpriteEffects.None, 0);
 			return false;
 		}
 	}

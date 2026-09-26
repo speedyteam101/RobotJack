@@ -338,12 +338,16 @@ namespace RobotJack.Common
 				return;
 			}
 
+			// The Shift Titan is far bigger than the player, so the held item and wings (drawn at player size) are hidden too.
+			bool titan = ActiveForm == RobotFormType.ShiftTitan;
 			PlayerDrawLayer robotLayer = ModContent.GetInstance<RobotDrawLayer>();
+			PlayerDrawLayer titanLayer = ModContent.GetInstance<TitanDrawLayer>();
 			foreach (PlayerDrawLayer layer in PlayerDrawLayerLoader.DrawOrder) {
 				if (layer == robotLayer
-					|| layer == PlayerDrawLayers.HeldItem
+					|| layer == titanLayer
+					|| (!titan && layer == PlayerDrawLayers.HeldItem)
 					|| layer == PlayerDrawLayers.ProjectileOverArm
-					|| layer == PlayerDrawLayers.Wings
+					|| (!titan && layer == PlayerDrawLayers.Wings)
 					|| layer == PlayerDrawLayers.MountBack
 					|| layer == PlayerDrawLayers.MountFront
 					|| layer == PlayerDrawLayers.FrozenOrWebbedDebuff

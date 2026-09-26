@@ -471,6 +471,798 @@ Mods: {
 					damage, heavy knockback, and they spin until the knockback wears off
 					'''
 			}
+
+			ShiftTrigger: {
+				DisplayName: Shift Trigger
+				Tooltip:
+					'''
+					Use to transform into the Shift Titan, a giant robot 10x your size; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{4} max life
+					Right click in your inventory to open the titan menu:
+					  merge any Jack trigger into it for a new titan with its own element and nine abilities
+					  (the merged trigger is given back when you take it out)
+					  change the armor, accent and core colours, the core's shape, the head and the weapon arm
+					  switch into car mode and back
+					The titan needs room to grow: it stays small until it has space to stand up
+					Found in a chest in the laboratory hidden in the caverns
+					"Shift into gear."
+					'''
+			}
+
+			ShiftArm: {
+				DisplayName: Shift Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge tech energy bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					'''
+			}
+
+			ShiftCoreBeam: {
+				DisplayName: Shift Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of tech energy out of the titan's core
+					Cuts through blocks
+					'''
+			}
+
+			ShiftStomp: {
+				DisplayName: Shift Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of tech energy bursts out from your feet
+					and the ground erupts on both sides
+					'''
+			}
+
+			ShiftEruption: {
+				DisplayName: Shift Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of tech energy burst out of the ground across the cursor
+					'''
+			}
+
+			ShiftSkyfall: {
+				DisplayName: Shift Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of tech energy rain down from the sky onto the cursor
+					'''
+			}
+
+			ShiftMissilePods: {
+				DisplayName: Shift Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing tech energy missiles from the titan's backpack
+					'''
+			}
+
+			ShiftSatellites: {
+				DisplayName: Shift Satellites
+				Tooltip:
+					'''
+					Six orbs of tech energy split off your core and circle the titan for 10 seconds
+					'''
+			}
+
+			ShiftAura: {
+				DisplayName: Shift Aura
+				Tooltip:
+					'''
+					Surround the whole titan with tech energy for 8 seconds, hurting everything inside
+					'''
+			}
+
+			ShiftOverdrive: {
+				DisplayName: Shift Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of tech energy,
+					the ground erupts all around you and bolts fly out in every direction
+					'''
+			}
+
+			PlasmaArm: {
+				DisplayName: Plasma Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge plasma bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaCoreBeam: {
+				DisplayName: Plasma Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of plasma out of the titan's core
+					Cuts through blocks
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaStomp: {
+				DisplayName: Plasma Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of plasma bursts out from your feet
+					and the ground erupts on both sides
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaEruption: {
+				DisplayName: Plasma Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of plasma burst out of the ground across the cursor
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaSkyfall: {
+				DisplayName: Plasma Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of plasma rain down from the sky onto the cursor
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaMissilePods: {
+				DisplayName: Plasma Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing plasma missiles from the titan's backpack
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaSatellites: {
+				DisplayName: Plasma Satellites
+				Tooltip:
+					'''
+					Six orbs of plasma split off your core and circle the titan for 10 seconds
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaAura: {
+				DisplayName: Plasma Aura
+				Tooltip:
+					'''
+					Surround the whole titan with plasma for 8 seconds, hurting everything inside
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			PlasmaOverdrive: {
+				DisplayName: Plasma Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of plasma,
+					the ground erupts all around you and bolts fly out in every direction
+					Plasma Titan: bolts pierce through enemies
+					'''
+			}
+
+			InfernoArm: {
+				DisplayName: Inferno Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge fire bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoCoreBeam: {
+				DisplayName: Inferno Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of fire out of the titan's core
+					Cuts through blocks
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoStomp: {
+				DisplayName: Inferno Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of fire bursts out from your feet
+					and the ground erupts on both sides
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoEruption: {
+				DisplayName: Inferno Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of fire burst out of the ground across the cursor
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoSkyfall: {
+				DisplayName: Inferno Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of fire rain down from the sky onto the cursor
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoMissilePods: {
+				DisplayName: Inferno Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing fire missiles from the titan's backpack
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoSatellites: {
+				DisplayName: Inferno Satellites
+				Tooltip:
+					'''
+					Six orbs of fire split off your core and circle the titan for 10 seconds
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoAura: {
+				DisplayName: Inferno Aura
+				Tooltip:
+					'''
+					Surround the whole titan with fire for 8 seconds, hurting everything inside
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			InfernoOverdrive: {
+				DisplayName: Inferno Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of fire,
+					the ground erupts all around you and bolts fly out in every direction
+					Inferno Titan: bolts explode
+					'''
+			}
+
+			GlacierArm: {
+				DisplayName: Glacier Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge ice bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierCoreBeam: {
+				DisplayName: Glacier Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of ice out of the titan's core
+					Cuts through blocks
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierStomp: {
+				DisplayName: Glacier Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of ice bursts out from your feet
+					and the ground erupts on both sides
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierEruption: {
+				DisplayName: Glacier Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of ice burst out of the ground across the cursor
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierSkyfall: {
+				DisplayName: Glacier Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of ice rain down from the sky onto the cursor
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierMissilePods: {
+				DisplayName: Glacier Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing ice missiles from the titan's backpack
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierSatellites: {
+				DisplayName: Glacier Satellites
+				Tooltip:
+					'''
+					Six orbs of ice split off your core and circle the titan for 10 seconds
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierAura: {
+				DisplayName: Glacier Aura
+				Tooltip:
+					'''
+					Surround the whole titan with ice for 8 seconds, hurting everything inside
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			GlacierOverdrive: {
+				DisplayName: Glacier Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of ice,
+					the ground erupts all around you and bolts fly out in every direction
+					Glacier Titan: bolts pierce, blasts freeze enemies
+					'''
+			}
+
+			StormArm: {
+				DisplayName: Storm Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge lightning bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormCoreBeam: {
+				DisplayName: Storm Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of lightning out of the titan's core
+					Cuts through blocks
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormStomp: {
+				DisplayName: Storm Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of lightning bursts out from your feet
+					and the ground erupts on both sides
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormEruption: {
+				DisplayName: Storm Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of lightning burst out of the ground across the cursor
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormSkyfall: {
+				DisplayName: Storm Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of lightning rain down from the sky onto the cursor
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormMissilePods: {
+				DisplayName: Storm Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing lightning missiles from the titan's backpack
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormSatellites: {
+				DisplayName: Storm Satellites
+				Tooltip:
+					'''
+					Six orbs of lightning split off your core and circle the titan for 10 seconds
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormAura: {
+				DisplayName: Storm Aura
+				Tooltip:
+					'''
+					Surround the whole titan with lightning for 8 seconds, hurting everything inside
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			StormOverdrive: {
+				DisplayName: Storm Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of lightning,
+					the ground erupts all around you and bolts fly out in every direction
+					Storm Titan: bolts home in on enemies
+					'''
+			}
+
+			VoidArm: {
+				DisplayName: Void Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge void bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidCoreBeam: {
+				DisplayName: Void Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of void out of the titan's core
+					Cuts through blocks
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidStomp: {
+				DisplayName: Void Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of void bursts out from your feet
+					and the ground erupts on both sides
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidEruption: {
+				DisplayName: Void Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of void burst out of the ground across the cursor
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidSkyfall: {
+				DisplayName: Void Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of void rain down from the sky onto the cursor
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidMissilePods: {
+				DisplayName: Void Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing void missiles from the titan's backpack
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidSatellites: {
+				DisplayName: Void Satellites
+				Tooltip:
+					'''
+					Six orbs of void split off your core and circle the titan for 10 seconds
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidAura: {
+				DisplayName: Void Aura
+				Tooltip:
+					'''
+					Surround the whole titan with void for 8 seconds, hurting everything inside
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			VoidOverdrive: {
+				DisplayName: Void Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of void,
+					the ground erupts all around you and bolts fly out in every direction
+					Void Titan: bolts pierce and home in
+					'''
+			}
+
+			StarArm: {
+				DisplayName: Star Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge starlight bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarCoreBeam: {
+				DisplayName: Star Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of starlight out of the titan's core
+					Cuts through blocks
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarStomp: {
+				DisplayName: Star Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of starlight bursts out from your feet
+					and the ground erupts on both sides
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarEruption: {
+				DisplayName: Star Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of starlight burst out of the ground across the cursor
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarSkyfall: {
+				DisplayName: Star Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of starlight rain down from the sky onto the cursor
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarMissilePods: {
+				DisplayName: Star Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing starlight missiles from the titan's backpack
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarSatellites: {
+				DisplayName: Star Satellites
+				Tooltip:
+					'''
+					Six orbs of starlight split off your core and circle the titan for 10 seconds
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarAura: {
+				DisplayName: Star Aura
+				Tooltip:
+					'''
+					Surround the whole titan with starlight for 8 seconds, hurting everything inside
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			StarOverdrive: {
+				DisplayName: Star Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of starlight,
+					the ground erupts all around you and bolts fly out in every direction
+					Star Titan: bolts explode and home in
+					'''
+			}
+
+			OmegaArm: {
+				DisplayName: Omega Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge prismatic energy bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaCoreBeam: {
+				DisplayName: Omega Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of prismatic energy out of the titan's core
+					Cuts through blocks
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaStomp: {
+				DisplayName: Omega Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of prismatic energy bursts out from your feet
+					and the ground erupts on both sides
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaEruption: {
+				DisplayName: Omega Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of prismatic energy burst out of the ground across the cursor
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaSkyfall: {
+				DisplayName: Omega Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of prismatic energy rain down from the sky onto the cursor
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaMissilePods: {
+				DisplayName: Omega Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing prismatic energy missiles from the titan's backpack
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaSatellites: {
+				DisplayName: Omega Satellites
+				Tooltip:
+					'''
+					Six orbs of prismatic energy split off your core and circle the titan for 10 seconds
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaAura: {
+				DisplayName: Omega Aura
+				Tooltip:
+					'''
+					Surround the whole titan with prismatic energy for 8 seconds, hurting everything inside
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			OmegaOverdrive: {
+				DisplayName: Omega Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of prismatic energy,
+					the ground erupts all around you and bolts fly out in every direction
+					Omega Titan: bolts explode, pierce and home in, blasts freeze enemies
+					'''
+			}
+
+			DivineArm: {
+				DisplayName: Divine Arm
+				Tooltip:
+					'''
+					Attack with the titan's weapon arm, chosen in the Shift Trigger's menu:
+					Cannon: three huge holy light bolts
+					Blade: a huge sweeping slash
+					Claw: three raking slashes, a little weaker
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineCoreBeam: {
+				DisplayName: Divine Core Beam
+				Tooltip:
+					'''
+					Hold left click to fire a giant beam of holy light out of the titan's core
+					Cuts through blocks
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineStomp: {
+				DisplayName: Divine Stomp
+				Tooltip:
+					'''
+					Stomp the ground: a shockwave of holy light bursts out from your feet
+					and the ground erupts on both sides
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineEruption: {
+				DisplayName: Divine Eruption
+				Tooltip:
+					'''
+					Eleven giant pillars of holy light burst out of the ground across the cursor
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineSkyfall: {
+				DisplayName: Divine Skyfall
+				Tooltip:
+					'''
+					Twenty huge exploding bolts of holy light rain down from the sky onto the cursor
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineMissilePods: {
+				DisplayName: Divine Missile Pods
+				Tooltip:
+					'''
+					Launch sixteen homing holy light missiles from the titan's backpack
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineSatellites: {
+				DisplayName: Divine Satellites
+				Tooltip:
+					'''
+					Six orbs of holy light split off your core and circle the titan for 10 seconds
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineAura: {
+				DisplayName: Divine Aura
+				Tooltip:
+					'''
+					Surround the whole titan with holy light for 8 seconds, hurting everything inside
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
+			DivineOverdrive: {
+				DisplayName: Divine Overdrive
+				Tooltip:
+					'''
+					Overload your core: an enormous blast of holy light,
+					the ground erupts all around you and bolts fly out in every direction
+					Divine Titan: bolts explode, pierce and home in
+					'''
+			}
+
 		}
 
 		Buffs: {
@@ -558,6 +1350,11 @@ Mods: {
 				DisplayName: Spinning
 				Description: You got rammed by a robot
 			}
+
+			ShiftTitanForm: {
+				DisplayName: Shift Titan
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{4} max life; more damage from the merged trigger
+			}
 		}
 
 		Projectiles: {
@@ -580,6 +1377,8 @@ Mods: {
 			HeavenlyGate.DisplayName: Heavenly Gate
 			GodsWrathCharge.DisplayName: Gods Wrath
 			GodsWrathBlast.DisplayName: Gods Wrath
+			TitanSlash.DisplayName: Titan Slash
+			TitanCarRam.DisplayName: Titan Car
 		}
 
 		DropConditions: {

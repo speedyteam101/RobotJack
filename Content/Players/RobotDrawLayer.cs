@@ -19,7 +19,7 @@ namespace RobotJack.Content.Players
 
 		public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
 			Player player = drawInfo.drawPlayer;
-			return !player.dead && player.GetModPlayer<RobotJackPlayer>().Transformed;
+			return !player.dead && player.GetModPlayer<RobotJackPlayer>().ActiveForm.IsJack();
 		}
 
 		public override Position GetDefaultPosition() => new Between(PlayerDrawLayers.Torso, PlayerDrawLayers.OffhandAcc);

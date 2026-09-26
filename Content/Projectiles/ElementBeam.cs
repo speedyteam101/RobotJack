@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using RobotJack.Common;
+using RobotJack.Common.Titan;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,12 +14,15 @@ namespace RobotJack.Content.Projectiles
 	// is held. It turns toward the cursor smoothly, stops at solid blocks, and hits everything along it every 6 ticks.
 	// ai[1] = element. ai[2] = 1: Omega Jack's Omega Cannon: three times as wide, twice as long, cuts through blocks,
 	// cycles through every element's colours and applies every element's debuff.
+	// ai[2] = 2: the Shift Titan's Core Beam: fired from the titan's core, four times as wide and 1.5x as long,
+	// cutting through blocks.
 	public class ElementBeam : ModProjectile
 	{
 		public const float MaxLength = 1400f;
 		private const float BaseWidth = 26f;
 		private bool Omega => Projectile.ai[2] == 1f;
-		private float BeamWidth => Omega ? BaseWidth * 3f : BaseWidth;
+		private bool Titan => Projectile.ai[2] == 2f;
+		private float BeamWidth => Omega ? BaseWidth * 3f : Titan ? BaseWidth * 4f : BaseWidth;
 		public const float TurnRate = 0.12f;
 
 		private JackElement Element => Elements.FromAI(Projectile.ai[1]);
@@ -67,6 +71,9 @@ namespace RobotJack.Content.Projectiles
 		// Where the beam starts: the arm cannon.
 		private static Vector2 CorePosition(Player player) => player.MountedCenter + new Vector2(player.direction * 12f, -4f * player.gravDir);
 
+		// The titan's beam comes out of its core instead.
+		private Vector2 BeamStart(Player player) => Titan ? TitanRenderer.CoreWorld(player) : CorePosition(player);
+
 		public override void AI() {
 			Player player = Main.player[Projectile.owner];
 
@@ -79,7 +86,7 @@ namespace RobotJack.Content.Projectiles
 				}
 
 				// Swing toward the cursor. velocity holds the unit aim direction.
-				Vector2 wanted = (Main.MouseWorld - CorePosition(player)).SafeNormalize(Vector2.UnitX * player.direction);
+				Vector2 wanted = (Main.MouseWorld - BeamStart(player)).SafeNormalize(Vector2.UnitX * player.direction);
 				Vector2 current = Projectile.velocity.SafeNormalize(wanted);
 				Vector2 aim = Vector2.Lerp(current, wanted, TurnRate).SafeNormalize(wanted);
 				if (Vector2.Distance(aim, Projectile.velocity) > 0.001f) {
@@ -93,7 +100,7 @@ namespace RobotJack.Content.Projectiles
 			Timer++;
 			Projectile.timeLeft = 10;
 			Vector2 dir = Projectile.velocity.SafeNormalize(Vector2.UnitX * player.direction);
-			Projectile.Center = CorePosition(player);
+			Projectile.Center = BeamStart(player);
 
 			Projectile.direction = dir.X >= 0f ? 1 : -1;
 			player.ChangeDir(Projectile.direction);
@@ -102,7 +109,7 @@ namespace RobotJack.Content.Projectiles
 			player.itemAnimation = 2;
 			player.itemRotation = (dir * Projectile.direction).ToRotation();
 
-			length = Omega ? MaxLength * 2f : MeasureLength(Projectile.Center, dir);
+			length = Omega ? MaxLength * 2f : Titan ? MaxLength * 1.5f : MeasureLength(Projectile.Center, dir);
 
 			if (Timer % 20 == 1) {
 				SoundEngine.PlaySound(SoundID.Item15 with { Pitch = 0.3f, Volume = 0.7f }, Projectile.Center);
@@ -159,6 +166,7 @@ namespace RobotJack.Content.Projectiles
 			Vector2 start = Projectile.Center - Main.screenPosition;
 			Vector2 end = start + dir * length;
 			float pulse = 1f + 0.12f * (float)System.Math.Sin(Timer * 0.7f);
+			float glowSize = Titan ? 2.5f : 1f;
 			float rotation = dir.ToRotation() - MathHelper.PiOver2;
 			Vector2 origin = new Vector2(beam.Width / 2f, 0f);
 
@@ -171,10 +179,10 @@ namespace RobotJack.Content.Projectiles
 					Main.EntitySpriteDraw(beam, start, null, color, rotation, origin, new Vector2(width * pulse / beam.Width, length / beam.Height), SpriteEffects.None, 0);
 				}
 			}
-			Main.EntitySpriteDraw(glow, start, null, Glow(Mid, 0.9f), 0f, glow.Size() / 2f, 0.8f * pulse, SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(glow, start, null, Glow(Color.White, 1f), 0f, glow.Size() / 2f, 0.35f * pulse, SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(glow, end, null, Glow(Mid, 0.9f), 0f, glow.Size() / 2f, 1f * pulse, SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(glow, end, null, Glow(Color.White, 1f), 0f, glow.Size() / 2f, 0.45f * pulse, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, start, null, Glow(Mid, 0.9f), 0f, glow.Size() / 2f, 0.8f * pulse * glowSize, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, start, null, Glow(Color.White, 1f), 0f, glow.Size() / 2f, 0.35f * pulse * glowSize, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, end, null, Glow(Mid, 0.9f), 0f, glow.Size() / 2f, 1f * pulse * glowSize, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(glow, end, null, Glow(Color.White, 1f), 0f, glow.Size() / 2f, 0.45f * pulse * glowSize, SpriteEffects.None, 0);
 			return false;
 		}
 	}

@@ -15,6 +15,7 @@ namespace RobotJack.Common
 		NovaJack,
 		OmegaJack,
 		GodJack,
+		ShiftTitan, // the giant titan from the Shift Trigger
 	}
 
 	public static class RobotFormTypeExtensions

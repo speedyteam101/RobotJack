@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants, Omega Jack, all of them combined, or God Jack), and use ability items, headlined by the **Orbital Cannon Strike**.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants, Omega Jack, all of them combined, or God Jack), find the laboratory and its **Shift Trigger** to become a giant customizable titan that turns into a car, and use ability items, headlined by the **Orbital Cannon Strike**.
 
 ## Installing (from source)
 
@@ -132,6 +132,48 @@ All the holy abilities set enemies ablaze with holy fire.
 
 Releasing before it's fully charged lets it fizzle out (no cooldown). After a full release there's a **60 second cooldown**.
 
+## The Laboratory and the Shift Titan
+
+**The laboratory** is a big steel hall hidden in the caverns (below the rock layer, away from spawn, the dungeon and the jungle temple), tall enough for a titan to stand up in, with glowing specimen tanks, lab shelves and a lit floor. A plated shaft with a rope runs down to it from the surface, and it's **marked on the map** (hover the icon: "Laboratory"). New worlds get one when they're generated; **existing worlds get one the first time they're loaded** with this version of the mod. The gold chest in the middle of the lab holds the **Shift Trigger**.
+
+**The Shift Trigger** turns you into the **Shift Titan**: a giant robot whose hitbox really is **10× the player** (200×420 px, about 12×26 blocks), with a **glowing core** in its chest.
+
+- **Stats:** +40% damage, +60 defense, 30% damage reduction, +400 max life, plus 5% more damage per tier of the merged trigger. Immune to its element's debuff (Omega and God: all of them).
+- **Room to grow:** it only grows when there's space; until then you stay player-sized and are told there isn't enough room. It **steps up ledges** up to 6 blocks high as it walks.
+- **The titan is drawn as a rig of parts,** so its legs stride as it walks, its weapon arm aims at what it's attacking, and every part can be recoloured.
+
+**Right click the Shift Trigger in your inventory** to open the titan menu (it shows a live preview):
+
+- **Merge slot:** click it while holding any Jack trigger (Robot, Blaze, Frost, Volt, Shadow, Nova, Omega or God) to merge it in. Click it empty-handed to take the trigger back out; it's given back to you. The merged trigger decides the titan's element, its fusion decorations and **its nine abilities**.
+- **Customization:** armor colour, accent colour and core colour (12 swatches each), **core shape** (round, diamond, star, square), **head** (visor, horned, dome) and **weapon arm** (cannon, blade, claw). Changes show on the titan straight away and are saved on the item.
+- **Car Mode button:** while you're the titan, it folds into a **sports car** (400×160 px) with a top speed of 16 pixels per tick (much faster than running boots). The core becomes its headlight. **Ramming enemies at speed damages them**, and it leaves exhaust smoke. Abilities can't be used in car mode.
+
+| Merged trigger | Titan | Element | Bolts | Damage tier |
+| --- | --- | --- | --- | --- |
+| none | Shift Titan | tech energy | plain | ×1.5 |
+| Robot Trigger | Plasma Titan | plasma | pierce | ×2 |
+| Blaze Trigger | Inferno Titan | fire | explode | ×2 |
+| Frost Trigger | Glacier Titan | ice | pierce, blasts freeze | ×2 |
+| Volt Trigger | Storm Titan | lightning | home in | ×3 |
+| Shadow Trigger | Void Titan | void | pierce, home in | ×3 |
+| Nova Trigger | Star Titan | starlight | explode, home in | ×5 |
+| Omega Trigger | Omega Titan | prismatic (every element) | explode, pierce, home in; blasts freeze | ×7 |
+| God Trigger | Divine Titan | holy light | explode, pierce, home in | ×9 |
+
+Every titan gets nine abilities of these kinds, named after it (Inferno Arm, Glacier Stomp, Divine Overdrive and so on). Base damage below is multiplied by the tier, then by the form bonus and bosses beaten:
+
+| Ability | Base damage | What it does |
+| --- | --- | --- |
+| **Arm** | 30 | Uses the weapon arm from the menu. **Cannon:** three huge bolts. **Blade:** a huge sweeping slash (×1.7). **Claw:** three raking slashes (×1.3). Auto-fire. |
+| **Core Beam** | 20 every 6 ticks | **Hold left click:** a giant beam out of the core that follows the cursor and cuts through blocks. |
+| **Stomp** | 60 | A shockwave from the feet (about 65 blocks across) and pillars erupting on both sides. |
+| **Eruption** | 45 per pillar | Eleven giant pillars burst out of the ground across the cursor. |
+| **Skyfall** | 30 ×20 | Twenty huge exploding bolts rain down onto the cursor. |
+| **Missile Pods** | 25 ×16 | Sixteen homing, exploding missiles launch from the backpack. |
+| **Satellites** | 20 | Six orbs split off the core and circle the titan for 10 s. 15 s cooldown. |
+| **Aura** | 18 | The element surrounds the whole titan for 8 s. 15 s cooldown. |
+| **Overdrive** | 120 | The core overloads: an enormous blast (about 125 blocks across), pillars all around and bolts in every direction. 45 s cooldown. |
+
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
@@ -146,3 +188,5 @@ All sprites are placeholders drawn by `tools/generate_sprites.py` (needs Pillow:
 Replace any PNG with hand-made art at the same size whenever you like. The robot sheets (`Content/Players/RobotBody*.png`, `RobotLegs*.png`) use the vanilla player sheet layout: 20 frames of 40×56 stacked vertically (0 idle, 1–4 arm aiming up → down, 5 jump, 6–19 walk cycle). The `_Glow` sheets are drawn full-bright on top.
 
 `tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants, Omega Jack and God Jack, and `tools/god_jack_preview.png` the heavenly gate opening, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.
+
+The Shift Titan, the laboratory tiles and the titan ability icons come from `tools/generate_titan_sprites.py` (run it from this folder too; `tools/titan_abilities.py` generates `Content/Abilities/TitanAbilityList.cs`). The titan is a rig of parts in `Content/Titan`, each with `_M` (armor colour), `_A` (accent colour), `_D` (untinted detail) and `_G` (glow) layers of the same size; the pivots are listed in `Common/Titan/TitanRenderer.cs`. `tools/titan_preview_3x.png` shows a few assembled titans and the car.

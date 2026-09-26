@@ -13,19 +13,22 @@ namespace RobotJack.Content.Projectiles
 	// Robot Jack's transformation effect (visual only, no damage). Energy rushes in toward the player,
 	// a pillar of light slams down from the sky onto them, shockwave rings burst out and sparks fly.
 	// ai[1] = 1: the smaller version played when turning back.
-	// ai[2] = colour: 0 = Robot Jack's cyan, 1-5 = a variant's element (JackElement + 1), 6 = Omega Jack's rainbow, 7 = God Jack's gold.
+	// ai[2] = colour: 0 = Robot Jack's cyan, 1-5 = a variant's element (JackElement + 1), 6 = Omega Jack's rainbow, 7 = God Jack's gold,
+	// 8 and up = the Shift Titan's element (JackElement + 8). Everything scales up with the player's size (for the titan).
 	public class TransformBurst : ModProjectile
 	{
 		public const int Lifetime = 45;
 
 		private bool Omega => Projectile.ai[2] == 6f;
-		private Color Cyan => Projectile.ai[2] >= 7f ? RobotFormTypeExtensions.GodGold : Omega ? Main.DiscoColor : Projectile.ai[2] >= 1f ? Elements.Main(Elements.FromAI(Projectile.ai[2] - 1f)) : new Color(90, 230, 255);
-		private int SparkDust => Omega ? Elements.Dust((JackElement)Main.rand.Next(Elements.Count)) : Projectile.ai[2] >= 1f ? Elements.Dust(Elements.FromAI(Projectile.ai[2] - 1f)) : DustID.Electric;
+		private JackElement? TitanElement => Projectile.ai[2] >= 8f ? Elements.FromAI(Projectile.ai[2] - 8f) : null;
+		private Color Cyan => TitanElement.HasValue ? Elements.Main(TitanElement.Value) : Projectile.ai[2] >= 7f ? RobotFormTypeExtensions.GodGold : Omega ? Main.DiscoColor : Projectile.ai[2] >= 1f ? Elements.Main(Elements.FromAI(Projectile.ai[2] - 1f)) : new Color(90, 230, 255);
+		private int SparkDust => TitanElement.HasValue ? Elements.Dust(TitanElement.Value) : Omega ? Elements.Dust((JackElement)Main.rand.Next(Elements.Count)) : Projectile.ai[2] >= 1f ? Elements.Dust(Elements.FromAI(Projectile.ai[2] - 1f)) : DustID.Electric;
 		private static Asset<Texture2D> beamTex, glowTex, ringTex;
 
 		private ref float Timer => ref Projectile.ai[0];
 		private bool TurningBack => Projectile.ai[1] == 1f;
-		private float Size => (TurningBack ? 0.6f : 1f) * (Omega ? 1.6f : 1f);
+		private float Size => (TurningBack ? 0.6f : 1f) * (Omega ? 1.6f : 1f)
+			* System.Math.Max(1f, Main.player[Projectile.owner].height / 42f * 0.4f);
 
 		public override void SetStaticDefaults() {
 			ProjectileID.Sets.DrawScreenCheckFluff[Type] = 2400; // the light pillar reaches up past the screen
