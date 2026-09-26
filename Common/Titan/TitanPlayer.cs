@@ -28,7 +28,18 @@ namespace RobotJack.Common.Titan
 
 		public JackElement Element => TitanData.Element(fusion);
 
+		// Terraria puts the player's hitbox height back to normal during its own update each tick (it only ever
+		// expects mounts to change it), so the titan's size is set again at every step of the update: before items
+		// and equipment, before movement (so collision uses the giant hitbox) and at the end (so it's drawn full size).
 		public override void PreUpdate() {
+			UpdateSize();
+		}
+
+		public override void PostUpdateEquips() {
+			UpdateSize();
+		}
+
+		public override void PostUpdateMiscEffects() {
 			UpdateSize();
 		}
 
@@ -77,6 +88,7 @@ namespace RobotJack.Common.Titan
 
 		// Giant strides: when walking into a ledge up to 6 blocks high, step up onto it instead of stopping.
 		public override void PreUpdateMovement() {
+			UpdateSize();
 			if (!IsFullSize || Player.velocity.Y != 0f) {
 				return;
 			}
@@ -99,6 +111,7 @@ namespace RobotJack.Common.Titan
 
 		// The car is fast; the titan walks a little slower but covers ground with huge strides.
 		public override void PostUpdateRunSpeeds() {
+			UpdateSize();
 			if (!IsTitan) {
 				return;
 			}
@@ -115,6 +128,7 @@ namespace RobotJack.Common.Titan
 		}
 
 		public override void PostUpdate() {
+			UpdateSize();
 			if (noRoomMessageCooldown > 0) {
 				noRoomMessageCooldown--;
 			}
