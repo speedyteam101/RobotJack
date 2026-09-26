@@ -344,7 +344,7 @@ namespace RobotJack.Common.Titan
 				Rectangle box = GetDimensions().ToRectangle();
 				ShiftTrigger trigger = menu.Trigger;
 				TitanFusion fusion = trigger?.fusion ?? TitanFusion.None;
-				Color glow = fusion == TitanFusion.Omega ? Main.DiscoColor : Elements.Main(TitanData.Element(fusion));
+				Color glow = fusion == TitanFusion.Omega ? Main.DiscoColor : RobotJack.Common.Elements.Main(TitanData.Element(fusion));
 				Box(spriteBatch, box, new Color(20, 26, 44), IsMouseHovering ? Color.White : glow);
 				if (fusion != TitanFusion.None) {
 					int type = TitanData.TriggerOf(fusion);
