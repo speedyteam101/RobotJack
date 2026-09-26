@@ -73,8 +73,9 @@ RJ_HALO = (90, 240, 255, 110)
 RJ_GLOW = (90, 240, 255, 255)
 RJ_GLOW_D = (30, 150, 200, 255)
 
-# Extra details drawn on top of the body by the variants (None for Robot Jack).
+# Extra details drawn on top of the body by the variants (None for Robot Jack), and behind it.
 RJ_DECOR = None
+RJ_DECOR_BACK = None
 
 
 def rj_scarf_tail(d, ox, y, frame):
@@ -143,6 +144,8 @@ def draw_body_frame(d, g, ox, oy, frame):
     if 6 <= frame <= 19 and abs(math.sin(walk_phase(frame))) > 0.7:
         bob = 1  # dip down; moving up would spill into the frame above
     y = oy + bob
+    if RJ_DECOR_BACK is not None:
+        RJ_DECOR_BACK(d, g, ox, y, frame)
     rj_arm(d, g, ox, y, frame, back=True)
 
     # Jetpack: two tanks with glowing nozzles
@@ -646,10 +649,11 @@ ELEMENT_COLORS = {  # main, core, dark (matches Elements.cs)
 
 
 def robot_variant_sheets():
-    base = {k: globals()[k] for k in JACK_VARIANTS["BlazeJack"]}
-    preview = Image.new("RGBA", (FRAME_W * 3 * (len(JACK_VARIANTS) + 2), FRAME_H), (28, 32, 46, 255))
+    base = {k: globals()[k] for k in list(JACK_VARIANTS["BlazeJack"]) + ["RJ_DECOR_BACK"]}
+    preview = Image.new("RGBA", (FRAME_W * 3 * (len(JACK_VARIANTS) + 3), FRAME_H), (28, 32, 46, 255))
     x = 0
-    for name, pal in [("Robot", base)] + list(JACK_VARIANTS.items()) + [("OmegaJack", OMEGA_PALETTE)]:
+    for name, pal in [("Robot", base)] + list(JACK_VARIANTS.items()) + [("OmegaJack", OMEGA_PALETTE), ("GodJack", GOD_PALETTE)]:
+        globals().update(base)  # start from Robot Jack's look so nothing leaks between palettes
         globals().update(pal)
         body, bd = canvas(FRAME_W, FRAME_H * FRAMES)
         body_glow, bg = canvas(FRAME_W, FRAME_H * FRAMES)
@@ -839,12 +843,143 @@ def omega_icons():
     invisible("Content/Projectiles/Singularity.png")
 
 
+
+# ---------------------------------------------------------------- God Jack and the heavenly gate
+
+def _decor_god_wings(d, g, ox, y, frame):
+    # Small angel wings folded out behind the back, flapping gently with the walk.
+    flap = 0
+    if 6 <= frame <= 19:
+        flap = round(math.sin(walk_phase(frame) * 2))
+    elif frame == 5:
+        flap = -2
+    feathers = [((6, 11), (1, 6 + flap)), ((6, 12), (0, 9 + flap)), ((6, 13), (1, 12 + flap)), ((6, 14), (2, 15 + flap))]
+    for base, tip in feathers:
+        tip = (max(0, tip[0]), max(0, tip[1]))
+        d.line([ox + base[0], y + base[1], ox + tip[0], y + tip[1]], fill=OUTLINE, width=3)
+    for base, tip in feathers:
+        tip = (max(0, tip[0]), max(0, tip[1]))
+        d.line([ox + base[0], y + base[1], ox + tip[0], y + tip[1]], fill=(250, 250, 255, 255))
+        d.point((ox + tip[0], y + tip[1]), fill=(255, 215, 90, 255))
+        g.point((ox + tip[0], y + tip[1]), fill=(255, 235, 150, 200))
+
+
+def _decor_god(d, g, ox, y, frame):
+    # A large blazing halo above the helmet and a golden sun on the chest.
+    g.ellipse([ox + 6, y + 0, ox + 14, y + 2], outline=(255, 225, 120, 255))
+    g.point((ox + 10, y + 0), fill=WHITE)
+    d.point((ox + 10, y + 13), fill=(255, 215, 90, 255))
+    g.point((ox + 10, y + 13), fill=WHITE)
+    for (dx, dy) in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+        g.point((ox + 10 + dx, y + 13 + dy), fill=(255, 215, 90, 230))
+
+
+GOD_PALETTE = dict(RJ_HI=(255, 255, 255, 255), RJ=(236, 236, 244, 255), RJ_MID=(190, 190, 210, 255), RJ_D=(130, 130, 155, 255),
+                   RJ_NAVY=(205, 160, 50, 255), RJ_NAVY_L=(255, 215, 90, 255), RJ_VISOR=(40, 30, 10, 255),
+                   RJ_GLOW=(255, 225, 120, 255), RJ_GLOW_D=(220, 170, 50, 255), RJ_HALO=(255, 225, 120, 110),
+                   SCARF=(255, 215, 90, 255), SCARF_L=(255, 245, 190, 255), SCARF_D=(190, 140, 40, 255),
+                   RJ_DECOR=_decor_god, RJ_DECOR_BACK=_decor_god_wings)
+
+MARBLE, MARBLE_D, MARBLE_DD = (244, 242, 236, 255), (205, 200, 190, 255), (160, 152, 140, 255)
+GATE_GOLD, GATE_GOLD_D, GATE_GOLD_L = (240, 195, 70, 255), (185, 135, 35, 255), (255, 235, 150, 255)
+
+
+def heavenly_gate():
+    # Frame: 48x72 (96x144 in game). Opening x 8..39, rows 16..67 is left empty for the doors.
+    img, d = canvas(48, 72)
+    # Tympanum (the filled space under the arch) with a sun emblem.
+    d.pieslice([6, 1, 41, 30], 180, 360, fill=GATE_GOLD_D)
+    d.pieslice([9, 4, 38, 27], 180, 360, fill=(255, 225, 140, 255))
+    cx, cy = 24, 14
+    for a in range(0, 180, 20):
+        r = math.radians(180 + a)
+        d.line([cx + math.cos(r) * 3, cy + math.sin(r) * 3, cx + math.cos(r) * 9, cy + math.sin(r) * 9], fill=GATE_GOLD)
+    d.pieslice([cx - 3, cy - 3, cx + 3, cy + 3], 180, 360, fill=WHITE)
+    # Arch: gold band over the top.
+    d.arc([2, 0, 45, 32], 180, 360, fill=OUTLINE, width=4)
+    d.arc([3, 1, 44, 31], 180, 360, fill=GATE_GOLD, width=2)
+    d.arc([3, 1, 44, 31], 200, 340, fill=GATE_GOLD_L, width=1)
+    d.rectangle([22, 0, 25, 3], fill=OUTLINE); d.rectangle([23, 0, 24, 2], fill=(150, 230, 255, 255))  # keystone gem
+    # Lintel across the top of the doorway.
+    d.rectangle([4, 14, 43, 16], fill=OUTLINE); d.line([5, 15, 42, 15], fill=GATE_GOLD)
+    # Pillars: fluted marble with gold capitals and bases.
+    for x0 in (0, 39):
+        d.rectangle([x0, 12, x0 + 8, 64], fill=OUTLINE)
+        d.rectangle([x0 + 1, 17, x0 + 7, 60], fill=MARBLE)
+        for fx in (x0 + 3, x0 + 5):
+            d.line([fx, 18, fx, 59], fill=MARBLE_D)
+        d.line([x0 + 7, 17, x0 + 7, 60], fill=MARBLE_DD)
+        d.rectangle([x0 + 1, 13, x0 + 7, 16], fill=GATE_GOLD); d.line([x0 + 1, 13, x0 + 7, 13], fill=GATE_GOLD_L)
+        d.rectangle([x0 + 1, 60, x0 + 7, 63], fill=GATE_GOLD); d.line([x0 + 1, 63, x0 + 7, 63], fill=GATE_GOLD_D)
+    # Marble steps.
+    d.rectangle([0, 64, 47, 69], fill=OUTLINE)
+    d.rectangle([1, 65, 46, 66], fill=MARBLE); d.rectangle([2, 67, 45, 68], fill=MARBLE_D)
+    # Clouds billowing around the base.
+    for (x, y, r) in ((2, 68, 4), (9, 69, 3), (16, 70, 3), (24, 70, 3), (32, 70, 3), (39, 69, 3), (45, 68, 4)):
+        d.ellipse([x - r, y - r, x + r, min(71, y + r)], fill=(250, 252, 255, 235))
+        d.point((x - 1, y - r + 1), fill=WHITE)
+    # Leave the doorway itself empty.
+    px = img.load()
+    for yy in range(17, 64):
+        for xx in range(9, 39):
+            px[xx, yy] = CLEAR
+    save(img, "Content/Projectiles/HeavenlyGate.png")
+
+    # One door leaf: 16x52 (32x104 in game), hinge on the left. The right door is the same leaf mirrored.
+    img, d = canvas(16, 52)
+    d.rectangle([0, 0, 15, 51], fill=OUTLINE)
+    d.rectangle([1, 1, 14, 50], fill=(248, 244, 232, 255))
+    d.rectangle([1, 1, 14, 2], fill=GATE_GOLD); d.rectangle([1, 49, 14, 50], fill=GATE_GOLD)
+    for (y0, y1) in ((5, 22), (27, 46)):
+        d.rectangle([3, y0, 12, y1], outline=GATE_GOLD)
+        d.rectangle([4, y0 + 1, 11, y1 - 1], fill=(238, 232, 215, 255))
+    # Star ornament and a gold handle on the inner edge.
+    d.line([7, 9, 7, 18], fill=GATE_GOLD); d.line([4, 13, 10, 13], fill=GATE_GOLD)
+    d.point((7, 13), fill=WHITE)
+    d.rectangle([13, 24, 14, 27], fill=GATE_GOLD_D); d.point((13, 25), fill=GATE_GOLD_L)
+    save(img, "Content/Projectiles/HeavenlyGateDoor.png")
+
+
+def god_icons():
+    gold, white = GATE_GOLD, WHITE
+    # God Trigger: a white and gold trigger with a halo and little wings.
+    img, d = canvas(16, 16)
+    d.line([1, 7, 4, 9], fill=white, width=2); d.line([14, 7, 11, 9], fill=white, width=2)
+    d.rounded_rectangle([4, 6, 11, 15], radius=2, fill=OUTLINE)
+    d.rounded_rectangle([5, 7, 10, 14], radius=1, fill=(236, 236, 244, 255))
+    d.line([5, 7, 5, 14], fill=gold)
+    d.rectangle([6, 2, 9, 6], fill=OUTLINE); d.rectangle([7, 3, 8, 5], fill=gold)
+    d.ellipse([4, 0, 11, 2], outline=(255, 225, 120, 255))
+    d.rectangle([6, 9, 9, 11], fill=gold); d.point((7, 10), fill=white)
+    save(img, "Content/Items/GodTrigger.png")
+
+    def form_inner(d):
+        d.ellipse([3, 0, 12, 3], outline=(255, 225, 120, 255))
+        d.rounded_rectangle([3, 4, 12, 11], radius=2, fill=(236, 236, 244, 255))
+        d.rectangle([6, 7, 12, 8], fill=gold)
+        d.rectangle([5, 12, 10, 14], fill=gold)
+    buff_icon("Content/Buffs/GodJackForm.png", form_inner)
+
+    def wrath(d):
+        d.ellipse([0, 0, 15, 15], outline=gold)
+        for a in range(0, 360, 45):
+            r = math.radians(a)
+            d.line([8 + math.cos(r) * 4, 8 + math.sin(r) * 4, 8 + math.cos(r) * 6, 8 + math.sin(r) * 6], fill=(255, 150, 40, 255))
+        d.ellipse([4, 4, 11, 11], fill=gold); d.ellipse([6, 6, 9, 9], fill=white)
+    ability_icon("Content/Abilities/GodsWrathAbility.png", wrath)
+
+    for name in ("GodsWrathCharge", "GodsWrathBlast"):
+        invisible("Content/Projectiles/%s.png" % name)
+
+
 if __name__ == "__main__":
     robot_sheets()
     robot_variant_sheets()
     jack_variant_icons()
     stunned_buff()
     omega_icons()
+    heavenly_gate()
+    god_icons()
     robot_trigger()
     orbital_icon(); plasma_icon(); missiles_icon(); thruster_icon()
     robot_form_buff(); orbital_cooldown_buff()

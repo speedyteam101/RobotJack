@@ -83,6 +83,8 @@ namespace RobotJack.Common
 
 		public override void PostUpdate() {
 			UpdateSpin();
+			wrathChargeTicks = 0;
+			wrathGlow = System.Math.Max(0f, wrathGlow - 0.05f);
 			RecordTrail();
 
 			if (Player.whoAmI == Main.myPlayer) {
@@ -95,6 +97,65 @@ namespace RobotJack.Common
 				}
 				UpdateAbilityItems();
 				UpdateHeadRam();
+			}
+		}
+
+		// ------------------------------------------------------------------ God Jack's gate entrance
+
+		// Set by HeavenlyGate on every client: the game tick the gate appeared, and the player's facing direction then.
+		public bool godEntrance;
+		public uint godEntranceStart;
+		public int godEntranceDirection = 1;
+
+		private int EntranceTicks => godEntrance ? (int)(Main.GameUpdateCount - godEntranceStart) : -1;
+
+		// Hidden inside the gate until its doors open...
+		public bool HiddenInGate => EntranceTicks >= 0 && EntranceTicks < HeavenlyGate.AppearTick;
+
+		// ...then walking out of it by themselves for a moment.
+		public bool SteppingOutOfGate => EntranceTicks >= HeavenlyGate.AppearTick && EntranceTicks < HeavenlyGate.StepOutEndTick;
+
+		public void StartGodEntrance() {
+			godEntrance = true;
+			godEntranceStart = Main.GameUpdateCount;
+			godEntranceDirection = Player.direction;
+		}
+
+		public override void SetControls() {
+			if (!godEntrance) {
+				return;
+			}
+			if (EntranceTicks >= HeavenlyGate.StepOutEndTick) {
+				godEntrance = false;
+				return;
+			}
+			if (HiddenInGate || SteppingOutOfGate) {
+				Player.controlLeft = SteppingOutOfGate && godEntranceDirection == -1;
+				Player.controlRight = SteppingOutOfGate && godEntranceDirection == 1;
+				Player.controlUp = Player.controlDown = Player.controlJump = false;
+				Player.controlUseItem = Player.controlUseTile = false;
+			}
+		}
+
+		// Gods Wrath: how brightly the player glows (0..1), and how long it has been charging (0 = not charging).
+		// Both are set every tick by GodsWrathCharge and fade/reset here when it stops.
+		public float wrathGlow;
+		public int wrathChargeTicks;
+
+		public override void PreUpdateMovement() {
+			if (wrathChargeTicks > 0) {
+				// Rise for the first second, then hang motionless in the air.
+				Player.velocity = new Vector2(0f, wrathChargeTicks < 60 ? -1.2f : 0f);
+				Player.fallStart = (int)(Player.position.Y / 16f);
+			}
+			if (HiddenInGate) {
+				Player.velocity = Vector2.Zero;
+				Player.immune = true;
+				Player.immuneTime = System.Math.Max(Player.immuneTime, 10);
+			}
+			else if (SteppingOutOfGate) {
+				// A slow, deliberate walk out of the light.
+				Player.velocity.X = MathHelper.Clamp(Player.velocity.X, -1.6f, 1.6f);
 			}
 		}
 
@@ -266,6 +327,13 @@ namespace RobotJack.Common
 		// While transformed, hide the normal player body so only the robot is drawn.
 		// Held items, mounts, wings and debuff effects stay visible.
 		public override void HideDrawLayers(PlayerDrawSet drawInfo) {
+			// Inside the heavenly gate: draw nothing at all.
+			if (HiddenInGate) {
+				foreach (PlayerDrawLayer layer in PlayerDrawLayerLoader.DrawOrder) {
+					layer.Hide();
+				}
+				return;
+			}
 			if (!Transformed || Player.dead) {
 				return;
 			}

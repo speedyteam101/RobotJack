@@ -12,5 +12,6 @@ Find the Robot Trigger and transform into a sci-fi combat robot.
   - Gravity Arm: hold to pull enemies toward your cursor.
 - Robot Jetpack: lets you fly. While transformed, ramming things with your robot head knocks them away spinning.
 - Five Robot Jack variants: Blaze, Frost, Volt, Shadow and Nova Jack, crafted from the Robot Trigger, each with eight elemental abilities.
+- God Jack: step out of a heavenly gate as a god, and unleash Gods Wrath: charge a mini sun inside a ring around half the world, then destroy everything inside it.
 - Omega Jack: every Robot Jack combined, with every perk and eight insanely powerful abilities (a block-piercing rainbow cannon, a black hole, time stop, orbital barrages and more).
 - Abilities grow stronger as you beat bosses.

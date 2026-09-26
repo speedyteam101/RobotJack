@@ -14,12 +14,17 @@ namespace RobotJack.Common
 		ShadowJack,
 		NovaJack,
 		OmegaJack,
+		GodJack,
 	}
 
 	public static class RobotFormTypeExtensions
 	{
+		// God Jack's divine gold.
+		public static readonly Color GodGold = new Color(255, 215, 90);
+
 		// Robot Jack, his five elemental variants and Omega Jack (same size and body, different colours and abilities).
-		public static bool IsJack(this RobotFormType form) => form == RobotFormType.RobotJack || form == RobotFormType.OmegaJack || form.Element() != null;
+		public static bool IsJack(this RobotFormType form) =>
+			form == RobotFormType.RobotJack || form == RobotFormType.OmegaJack || form == RobotFormType.GodJack || form.Element() != null;
 
 		// The element of a Robot Jack variant, or null for every other form.
 		public static JackElement? Element(this RobotFormType form) => form switch {
@@ -35,6 +40,9 @@ namespace RobotJack.Common
 		public static Color GlowColor(this RobotFormType form) {
 			if (form == RobotFormType.OmegaJack) {
 				return Main.DiscoColor;
+			}
+			if (form == RobotFormType.GodJack) {
+				return GodGold;
 			}
 			JackElement? element = form.Element();
 			return element.HasValue ? Elements.Main(element.Value) : new Color(90, 230, 255);

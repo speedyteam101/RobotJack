@@ -48,8 +48,11 @@ namespace RobotJack.Content.Abilities
 		// Which form grants this ability.
 		public virtual RobotFormType Form => RobotFormType.RobotJack;
 
+		// Whether this ability is given in a form. Normally only its own; Omega Jack's are also God Jack's.
+		public virtual bool AllowedIn(RobotFormType form) => form == Form;
+
 		public bool IsAllowed(Player player) {
-			return player.GetModPlayer<RobotJackPlayer>().ActiveForm == Form;
+			return AllowedIn(player.GetModPlayer<RobotJackPlayer>().ActiveForm);
 		}
 
 		// Cooldown in ticks after each use (0 = none). Shown in the tooltip and on the inventory slot.

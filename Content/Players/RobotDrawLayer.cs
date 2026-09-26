@@ -31,6 +31,8 @@ namespace RobotJack.Content.Players
 			RobotFormType.VoltJack => "VoltJack",
 			RobotFormType.ShadowJack => "ShadowJack",
 			RobotFormType.NovaJack => "NovaJack",
+			RobotFormType.OmegaJack => "OmegaJack",
+			RobotFormType.GodJack => "GodJack",
 			_ => "Robot",
 		};
 
@@ -53,6 +55,14 @@ namespace RobotJack.Content.Players
 			DrawPart(ref drawInfo, sheet + "Legs_Glow", player.legFrame, player.legPosition, player.legRotation, glow);
 			DrawPart(ref drawInfo, sheet + "Body", player.bodyFrame, player.bodyPosition, player.bodyRotation, light);
 			DrawPart(ref drawInfo, sheet + "Body_Glow", player.bodyFrame, player.bodyPosition, player.bodyRotation, glow);
+
+			// Charging Gods Wrath: the whole robot glows brighter and brighter gold.
+			float wrath = player.GetModPlayer<RobotJackPlayer>().wrathGlow;
+			if (wrath > 0f && drawInfo.shadow == 0f) {
+				Color gold = new Color(255, 215, 90, 0) * (0.9f * wrath);
+				DrawPart(ref drawInfo, sheet + "Legs", player.legFrame, player.legPosition, player.legRotation, gold);
+				DrawPart(ref drawInfo, sheet + "Body", player.bodyFrame, player.bodyPosition, player.bodyRotation, gold);
+			}
 		}
 
 		// Faded copies of the robot at its last few positions (additive, so they glow).

@@ -396,6 +396,32 @@ Mods: {
 					'''
 			}
 
+			GodTrigger: {
+				DisplayName: God Trigger
+				Tooltip:
+					'''
+					Use to pass through the heavenly gate and step out as God Jack; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+					Has every perk: immune to fire, lava, cold, electricity and shadowflame,
+					no slipping on ice, +25% attack speed, a chance to dodge and +20 health per second
+					While transformed you get Gods Wrath and all of Omega Jack's abilities
+					Crafted from the Omega Trigger, which you keep
+					"Judgement."
+					'''
+			}
+
+			GodsWrathAbility: {
+				DisplayName: Gods Wrath
+				Tooltip:
+					'''
+					Hold left click to charge for 5 seconds: you rise and glow, the air around you becomes a mini sun,
+					the view pulls back and a ring of judgement appears around at least half the world (see the map)
+					Release once fully charged: everything inside the ring is destroyed, bosses included
+					Players, town NPCs, critters and target dummies are spared
+					Releasing early lets it fizzle out with no cooldown
+					'''
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -445,6 +471,11 @@ Mods: {
 
 			OmegaJackForm: {
 				DisplayName: Omega Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+			}
+
+			GodJackForm: {
+				DisplayName: God Jack
 				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
 			}
 
@@ -501,6 +532,9 @@ Mods: {
 			ElementAura.DisplayName: Element Aura
 			ElementOrbiter.DisplayName: Orbiting Orb
 			Singularity.DisplayName: Singularity
+			HeavenlyGate.DisplayName: Heavenly Gate
+			GodsWrathCharge.DisplayName: Gods Wrath
+			GodsWrathBlast.DisplayName: Gods Wrath
 		}
 
 		DropConditions: {

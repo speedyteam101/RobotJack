@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants, or Omega Jack, all of them combined), and use ability items, headlined by the **Orbital Cannon Strike**.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants, Omega Jack, all of them combined, or God Jack), and use ability items, headlined by the **Orbital Cannon Strike**.
 
 ## Installing (from source)
 
@@ -99,6 +99,25 @@ Base damage is higher for the later variants (Volt and Shadow ×2, Nova ×3.5 of
 
 All of them still scale with bosses beaten, on top of Omega Jack's +80% damage.
 
+## God Jack
+
+**Beyond Omega Jack.** The **God Trigger** is crafted from the Omega Trigger (which you keep) plus **30 Luminite Bar, 20 Solar Fragment and 15 Soul of Light** at the Ancient Manipulator.
+
+**The entrance:** using the God Trigger doesn't just transform you. A pillar of heavenly light slams down and a marble-and-gold **heavenly gate** rises on a bed of clouds where you stand. You vanish inside it (frozen and invincible), its doors swing open in a flood of light with god rays turning behind it, and you **walk out of the doorway as God Jack** while the gate dissolves into golden sparkles.
+
+- **Look:** white and gold armor, a gold visor, a blazing halo, small angel wings on the back, and a golden glow with drifting motes. Golden afterimages and jetpack sparks.
+- **Stats:** +120% damage, +25% crit, +90 defense, 40% damage reduction, +80% movement speed, +300 max life.
+- **Every perk:** immune to fire, lava, cold, electricity and shadowflame, no slipping on ice, +25% attack speed, a chance to dodge attacks, +20 health per second.
+- **Abilities:** **Gods Wrath**, plus all eight of Omega Jack's abilities.
+
+### Gods Wrath
+
+1. **Hold left click to charge (5 seconds).** You rise into the air and hang there, glowing brighter and brighter gold. The air around you ignites into a growing **mini sun** with a white-hot core and turning rays, and the camera **slowly zooms out** (to about 80% of the normal view; the game doesn't draw the world much further than the screen, so zooming out more would show black edges). A giant **golden ring of judgement** appears around at least **half the world**: its diameter is half the world's width. It's far bigger than the screen, so you'll see it as a golden line when you're near its edge, and **it's drawn on the world map and minimap** so you can see everything it covers.
+2. **When it's fully charged** the sun pulses white and the screen shakes.
+3. **Release:** the screen whites out, the sun goes nova, and a golden shockwave races out to the edge of the ring over about 2.5 seconds. **Everything it passes is killed outright, bosses included**, and enemy projectiles are wiped out. **Spared:** all players, town NPCs (the Guide and friends), critters and target dummies.
+
+Releasing before it's fully charged lets it fizzle out (no cooldown). After a full release there's a **60 second cooldown**.
+
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
@@ -112,4 +131,4 @@ An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
 All sprites are placeholders drawn by `tools/generate_sprites.py` (needs Pillow: `pip install pillow`; run it from this folder).
 Replace any PNG with hand-made art at the same size whenever you like. The robot sheets (`Content/Players/RobotBody*.png`, `RobotLegs*.png`) use the vanilla player sheet layout: 20 frames of 40×56 stacked vertically (0 idle, 1–4 arm aiming up → down, 5 jump, 6–19 walk cycle). The `_Glow` sheets are drawn full-bright on top.
 
-`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants and Omega Jack, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.
+`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants, Omega Jack and God Jack, and `tools/god_jack_preview.png` the heavenly gate opening, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.

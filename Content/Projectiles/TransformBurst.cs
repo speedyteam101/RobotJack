@@ -13,13 +13,13 @@ namespace RobotJack.Content.Projectiles
 	// Robot Jack's transformation effect (visual only, no damage). Energy rushes in toward the player,
 	// a pillar of light slams down from the sky onto them, shockwave rings burst out and sparks fly.
 	// ai[1] = 1: the smaller version played when turning back.
-	// ai[2] = colour: 0 = Robot Jack's cyan, 1-5 = a variant's element (JackElement + 1), 6 = Omega Jack's rainbow.
+	// ai[2] = colour: 0 = Robot Jack's cyan, 1-5 = a variant's element (JackElement + 1), 6 = Omega Jack's rainbow, 7 = God Jack's gold.
 	public class TransformBurst : ModProjectile
 	{
 		public const int Lifetime = 45;
 
-		private bool Omega => Projectile.ai[2] >= 6f;
-		private Color Cyan => Omega ? Main.DiscoColor : Projectile.ai[2] >= 1f ? Elements.Main(Elements.FromAI(Projectile.ai[2] - 1f)) : new Color(90, 230, 255);
+		private bool Omega => Projectile.ai[2] == 6f;
+		private Color Cyan => Projectile.ai[2] >= 7f ? RobotFormTypeExtensions.GodGold : Omega ? Main.DiscoColor : Projectile.ai[2] >= 1f ? Elements.Main(Elements.FromAI(Projectile.ai[2] - 1f)) : new Color(90, 230, 255);
 		private int SparkDust => Omega ? Elements.Dust((JackElement)Main.rand.Next(Elements.Count)) : Projectile.ai[2] >= 1f ? Elements.Dust(Elements.FromAI(Projectile.ai[2] - 1f)) : DustID.Electric;
 		private static Asset<Texture2D> beamTex, glowTex, ringTex;
 

@@ -131,4 +131,43 @@ namespace RobotJack.Content.Buffs
 			Lighting.AddLight(player.Center, Main.DiscoColor.ToVector3() * 0.5f);
 		}
 	}
+
+	// God Jack: beyond Omega Jack. Every perk, divine stats, a golden glow, and Gods Wrath.
+	public class GodJackForm : JackFormBuff
+	{
+		public override RobotFormType Form => RobotFormType.GodJack;
+		public override int DamageBonus => 120;
+		public override int DefenseBonus => 90;
+		public override int DamageReduction => 40;
+		public override int MoveSpeedBonus => 80;
+		public override int MaxLifeBonus => 300;
+		public override int CritBonus => 25;
+
+		protected override int JetSparkDust => DustID.Enchanted_Gold;
+
+		public override void Update(Player player, ref int buffIndex) {
+			base.Update(player, ref buffIndex);
+			player.buffImmune[BuffID.OnFire] = true;
+			player.buffImmune[BuffID.OnFire3] = true;
+			player.buffImmune[BuffID.Burning] = true;
+			player.buffImmune[BuffID.Frostburn] = true;
+			player.buffImmune[BuffID.Chilled] = true;
+			player.buffImmune[BuffID.Electrified] = true;
+			player.buffImmune[BuffID.ShadowFlame] = true;
+			player.lavaImmune = true;
+			player.fireWalk = true;
+			player.iceSkate = true;
+			player.blackBelt = true;
+			player.GetAttackSpeed(DamageClass.Generic) += 0.25f;
+			player.lifeRegen += 40; // +20 health per second
+
+			// A soft divine glow and drifting golden motes.
+			Lighting.AddLight(player.Center, 1f, 0.85f, 0.4f);
+			if (Main.rand.NextBool(6)) {
+				Dust mote = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Enchanted_Gold, 0f, -1f);
+				mote.noGravity = true;
+				mote.velocity *= 0.3f;
+			}
+		}
+	}
 }
