@@ -43,7 +43,7 @@ namespace RobotJack.Common
 			JackElement.Frost => DustID.IceTorch,
 			JackElement.Volt => DustID.Electric,
 			JackElement.Shadow => DustID.Corruption,
-			_ => DustID.Enchanted,
+			_ => DustID.Enchanted_Pink,
 		};
 
 		public static int Debuff(JackElement e) => e switch {
