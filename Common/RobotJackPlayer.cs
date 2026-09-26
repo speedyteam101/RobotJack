@@ -28,10 +28,6 @@ namespace RobotJack.Common
 		// How many different absorbed attacks are remembered and fired back by the release blast.
 		public const int MaxRecorded = 12;
 
-		// Titan hitbox size (the normal player is 20x42).
-		public const int TitanWidth = 36;
-		public const int TitanHeight = 84;
-
 		// The active form, based on the form buffs themselves, so it's correct at any point in the update.
 		public RobotFormType ActiveForm {
 			get {
@@ -44,7 +40,7 @@ namespace RobotJack.Common
 			}
 		}
 
-		// True in any form (Robot Jack or a Titan).
+		// True in any form (Robot Jack or one of his variants).
 		public bool Transformed => ActiveForm != RobotFormType.None;
 
 		// Set by the Robot Jetpack each frame it's equipped.
@@ -73,58 +69,17 @@ namespace RobotJack.Common
 
 		public void StartCooldown(int itemType, int ticks) => cooldowns[itemType] = ticks;
 
-		// Titan Camera's Rewind: where the player was and how much life they had, for the last few seconds.
-		public const int RewindTicks = 180;
-		private readonly Vector2[] rewindPosition = new Vector2[RewindTicks];
-		private readonly int[] rewindLife = new int[RewindTicks];
-		private int rewindNext;
-		private int rewindCount;
 
 		public override void ResetEffects() {
 			jetpack = false;
 		}
 
 		public override void UpdateDead() {
-			rewindCount = 0;
 			energy = 0f;
 			recorded.Clear();
 			absorbTimer = 0;
-			UpdateSize();
 		}
 
-		// Runs for every player on every client and the server, so everyone agrees on each player's size.
-		public override void PreUpdate() {
-			UpdateSize();
-		}
-
-		// Titans have a bigger hitbox. Grows only when there's room (otherwise it waits until there is),
-		// and keeps the feet where they were. Mounts manage the player's height themselves, so Titans ride at normal size.
-		private void UpdateSize() {
-			bool big = ActiveForm.IsTitan() && !Player.dead && !Player.mount.Active;
-			int width = big ? TitanWidth : Player.defaultWidth;
-			int height = big ? TitanHeight : Player.defaultHeight;
-			if (Player.mount.Active) {
-				height = Player.height; // leave the mount's height alone
-			}
-			if (Player.width == width && Player.height == height) {
-				return;
-			}
-
-			Vector2 position = Player.position;
-			position.X += (Player.width - width) / 2f;
-			if (Player.gravDir == 1f) {
-				position.Y += Player.height - height; // keep the feet on the ground
-			}
-
-			bool growing = width > Player.width || height > Player.height;
-			if (growing && Collision.SolidCollision(position, width, height)) {
-				return; // not enough room yet
-			}
-
-			Player.position = position;
-			Player.width = width;
-			Player.height = height;
-		}
 
 		public override void PostUpdate() {
 			UpdateSpin();
@@ -138,7 +93,6 @@ namespace RobotJack.Common
 				if (lifeStealCooldown > 0) {
 					lifeStealCooldown--;
 				}
-				RecordRewind();
 				UpdateAbilityItems();
 				UpdateHeadRam();
 			}
@@ -156,7 +110,7 @@ namespace RobotJack.Common
 			trailPositions[0] = Player.position;
 		}
 
-		// ------------------------------------------------------------------ cooldowns, rewind, teleport
+		// ------------------------------------------------------------------ cooldowns
 
 		private readonly List<int> cooldownKeys = new();
 
@@ -167,34 +121,6 @@ namespace RobotJack.Common
 				if (--cooldowns[key] <= 0) {
 					cooldowns.Remove(key);
 				}
-			}
-		}
-
-		private void RecordRewind() {
-			rewindPosition[rewindNext] = Player.position;
-			rewindLife[rewindNext] = Player.statLife;
-			rewindNext = (rewindNext + 1) % RewindTicks;
-			rewindCount = System.Math.Min(rewindCount + 1, RewindTicks);
-		}
-
-		// The oldest recorded moment (up to 3 seconds ago). False if nothing has been recorded yet.
-		public bool TryGetRewind(out Vector2 position, out int life) {
-			int index = rewindCount < RewindTicks ? 0 : rewindNext;
-			position = rewindPosition[index];
-			life = rewindLife[index];
-			return rewindCount > 0;
-		}
-
-		public void ClearRewind() {
-			rewindCount = 0;
-			rewindNext = 0;
-		}
-
-		// Teleports the local player (position = top-left of the hitbox) and tells the server in multiplayer.
-		public static void TeleportPlayer(Player player, Vector2 position) {
-			player.Teleport(position, 1);
-			if (Main.netMode == NetmodeID.MultiplayerClient) {
-				NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, player.whoAmI, position.X, position.Y, 1);
 			}
 		}
 

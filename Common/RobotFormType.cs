@@ -7,9 +7,6 @@ namespace RobotJack.Common
 	{
 		None,
 		RobotJack,
-		TitanSpeaker,
-		TitanCamera,
-		TitanTV,
 		BlazeJack,
 		FrostJack,
 		VoltJack,
@@ -19,10 +16,6 @@ namespace RobotJack.Common
 
 	public static class RobotFormTypeExtensions
 	{
-		// Titans are drawn twice as big and have a bigger hitbox.
-		public static bool IsTitan(this RobotFormType form) =>
-			form == RobotFormType.TitanSpeaker || form == RobotFormType.TitanCamera || form == RobotFormType.TitanTV;
-
 		// Robot Jack and his five elemental variants (same size and body, different colours and abilities).
 		public static bool IsJack(this RobotFormType form) => form == RobotFormType.RobotJack || form.Element() != null;
 

@@ -9,21 +9,18 @@ using Terraria.ModLoader;
 
 namespace RobotJack.Content.Projectiles
 {
-	// A continuous beam toward the cursor while left click is held. It turns toward the cursor smoothly,
-	// stops at solid blocks, and hits everything along it every 6 ticks.
-	// ai[1] = style: 0 = Titan Camera's Core Laser (blue, from the chest core),
-	// 1 = Titan TV's Broadcast Beam (purple, from the screen),
-	// 2-6 = a Robot Jack variant's element beam (JackElement + 2, from the arm cannon).
-	public class CoreLaserBeam : ModProjectile
+	// A Robot Jack variant's element beam: fired continuously from the arm cannon toward the cursor while left click
+	// is held. It turns toward the cursor smoothly, stops at solid blocks, and hits everything along it every 6 ticks.
+	// ai[1] = element.
+	public class ElementBeam : ModProjectile
 	{
 		public const float MaxLength = 1400f;
 		public const float BeamWidth = 26f;
 		public const float TurnRate = 0.12f;
 
-		private bool Broadcast => Projectile.ai[1] == 1f;
-		private JackElement? JackBeam => Projectile.ai[1] >= 2f ? Elements.FromAI(Projectile.ai[1] - 2f) : null;
-		private Color Outer => JackBeam is JackElement e ? Elements.Main(e) : Broadcast ? new Color(150, 50, 255) : new Color(40, 120, 255);
-		private Color Mid => JackBeam is JackElement e ? Elements.Core(e) : Broadcast ? new Color(230, 140, 255) : new Color(90, 200, 255);
+		private JackElement Element => Elements.FromAI(Projectile.ai[1]);
+		private Color Outer => Elements.Main(Element);
+		private Color Mid => Elements.Core(Element);
 
 		private static Asset<Texture2D> beamTex, glowTex;
 
@@ -48,7 +45,7 @@ namespace RobotJack.Content.Projectiles
 			Projectile.width = 20;
 			Projectile.height = 20;
 			Projectile.friendly = true;
-			Projectile.DamageType = DamageClass.Magic;
+			Projectile.DamageType = DamageClass.Ranged;
 			Projectile.penetrate = -1;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
@@ -62,12 +59,8 @@ namespace RobotJack.Content.Projectiles
 
 		public override bool? CanCutTiles() => false;
 
-		// Where the beam starts: the chest core, or the TV screen.
-		private Vector2 CorePosition(Player player) => JackBeam.HasValue
-			? player.MountedCenter + new Vector2(player.direction * 12f, -4f * player.gravDir)
-			: Broadcast
-			? player.MountedCenter + new Vector2(player.direction * 6f, -34f * player.gravDir)
-			: player.MountedCenter + new Vector2(player.direction * 4f, -8f * player.gravDir);
+		// Where the beam starts: the arm cannon.
+		private static Vector2 CorePosition(Player player) => player.MountedCenter + new Vector2(player.direction * 12f, -4f * player.gravDir);
 
 		public override void AI() {
 			Player player = Main.player[Projectile.owner];
@@ -113,7 +106,7 @@ namespace RobotJack.Content.Projectiles
 			// Sparks where it hits.
 			Vector2 end = Projectile.Center + dir * length;
 			for (int i = 0; i < 2; i++) {
-				Dust dust = Dust.NewDustPerfect(end, JackBeam is JackElement de ? Elements.Dust(de) : Broadcast ? DustID.PinkFairy : DustID.Electric, -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
+				Dust dust = Dust.NewDustPerfect(end, Elements.Dust(Element), -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
 				dust.noGravity = true;
 			}
 			for (float d = 0; d < length; d += 48f) {
@@ -142,12 +135,7 @@ namespace RobotJack.Content.Projectiles
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-			if (JackBeam is JackElement e) {
-				ElementFX.Hit(target, e);
-			}
-			else {
-				target.AddBuff(BuffID.Electrified, 120);
-			}
+			ElementFX.Hit(target, Element);
 		}
 
 		private static Color Glow(Color color, float opacity) => new Color(color.R, color.G, color.B, 0) * opacity;

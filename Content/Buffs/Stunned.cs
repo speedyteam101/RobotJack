@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace RobotJack.Content.Buffs
 {
-	// Frozen in place by Titan Camera's flash or Titan TV's hypno screen. StunnedNPC does the freezing.
+	// Frozen in place by Frost Jack's ice. StunnedNPC does the freezing.
 	// Never applied to bosses.
 	public class Stunned : ModBuff
 	{

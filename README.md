@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants), and use ability items, headlined by the **Orbital Cannon Strike**. In Hardmode, craft cores to become one of three giant **Titans**: Titan Speaker, Titan Camera and Titan TV.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants), and use ability items, headlined by the **Orbital Cannon Strike**.
 
 ## Installing (from source)
 
@@ -78,49 +78,6 @@ Their abilities are built from these kinds, each in the variant's element (fire 
 
 Base damage is higher for the later variants (Volt and Shadow ×2, Nova ×3.5 of Blaze/Frost's), and everything still scales with bosses beaten.
 
-## Titan forms
-
-Three more forms, each with its own transform item (use to transform, use again to turn back; no time limit or cooldown). Only one form can be active at a time: using any transform item ends the current one. Each Titan has **only its own abilities**, not Robot Jack's.
-
-**Titans are giant:** drawn at twice the player's size, and their hitbox is too (36×84 instead of 20×42, about 2 blocks wide and 5 tall). You won't fit through small gaps. If there isn't room when you transform, you stay normal size until there is. While riding a mount you're normal size. To make up for being easier to hit, Titans are tougher. All Titans also get knockback and fall damage immunity, higher jumps and the hover jets, and the Robot Jetpack head ram works for them too.
-
-| Form | Transform item (Mythril/Orichalcum Anvil) | Stats |
-| --- | --- | --- |
-| **Titan Speaker** | Titan Speaker Core: 12 Hallowed Bar, 10 Soul of Might | +30% damage, +40 defense, 20% damage reduction, +15% speed, +150 max life |
-| **Titan Camera** | Titan Camera Core: 12 Hallowed Bar, 10 Soul of Sight | +35% damage, +15% crit, +30 defense, 15% damage reduction, +20% speed, +100 max life |
-| **Titan TV** | Titan TV Core: 12 Hallowed Bar, 10 Soul of Fright | +30% damage, +30 defense, 15% damage reduction, +35% speed, +100 max life |
-
-Titan ability damage scales with bosses beaten like Robot Jack's.
-
-Each Titan has **8 abilities**. They all go into your inventory when you transform, so keep 8 slots free. Some have cooldowns: the slot darkens and counts down the seconds while you wait.
-
-| Titan | Ability | Base damage | What it does |
-| --- | --- | --- | --- |
-| Speaker | **Sonic Boom** | 80 | A huge sound wave from your speaker head that grows as it flies and passes through everything. Heavy knockback. |
-| Speaker | **Bass Drop** | 120 | A ring of bass bursts out around you: hits everything nearby once, throws it away from you and confuses it. Screen shake. |
-| Speaker | **Speaker Barrage** | 35 | Rapid-fire small sound waves (auto-fire). |
-| Speaker | **Speaker Army** | 45 (summon) | Summon **six speaker-headed soldiers** for 20 s. They march along the ground, jump over obstacles, chase the nearest enemy, hit what they run into and fire small sound waves at enemies in range. **30 s cooldown.** |
-| Speaker | **Sonic Shield** | 30 | A bubble of sound around you for 6 s: shatters enemy projectiles that touch it, pushes enemies out and hurts them. **20 s cooldown.** |
-| Speaker | **Subwoofer Quake** | 95 | Stomp: two giant sound waves roll out along the ground, one each way. |
-| Speaker | **Feedback Loop** | 50 ×12 | Twelve sound waves burst out in every direction. |
-| Speaker | **Boom Dash** | 85 (melee) | Dash toward the cursor on a burst of bass, confusing everything you hit, leaving a sound wave behind you. |
-| Camera | **Core Laser** | 45 every 6 ticks | **Hold left click**: a continuous blue laser from your chest core. It turns to follow the cursor and stops at blocks. |
-| Camera | **Camera Flash** | 60 | A blinding flash from your lens: damages and confuses everything nearby and **stuns** enemies in place for 2.5 s. Bosses aren't stunned. |
-| Camera | **Lens Burst** | 40 ×3 | Three homing blue orbs (auto-fire). |
-| Camera | **Camera Army** | 45 (summon) | Summon **six camera-headed soldiers** for 20 s that march, chase and fight like the Speaker Army, shooting plasma bolts. **30 s cooldown.** |
-| Camera | **Target Lock** | none | Lock on to every enemy near the cursor: a red reticle marks them, and they take **50% more damage** from everything for 8 s (except the Orbital Cannon Strike, which always does exactly its damage). |
-| Camera | **Zoom Shot** | 220 | A big, fast plasma shot from your zoom lens that pierces up to 6 enemies. |
-| Camera | **Rewind** | none | Jump back to where you were 3 seconds ago, and get back the health you had then if it was more. **20 s cooldown.** |
-| Camera | **Flash Grenades** | 55 ×3 | Throw three flash bulbs that pop into small camera flashes: damage, confusion, 1.5 s stun (not bosses). |
-| TV | **Hypno Screen** | 30 ×3 | Three hypnotic waves from your screen: confuse enemies for 5 s and stun them for 1.5 s. Bosses aren't stunned. |
-| TV | **Energy Blades** | 90 (melee) | Swing a giant energy blade in a wide arc toward the cursor (auto-swing). |
-| TV | **Static Storm** | 30 ×6 | Spray six homing purple orbs (auto-fire). |
-| TV | **TV Army** | 45 (summon) | Summon **six TV-headed soldiers** for 20 s that march, chase and fight like the Speaker Army, firing homing static orbs. **30 s cooldown.** |
-| TV | **Channel Surf** | 35 per orb | Teleport to the cursor (up to ~56 tiles away, only if there's room), bursting five static orbs out where you leave and five where you arrive. |
-| TV | **Blade Dash** | 100 (melee) | Dash toward the cursor with an energy blade swing leading the way. |
-| TV | **Static Field** | 40 | A crackling field around you for 8 s that zaps every enemy inside with lightning three times a second. **15 s cooldown.** |
-| TV | **Broadcast Beam** | 40 every 6 ticks | **Hold left click**: a purple beam from your screen that follows the cursor and stops at blocks. |
-
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
@@ -134,4 +91,4 @@ An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
 All sprites are placeholders drawn by `tools/generate_sprites.py` (needs Pillow: `pip install pillow`; run it from this folder).
 Replace any PNG with hand-made art at the same size whenever you like. The robot sheets (`Content/Players/RobotBody*.png`, `RobotLegs*.png`) use the vanilla player sheet layout: 20 frames of 40×56 stacked vertically (0 idle, 1–4 arm aiming up → down, 5 jump, 6–19 walk cycle). The `_Glow` sheets are drawn full-bright on top.
 
-`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/titan_preview_4x.png` shows Robot Jack next to the three Titans. The Titan sheets (`Content/Players/Titan*.png`) use the same layout at twice the size: 80×112 per frame.
+`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.

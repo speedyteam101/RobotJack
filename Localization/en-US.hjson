@@ -61,226 +61,6 @@ Mods: {
 					'''
 			}
 
-			TitanSpeakerCore: {
-				DisplayName: Titan Speaker Core
-				Tooltip:
-					'''
-					Use to transform into Titan Speaker; use again to turn back
-					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
-					Titans are twice as big, hitbox included
-					While transformed you get the Titan's own ability items
-					"Turn it up."
-					'''
-			}
-
-			TitanCameraCore: {
-				DisplayName: Titan Camera Core
-				Tooltip:
-					'''
-					Use to transform into Titan Camera; use again to turn back
-					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
-					Titans are twice as big, hitbox included
-					While transformed you get the Titan's own ability items
-					"Say cheese."
-					'''
-			}
-
-			TitanTVCore: {
-				DisplayName: Titan TV Core
-				Tooltip:
-					'''
-					Use to transform into Titan TV; use again to turn back
-					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
-					Titans are twice as big, hitbox included
-					While transformed you get the Titan's own ability items
-					"Stay tuned."
-					'''
-			}
-
-			SonicBoom: {
-				DisplayName: Sonic Boom
-				Tooltip:
-					'''
-					Fire a huge sound wave that passes through everything
-					Heavy knockback
-					'''
-			}
-
-			BassDrop: {
-				DisplayName: Bass Drop
-				Tooltip:
-					'''
-					Blast a ring of bass all around you
-					Throws enemies away and confuses them
-					'''
-			}
-
-			SpeakerBarrage: {
-				DisplayName: Speaker Barrage
-				Tooltip: Rapid-fire small sound waves
-			}
-
-			CoreLaser: {
-				DisplayName: Core Laser
-				Tooltip:
-					'''
-					Hold left click to fire a continuous laser from your chest core
-					The beam turns to follow the cursor and stops at blocks
-					'''
-			}
-
-			CameraFlash: {
-				DisplayName: Camera Flash
-				Tooltip:
-					'''
-					A blinding flash that damages and confuses everything nearby
-					Stuns enemies in place for 2.5 seconds (not bosses)
-					'''
-			}
-
-			LensBurst: {
-				DisplayName: Lens Burst
-				Tooltip: Fire three homing energy orbs from your lens
-			}
-
-			HypnoScreen: {
-				DisplayName: Hypno Screen
-				Tooltip:
-					'''
-					Beam three hypnotic waves from your screen
-					Confuses enemies and stuns them briefly (not bosses)
-					'''
-			}
-
-			EnergyBlades: {
-				DisplayName: Energy Blades
-				Tooltip: Swing a giant energy blade in a wide arc
-			}
-
-			StaticStorm: {
-				DisplayName: Static Storm
-				Tooltip: Spray six homing static orbs
-			}
-
-			SpeakerArmy: {
-				DisplayName: Speaker Army
-				Tooltip:
-					'''
-					Summon an army of six speaker soldiers for 20 seconds
-					They march along the ground, chase down enemies and shoot at them
-					'''
-			}
-
-			SonicShieldAbility: {
-				DisplayName: Sonic Shield
-				Tooltip:
-					'''
-					Surround yourself with a bubble of sound for 6 seconds
-					Shatters enemy projectiles, pushes enemies out and hurts them
-					'''
-			}
-
-			SubwooferQuake: {
-				DisplayName: Subwoofer Quake
-				Tooltip: Stomp the ground: two giant sound waves roll out, one each way
-			}
-
-			FeedbackLoop: {
-				DisplayName: Feedback Loop
-				Tooltip: Twelve sound waves burst out in every direction
-			}
-
-			BoomDash: {
-				DisplayName: Boom Dash
-				Tooltip:
-					'''
-					Blast toward the cursor on a burst of bass
-					Confuses everything you plough through
-					'''
-			}
-
-			CameraArmy: {
-				DisplayName: Camera Army
-				Tooltip:
-					'''
-					Summon an army of six camera soldiers for 20 seconds
-					They march along the ground, chase down enemies and shoot at them
-					'''
-			}
-
-			TargetLock: {
-				DisplayName: Target Lock
-				Tooltip:
-					'''
-					Lock on to every enemy near the cursor
-					Locked-on enemies take 50% more damage for 8 seconds
-					'''
-			}
-
-			ZoomShot: {
-				DisplayName: Zoom Shot
-				Tooltip: A powerful shot from your zoom lens that pierces up to 6 enemies
-			}
-
-			Rewind: {
-				DisplayName: Rewind
-				Tooltip:
-					'''
-					Jump back to where you were 3 seconds ago
-					Also restores the health you had then, if it was more
-					'''
-			}
-
-			FlashGrenades: {
-				DisplayName: Flash Grenades
-				Tooltip:
-					'''
-					Throw three flash grenades that pop into small camera flashes
-					The flashes confuse and briefly stun enemies (not bosses)
-					'''
-			}
-
-			TVArmy: {
-				DisplayName: TV Army
-				Tooltip:
-					'''
-					Summon an army of six TV soldiers for 20 seconds
-					They march along the ground, chase down enemies and shoot at them
-					'''
-			}
-
-			ChannelSurf: {
-				DisplayName: Channel Surf
-				Tooltip:
-					'''
-					Teleport to the cursor, if there's room
-					Bursts static orbs out where you leave and where you arrive
-					'''
-			}
-
-			BladeDash: {
-				DisplayName: Blade Dash
-				Tooltip: Dash toward the cursor with an energy blade swing leading the way
-			}
-
-			StaticFieldAbility: {
-				DisplayName: Static Field
-				Tooltip:
-					'''
-					A crackling field surrounds you for 8 seconds
-					Zaps every enemy inside it with lightning
-					'''
-			}
-
-			BroadcastBeam: {
-				DisplayName: Broadcast Beam
-				Tooltip:
-					'''
-					Hold left click to broadcast a purple beam from your screen
-					The beam turns to follow the cursor and stops at blocks
-					'''
-			}
-
 			BlazeTrigger: {
 				DisplayName: Blaze Trigger
 				Tooltip:
@@ -563,29 +343,9 @@ Mods: {
 				Description: You are a combat robot
 			}
 
-			TitanSpeakerForm: {
-				DisplayName: Titan Speaker
-				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
-			}
-
-			TitanCameraForm: {
-				DisplayName: Titan Camera
-				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
-			}
-
-			TitanTVForm: {
-				DisplayName: Titan TV
-				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life
-			}
-
 			Stunned: {
 				DisplayName: Stunned
 				Description: Frozen in place
-			}
-
-			Marked: {
-				DisplayName: Marked
-				Description: Takes 50% more damage
 			}
 
 			BlazeJackForm: {
@@ -659,21 +419,12 @@ Mods: {
 			EnergyBlast.DisplayName: Energy Release
 			EnergyEcho.DisplayName: Absorbed Attack
 			GravityWell.DisplayName: Gravity Well
-			SoundWave.DisplayName: Sound Wave
-			SpeakerShockwave.DisplayName: Bass Drop
-			CoreLaserBeam.DisplayName: Core Laser
-			CameraFlashBurst.DisplayName: Camera Flash
-			EnergyOrb.DisplayName: Energy Orb
-			BladeSwing.DisplayName: Energy Blade
-			ArmySoldier.DisplayName: Army Soldier
+			ElementBeam.DisplayName: Element Beam
 			ElementBolt.DisplayName: Element Bolt
 			ElementBlast.DisplayName: Element Blast
 			ElementPillar.DisplayName: Eruption
 			ElementAura.DisplayName: Element Aura
 			ElementOrbiter.DisplayName: Orbiting Orb
-			SonicShield.DisplayName: Sonic Shield
-			StaticField.DisplayName: Static Field
-			FlashGrenade.DisplayName: Flash Grenade
 		}
 
 		DropConditions: {

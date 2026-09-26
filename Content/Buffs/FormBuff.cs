@@ -49,7 +49,7 @@ namespace RobotJack.Content.Buffs
 			player.statLifeMax2 += MaxLifeBonus;
 			player.noKnockback = true;
 			player.noFallDmg = true;
-			player.jumpSpeedBoost += Form.IsTitan() ? 3f : 2f;
+			player.jumpSpeedBoost += 2f;
 
 			// Hover jets: hold jump while falling to glide down slowly.
 			bool falling = player.velocity.Y * player.gravDir > 0f;

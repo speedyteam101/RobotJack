@@ -80,21 +80,21 @@ namespace RobotJack.Content.Abilities
 		}
 	}
 
-	// Hold left click for a continuous element beam from the arm cannon (the Core Laser beam in this element's colours).
+	// Hold left click for a continuous element beam from the arm cannon.
 	public abstract class BeamAbility : ElementAbility
 	{
 		protected override int UseTime => 20;
 
 		protected override void SetShoot() {
 			Item.channel = true;
-			Item.shoot = ModContent.ProjectileType<CoreLaserBeam>();
+			Item.shoot = ModContent.ProjectileType<ElementBeam>();
 			Item.shootSpeed = 1f;
 		}
 
 		protected override bool CanUseAbility(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-			Projectile.NewProjectile(source, player.MountedCenter, velocity.SafeNormalize(Vector2.UnitX * player.direction), type, damage, knockback, player.whoAmI, ai1: (int)Element + 2);
+			Projectile.NewProjectile(source, player.MountedCenter, velocity.SafeNormalize(Vector2.UnitX * player.direction), type, damage, knockback, player.whoAmI, ai1: (int)Element);
 			return false;
 		}
 	}
@@ -188,7 +188,7 @@ namespace RobotJack.Content.Abilities
 			player.immune = true;
 			player.immuneTime = Invincibility;
 			player.fallStart = (int)(player.position.Y / 16f);
-			Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, damage, knockback, player.whoAmI, ai0: (int)Element + 3);
+			Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, damage, knockback, player.whoAmI, ai0: (int)Element + 1);
 			Projectile.NewProjectile(source, player.Center, Vector2.Zero, ModContent.ProjectileType<ElementBlast>(), damage / 2, knockback, player.whoAmI,
 				ai0: (int)Element, ai1: 90f);
 			return false;
