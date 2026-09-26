@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework;
 using RobotJack.Common;
 using RobotJack.Content.Buffs;
+using RobotJack.Content.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,6 +14,12 @@ namespace RobotJack.Content.Items
 	{
 		public override RobotFormType Form => RobotFormType.RobotJack;
 		protected override int FormBuffType => ModContent.BuffType<RobotForm>();
+
+		// A pillar of light and shockwave rings (smaller when turning back).
+		protected override void SpawnTransformEffect(Player player, bool transforming) {
+			Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero,
+				ModContent.ProjectileType<TransformBurst>(), 0, 0f, player.whoAmI, ai1: transforming ? 0f : 1f);
+		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();

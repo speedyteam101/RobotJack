@@ -60,6 +60,12 @@ namespace RobotJack.Common
 
 		private bool wasSpinning;
 
+		// Robot Jack's afterimages: where the player was over the last few ticks (every 2 ticks, newest first).
+		// Recorded for every player on every client, since it's only used for drawing.
+		public const int TrailLength = 5;
+		public readonly Vector2[] trailPositions = new Vector2[TrailLength];
+		private int trailTick;
+
 		// Ability cooldowns (item type -> ticks left). Local to the owning client.
 		private readonly Dictionary<int, int> cooldowns = new();
 
@@ -122,6 +128,7 @@ namespace RobotJack.Common
 
 		public override void PostUpdate() {
 			UpdateSpin();
+			RecordTrail();
 
 			if (Player.whoAmI == Main.myPlayer) {
 				if (absorbTimer > 0) {
@@ -132,6 +139,18 @@ namespace RobotJack.Common
 				UpdateAbilityItems();
 				UpdateHeadRam();
 			}
+		}
+
+		// ------------------------------------------------------------------ afterimages
+
+		private void RecordTrail() {
+			if (++trailTick % 2 != 0) {
+				return;
+			}
+			for (int i = TrailLength - 1; i > 0; i--) {
+				trailPositions[i] = trailPositions[i - 1];
+			}
+			trailPositions[0] = Player.position;
 		}
 
 		// ------------------------------------------------------------------ cooldowns, rewind, teleport

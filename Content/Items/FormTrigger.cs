@@ -28,6 +28,10 @@ namespace RobotJack.Content.Items
 			Item.useAnimation = 30;
 		}
 
+		// Extra transformation effect (spawned by the player using the item). None by default.
+		protected virtual void SpawnTransformEffect(Player player, bool transforming) {
+		}
+
 		public override bool? UseItem(Player player) {
 			bool transforming = !player.HasBuff(FormBuffType);
 
@@ -39,6 +43,7 @@ namespace RobotJack.Content.Items
 				if (transforming) {
 					player.AddBuff(FormBuffType, 2);
 				}
+				SpawnTransformEffect(player, transforming);
 			}
 
 			SoundEngine.PlaySound(transforming ? SoundID.Item113 : SoundID.Item94, player.Center);

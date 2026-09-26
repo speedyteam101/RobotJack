@@ -22,7 +22,10 @@ Use the Robot Trigger to become Robot Jack; use it again to turn back. The form 
 - +25% damage, +20 defense, 10% damage reduction, +30% movement speed
 - Higher jumps, no knockback, no fall damage
 - **Hover jets:** hold jump while falling to glide down
-- Your character is drawn as a robot. It animates with your walking, jumping and aiming, and its visor, chest core and jets glow in the dark.
+- Your character is drawn as a white-armored hero robot with a glowing cyan V-visor and chest core, a back jetpack and a red scarf that hangs down when you stand still and streams out behind you when you run or jump. It animates with your walking, jumping and aiming, and the glowing parts stay lit in the dark.
+- **Transformation effect:** energy rushes in, a pillar of light slams down from the sky onto you, and shockwave rings burst out with a small screen shake (a smaller version plays when you turn back).
+- **Afterimages:** when you move fast (dashing, falling, flying) you leave glowing cyan afterimages behind you.
+- **Jetpack flames** burn from your back whenever you're in the air.
 
 ## Abilities
 

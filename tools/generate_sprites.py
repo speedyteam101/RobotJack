@@ -57,12 +57,53 @@ def walk_phase(frame):
     return (frame - 6) / 14 * math.tau
 
 
-def draw_arm(d, ox, oy, frame, back):
-    shoulder = (ox + (8 if back else 11), oy + 12)
+# Robot Jack: white hero armour with navy accents, a glowing cyan V-visor and chest core,
+# a back jetpack and a red scarf that streams out behind him. Drawn on the 20x28 grid, saved 2x.
+RJ_HI = (248, 250, 255, 255)
+RJ = (212, 218, 232, 255)
+RJ_MID = (158, 168, 190, 255)
+RJ_D = (100, 110, 135, 255)
+RJ_NAVY = (34, 48, 96, 255)
+RJ_NAVY_L = (62, 88, 160, 255)
+RJ_VISOR = (18, 24, 44, 255)
+SCARF = (225, 45, 55, 255)
+SCARF_L = (255, 110, 110, 255)
+SCARF_D = (140, 20, 35, 255)
+CYAN_HALO = (90, 240, 255, 110)
+
+
+def rj_scarf_tail(d, ox, y, frame):
+    """Scarf tail behind the neck: hangs down the back when standing, streams out behind when moving."""
+    if 6 <= frame <= 19:
+        wave = round(math.sin(walk_phase(frame) * 2) * 1.2)
+        pts = [(7, 10), (4, 10 + wave), (1, 11 + wave), (0, 13 + wave), (2, 13 + wave), (4, 12 + wave), (7, 12)]
+    elif frame == 5:
+        # Airborne: it flies up and back.
+        pts = [(7, 10), (5, 8), (2, 6), (1, 7), (3, 9), (5, 11), (7, 12)]
+    else:
+        pts = [(7, 10), (5, 10), (4, 12), (4, 16), (6, 16), (6, 13), (7, 12)]
+    pts = [(ox + max(0, x), y + yy) for x, yy in pts]
+    d.polygon(pts, fill=OUTLINE)
+    # Fill one pixel inside the outline by drawing the same shape's spine in colour.
+    for a, b in zip(pts[1:4], pts[2:5]):
+        d.line([a, b], fill=SCARF)
+    d.line([pts[0], pts[1]], fill=SCARF_L)
+    d.line([pts[4], pts[5]], fill=SCARF_D)
+
+
+def rj_scarf_knot(d, ox, y):
+    """Scarf wrapped around the neck, at the base of the helmet."""
+    d.rectangle([ox + 6, y + 9, ox + 12, y + 11], fill=OUTLINE)
+    d.line([ox + 7, y + 9, ox + 11, y + 9], fill=SCARF_L)
+    d.line([ox + 7, y + 10, ox + 11, y + 10], fill=SCARF)
+    d.point((ox + 7, y + 11), fill=SCARF_D)
+
+
+def rj_arm(d, g, ox, y, frame, back):
+    shoulder = (ox + (8 if back else 11), y + 12)
     if frame in ARM_ANGLES:
         a = math.radians(ARM_ANGLES[frame])
-        length = 7
-        hand = (shoulder[0] + round(math.cos(a) * length), shoulder[1] + round(math.sin(a) * length))
+        hand = (shoulder[0] + round(math.cos(a) * 7), shoulder[1] + round(math.sin(a) * 7))
     else:
         swing = 0
         if 6 <= frame <= 19:
@@ -70,14 +111,26 @@ def draw_arm(d, ox, oy, frame, back):
         elif frame == 5:
             swing = -2 if back else 2
         hand = (shoulder[0] + swing, shoulder[1] + 6)
-    col = STEEL_D if back else STEEL
+    base = RJ_MID if back else RJ
     thick_line(d, shoulder, hand, OUTLINE, 4)
-    thick_line(d, shoulder, hand, col, 2)
-    # Shoulder plate and cannon hand
-    d.rectangle([shoulder[0] - 1, shoulder[1] - 1, shoulder[0] + 1, shoulder[1] + 1], fill=NAVY if back else BLUE)
+    thick_line(d, shoulder, hand, base, 2)
+    if not back:
+        # Navy forearm guard with a glowing strip
+        mid = ((shoulder[0] + hand[0]) // 2, (shoulder[1] + hand[1]) // 2)
+        d.line([mid, hand], fill=RJ_NAVY_L, width=2)
+        g.line([mid, hand], fill=(90, 240, 255, 150))
+    # Fist / arm cannon muzzle
     d.rectangle([hand[0] - 1, hand[1] - 1, hand[0] + 1, hand[1] + 1], fill=OUTLINE)
-    d.point(hand, fill=CYAN_D if back else CYAN)
-    return hand
+    d.point(hand, fill=RJ_HI if not back else RJ_D)
+    if not back:
+        g.point(hand, fill=CYAN_HALO)
+    # Rounded shoulder pad
+    sx, sy = shoulder
+    d.rectangle([sx - 2, sy - 2, sx + 2, sy + 1], fill=OUTLINE)
+    d.rectangle([sx - 1, sy - 1, sx + 1, sy], fill=RJ_D if back else RJ)
+    if not back:
+        d.point((sx - 1, sy - 1), fill=RJ_HI)
+        d.point((sx + 1, sy), fill=RJ_NAVY_L)
 
 
 def draw_body_frame(d, g, ox, oy, frame):
@@ -85,53 +138,80 @@ def draw_body_frame(d, g, ox, oy, frame):
     if 6 <= frame <= 19 and abs(math.sin(walk_phase(frame))) > 0.7:
         bob = 1  # dip down; moving up would spill into the frame above
     y = oy + bob
-    draw_arm(d, ox, y, frame, back=True)
-    # Thruster pack
-    d.rectangle([ox + 3, y + 11, ox + 5, y + 17], fill=OUTLINE)
-    d.rectangle([ox + 4, y + 12, ox + 5, y + 16], fill=STEEL_D)
-    d.point((ox + 4, y + 17), fill=ORANGE)
-    g.point((ox + 4, y + 17), fill=ORANGE_L)
-    # Torso
+    rj_arm(d, g, ox, y, frame, back=True)
+
+    # Jetpack: two tanks with glowing nozzles
+    d.rectangle([ox + 2, y + 10, ox + 6, y + 17], fill=OUTLINE)
+    d.rectangle([ox + 3, y + 11, ox + 5, y + 16], fill=RJ_MID)
+    d.line([ox + 3, y + 11, ox + 3, y + 15], fill=RJ)
+    d.line([ox + 4, y + 13, ox + 5, y + 13], fill=RJ_NAVY)
+    for nx in (ox + 3, ox + 5):
+        d.point((nx, y + 17), fill=RJ_D)
+        g.point((nx, y + 18), fill=ORANGE_L)
+        g.point((nx, y + 19), fill=(255, 150, 40, 120))
+    rj_scarf_tail(d, ox, y, frame)
+
+    # Torso: white chest plate over a navy undersuit
     d.rectangle([ox + 5, y + 10, ox + 14, y + 18], fill=OUTLINE)
-    d.rectangle([ox + 6, y + 11, ox + 13, y + 17], fill=BLUE)
-    d.line([ox + 6, y + 11, ox + 13, y + 11], fill=BLUE_L)
-    d.line([ox + 6, y + 17, ox + 13, y + 17], fill=NAVY)
-    d.rectangle([ox + 7, y + 16, ox + 12, y + 17], fill=STEEL_D)  # belt
+    d.rectangle([ox + 6, y + 11, ox + 13, y + 17], fill=RJ_NAVY)
+    d.polygon([(ox + 6, y + 11), (ox + 13, y + 11), (ox + 12, y + 15), (ox + 7, y + 15)], fill=RJ)
+    d.line([ox + 6, y + 11, ox + 13, y + 11], fill=RJ_HI)
+    d.line([ox + 7, y + 15, ox + 12, y + 15], fill=RJ_MID)
+    d.rectangle([ox + 7, y + 16, ox + 12, y + 17], fill=RJ_D)       # belt
+    d.point((ox + 10, y + 16), fill=GOLD)
     # Chest core
     d.rectangle([ox + 9, y + 12, ox + 11, y + 14], fill=OUTLINE)
     d.point((ox + 10, y + 13), fill=CYAN)
+    g.rectangle([ox + 8, y + 11, ox + 12, y + 15], fill=(90, 240, 255, 45))
+    g.point((ox + 9, y + 13), fill=CYAN_HALO); g.point((ox + 11, y + 13), fill=CYAN_HALO)
+    g.point((ox + 10, y + 12), fill=CYAN_HALO); g.point((ox + 10, y + 14), fill=CYAN_HALO)
     g.point((ox + 10, y + 13), fill=WHITE)
-    g.point((ox + 9, y + 13), fill=(90, 240, 255, 120))
-    g.point((ox + 11, y + 13), fill=(90, 240, 255, 120))
-    # Neck + head
-    d.rectangle([ox + 8, y + 9, ox + 11, y + 10], fill=STEEL_D)
-    d.rectangle([ox + 5, y + 3, ox + 14, y + 9], fill=OUTLINE)
-    d.rectangle([ox + 6, y + 4, ox + 13, y + 8], fill=STEEL)
-    d.line([ox + 6, y + 4, ox + 13, y + 4], fill=STEEL_L)
-    d.line([ox + 6, y + 8, ox + 13, y + 8], fill=STEEL_D)
-    # Visor (facing right)
-    d.rectangle([ox + 9, y + 5, ox + 13, y + 6], fill=CYAN_D)
+
+    # Helmet: rounded white dome with a navy crest and a glowing V visor
+    d.rounded_rectangle([ox + 5, y + 2, ox + 14, y + 9], radius=2, fill=OUTLINE)
+    d.rounded_rectangle([ox + 6, y + 3, ox + 13, y + 8], radius=1, fill=RJ)
+    d.line([ox + 7, y + 3, ox + 12, y + 3], fill=RJ_HI)
+    d.line([ox + 6, y + 8, ox + 13, y + 8], fill=RJ_MID)
+    d.line([ox + 6, y + 3, ox + 6, y + 7], fill=RJ_MID)                # back of the helmet in shade
+    # Crest fin running over the top and an antenna
+    d.line([ox + 8, y + 2, ox + 11, y + 2], fill=RJ_NAVY)
+    d.line([ox + 7, y + 1, ox + 7, y + 2], fill=RJ_D)
+    d.point((ox + 7, y + 0), fill=CYAN)
+    g.point((ox + 7, y + 0), fill=WHITE)
+    # Ear piece
+    d.rectangle([ox + 6, y + 5, ox + 7, y + 6], fill=RJ_NAVY_L)
+    g.point((ox + 7, y + 5), fill=CYAN_HALO)
+    # V-shaped visor (facing right): wide on top, narrowing below
+    d.rectangle([ox + 9, y + 4, ox + 13, y + 6], fill=RJ_VISOR)
+    d.line([ox + 9, y + 4, ox + 13, y + 4], fill=CYAN_D)
     d.line([ox + 10, y + 5, ox + 13, y + 5], fill=CYAN)
+    d.point((ox + 12, y + 6), fill=CYAN_D)
+    g.line([ox + 9, y + 4, ox + 13, y + 4], fill=(90, 240, 255, 160))
     g.line([ox + 10, y + 5, ox + 13, y + 5], fill=WHITE)
-    g.line([ox + 9, y + 6, ox + 13, y + 6], fill=(90, 240, 255, 150))
-    # Antenna
-    d.line([ox + 7, y + 1, ox + 7, y + 2], fill=STEEL_D)
-    d.point((ox + 7, y + 0), fill=RED)
-    g.point((ox + 7, y + 0), fill=(255, 90, 90, 255))
-    # Ear bolt
-    d.point((ox + 7, y + 6), fill=GOLD)
-    draw_arm(d, ox, y, frame, back=False)
+    g.point((ox + 12, y + 6), fill=CYAN)
+    g.point((ox + 14, y + 5), fill=(90, 240, 255, 90))                 # glow spilling out of the visor
+    # Jaw plate
+    d.line([ox + 9, y + 7, ox + 12, y + 7], fill=RJ_MID)
+    rj_scarf_knot(d, ox, y)
+
+    rj_arm(d, g, ox, y, frame, back=False)
 
 
-def draw_leg(d, hip, foot, color):
+def draw_leg(d, g, hip, foot, back):
     knee = ((hip[0] + foot[0]) // 2 + 1, (hip[1] + foot[1]) // 2)
+    base = RJ_MID if back else RJ
     thick_line(d, hip, knee, OUTLINE, 4)
     thick_line(d, knee, foot, OUTLINE, 4)
-    thick_line(d, hip, knee, color, 2)
-    thick_line(d, knee, foot, color, 2)
-    d.rectangle([knee[0] - 1, knee[1], knee[0], knee[1] + 1], fill=BLUE)
+    thick_line(d, hip, knee, RJ_NAVY if back else RJ_NAVY_L, 2)        # navy thigh
+    thick_line(d, knee, foot, base, 2)                                 # white shin guard
+    if not back:
+        g.point(((knee[0] + foot[0]) // 2, (knee[1] + foot[1]) // 2), fill=(90, 240, 255, 130))
+    # Knee cap
+    d.rectangle([knee[0] - 1, knee[1] - 1, knee[0], knee[1]], fill=RJ_HI if not back else RJ_D)
+    # Boot with a lighter toe
     d.rectangle([foot[0] - 1, foot[1] - 1, foot[0] + 2, foot[1]], fill=OUTLINE)
-    d.line([foot[0] - 1, foot[1] - 1, foot[0] + 2, foot[1] - 1], fill=STEEL_D)
+    d.line([foot[0] - 1, foot[1] - 1, foot[0] + 1, foot[1] - 1], fill=RJ_NAVY if back else RJ_NAVY_L)
+    d.point((foot[0] + 2, foot[1] - 1), fill=RJ_D if back else RJ_HI)
 
 
 def draw_legs_frame(d, g, ox, oy, frame):
@@ -151,13 +231,14 @@ def draw_legs_frame(d, g, ox, oy, frame):
     else:
         back_foot = (ox + 8, ground)
         front_foot = (ox + 11, ground)
-    draw_leg(d, back_hip, back_foot, STEEL_D)
-    draw_leg(d, front_hip, front_foot, STEEL)
-    # Hip plate
-    d.rectangle([ox + 6, hip_y - 1, ox + 13, hip_y], fill=NAVY)
-    # Tiny glowing boot jets
+    draw_leg(d, g, back_hip, back_foot, True)
+    draw_leg(d, g, front_hip, front_foot, False)
+    # Hip plate with a glowing buckle line
+    d.rectangle([ox + 6, hip_y - 1, ox + 13, hip_y], fill=RJ_NAVY)
+    d.line([ox + 7, hip_y - 1, ox + 12, hip_y - 1], fill=RJ_NAVY_L)
+    # Boot jets glow at the heels
     for foot in (back_foot, front_foot):
-        g.point((foot[0], foot[1]), fill=(255, 160, 60, 110))
+        g.point((foot[0] - 1, foot[1]), fill=(255, 160, 60, 130))
 
 
 def robot_sheets():
@@ -172,13 +253,11 @@ def robot_sheets():
     save(body_glow, "Content/Players/RobotBody_Glow.png")
     save(legs, "Content/Players/RobotLegs.png")
     save(legs_glow, "Content/Players/RobotLegs_Glow.png")
-    # Big preview of a few frames for the README / checking by eye.
-    preview = Image.new("RGBA", (FRAME_W * 7, FRAME_H), (35, 40, 55, 255))
-    for i, f in enumerate([0, 1, 2, 3, 4, 5, 9]):
-        cell = legs.crop((0, f * FRAME_H, FRAME_W, (f + 1) * FRAME_H))
-        preview.alpha_composite(cell, (i * FRAME_W, 0))
-        cell = body.crop((0, f * FRAME_H, FRAME_W, (f + 1) * FRAME_H))
-        preview.alpha_composite(cell, (i * FRAME_W, 0))
+    # Big preview of a few frames (idle, the four aim poses, jump, walk), glow layers on top like in game.
+    preview = Image.new("RGBA", (FRAME_W * 8, FRAME_H), (28, 32, 46, 255))
+    for i, f in enumerate([0, 1, 2, 3, 4, 5, 9, 16]):
+        for sheet in (legs, legs_glow, body, body_glow):
+            preview.alpha_composite(sheet.crop((0, f * FRAME_H, FRAME_W, (f + 1) * FRAME_H)), (i * FRAME_W, 0))
     save(preview, "tools/robot_preview_8x.png", scale=8)
 
 
@@ -1042,7 +1121,7 @@ def titan_more_icons():
         d.line([1, 8, 5, 8], fill=red); d.line([10, 8, 14, 8], fill=red); d.point((8, 8), fill=WHITE)
     buff_icon("Content/Buffs/Marked.png", marked)
 
-    for name in ("SonicShield", "StaticField"):
+    for name in ("SonicShield", "StaticField", "TransformBurst"):
         invisible("Content/Projectiles/%s.png" % name)
 
 
