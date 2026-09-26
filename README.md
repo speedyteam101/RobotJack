@@ -108,7 +108,21 @@ All of them still scale with bosses beaten, on top of Omega Jack's +80% damage.
 - **Look:** white and gold armor, a gold visor, a blazing halo, small angel wings on the back, and a golden glow with drifting motes. Golden afterimages and jetpack sparks.
 - **Stats:** +120% damage, +25% crit, +90 defense, 40% damage reduction, +80% movement speed, +300 max life.
 - **Every perk:** immune to fire, lava, cold, electricity and shadowflame, no slipping on ice, +25% attack speed, a chance to dodge attacks, +20 health per second.
-- **Abilities:** **Gods Wrath**, plus all eight of Omega Jack's abilities.
+- **Abilities:** nine of its own (Omega Jack's stay with Omega Jack). Its damage is 7× the early variants' base (Omega's is set separately), and everything still scales with bosses beaten:
+
+| Ability | Base damage | What it does |
+| --- | --- | --- |
+| **Gods Wrath** | kills outright | Charge a mini sun inside a ring around half the world, then destroy everything in it (see below). |
+| **Holy Lances** | 280 ×3 | Three huge homing lances of light that pierce through enemies (auto-fire). |
+| **Heaven's Beam** | 175 every 6 ticks | **Hold left click**: a beam of pure heavenly light that follows the cursor and stops at blocks. |
+| **Divine Judgement** | 350 per pillar | Nine pillars of holy light strike down in a row across the cursor. |
+| **Rain of Heaven** | 245 ×16 | Sixteen exploding bolts of light fall from the heavens onto the area around the cursor. |
+| **Radiance** | 490 | A huge burst of radiance all around you (about 60 tiles across). |
+| **Seraph Dash** | 385 (melee) | Dash toward the cursor on wings of light, invincible for a second. |
+| **Halo of Blades** | 210 | Eight holy blades circle you for 10 s. 12 s cooldown. |
+| **Divine Shield** | none | You can't be hurt at all for 5 s. 60 s cooldown. |
+
+All the holy abilities set enemies ablaze with holy fire.
 
 ### Gods Wrath
 

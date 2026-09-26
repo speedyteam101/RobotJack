@@ -16,9 +16,6 @@ namespace RobotJack.Content.Abilities
 	{
 		public override RobotFormType Form => RobotFormType.OmegaJack;
 
-		// God Jack has all of Omega Jack's abilities too.
-		public override bool AllowedIn(RobotFormType form) => form == RobotFormType.OmegaJack || form == RobotFormType.GodJack;
-
 		public override void SetDefaults() {
 			base.SetDefaults();
 			Item.width = 32;

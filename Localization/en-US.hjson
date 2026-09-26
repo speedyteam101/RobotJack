@@ -404,7 +404,7 @@ Mods: {
 					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
 					Has every perk: immune to fire, lava, cold, electricity and shadowflame,
 					no slipping on ice, +25% attack speed, a chance to dodge and +20 health per second
-					While transformed you get Gods Wrath and all of Omega Jack's abilities
+					While transformed you get God Jack's nine abilities, including Gods Wrath
 					Crafted from the Omega Trigger, which you keep
 					"Judgement."
 					'''
@@ -420,6 +420,46 @@ Mods: {
 					Players, town NPCs, critters and target dummies are spared
 					Releasing early lets it fizzle out with no cooldown
 					'''
+			}
+
+			HolyLances: {
+				DisplayName: Holy Lances
+				Tooltip: Three huge homing lances of light that pierce through enemies
+			}
+
+			HeavensBeam: {
+				DisplayName: Heaven's Beam
+				Tooltip: Hold left click: a beam of pure heavenly light from your arm cannon
+			}
+
+			DivineJudgement: {
+				DisplayName: Divine Judgement
+				Tooltip: Nine pillars of holy light strike down across the cursor
+			}
+
+			RainOfHeaven: {
+				DisplayName: Rain of Heaven
+				Tooltip: Sixteen exploding bolts of light fall from the heavens onto the cursor
+			}
+
+			Radiance: {
+				DisplayName: Radiance
+				Tooltip: A huge burst of radiance all around you
+			}
+
+			SeraphDash: {
+				DisplayName: Seraph Dash
+				Tooltip: Dash toward the cursor on wings of light, invincible for a second
+			}
+
+			HaloOfBlades: {
+				DisplayName: Halo of Blades
+				Tooltip: Eight holy blades circle you for 10 seconds
+			}
+
+			DivineShieldAbility: {
+				DisplayName: Divine Shield
+				Tooltip: A divine shield: you can't be hurt at all for 5 seconds
 			}
 
 			RobotJetpack: {
@@ -477,6 +517,11 @@ Mods: {
 			GodJackForm: {
 				DisplayName: God Jack
 				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+			}
+
+			DivineShield: {
+				DisplayName: Divine Shield
+				Description: You can't be hurt
 			}
 
 			Overheat: {

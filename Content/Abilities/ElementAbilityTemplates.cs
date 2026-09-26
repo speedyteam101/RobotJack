@@ -18,10 +18,11 @@ namespace RobotJack.Content.Abilities
 
 		public override RobotFormType Form => Elements.Form(Element);
 
-		// Blaze and Frost are pre-Hardmode, Volt and Shadow Hardmode, Nova post-Moon Lord.
+		// Blaze and Frost are pre-Hardmode, Volt and Shadow Hardmode, Nova post-Moon Lord, God Jack's Holy far beyond.
 		public float TierMultiplier => Element switch {
 			JackElement.Volt or JackElement.Shadow => 2f,
 			JackElement.Nova => 3.5f,
+			JackElement.Holy => 7f,
 			_ => 1f,
 		};
 
@@ -230,17 +231,18 @@ namespace RobotJack.Content.Abilities
 		}
 	}
 
-	// Power up: gives the player a buff for 10 seconds. 30 second cooldown.
+	// Power up: gives the player a buff (10 seconds unless changed). 30 second cooldown unless changed.
 	public abstract class PowerAbility : ElementAbility
 	{
 		protected abstract int BuffType { get; }
+		protected virtual int BuffTicks => 10 * 60;
 		protected override int BaseDamage => 0;
 		public override int CooldownTicks => 30 * 60;
 		protected override int UseStyle => ItemUseStyleID.HoldUp;
 
 		public override bool? UseItem(Player player) {
 			if (player.whoAmI == Main.myPlayer) {
-				player.AddBuff(BuffType, 10 * 60);
+				player.AddBuff(BuffType, BuffTicks);
 			}
 			ElementFX.Burst(player.Center, Element, 30, 6f, 1.5f);
 			return true;

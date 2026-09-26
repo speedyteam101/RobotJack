@@ -3,8 +3,8 @@ using Terraria.ID;
 
 namespace RobotJack.Common
 {
-	// The five Robot Jack variants' elements. Element abilities and projectiles take one of these
-	// (usually stored in a projectile's ai[0]) to pick their colours, dust and debuff.
+	// The five Robot Jack variants' elements, plus God Jack's Holy light. Element abilities and projectiles take one
+	// of these (usually stored in a projectile's ai[0]) to pick their colours, dust and debuff.
 	public enum JackElement
 	{
 		Blaze,
@@ -12,13 +12,15 @@ namespace RobotJack.Common
 		Volt,
 		Shadow,
 		Nova,
+		Holy, // God Jack's golden light (not one of the five variants)
 	}
 
 	public static class Elements
 	{
+		// The five variants' elements (Holy isn't counted: Omega Jack's rainbow cycles through these five).
 		public const int Count = 5;
 
-		public static JackElement FromAI(float ai) => (JackElement)System.Math.Clamp((int)ai, 0, Count - 1);
+		public static JackElement FromAI(float ai) => (JackElement)System.Math.Clamp((int)ai, 0, (int)JackElement.Holy);
 
 		// Main colour (glows, beams, rings).
 		public static Color Main(JackElement e) => e switch {
@@ -26,6 +28,7 @@ namespace RobotJack.Common
 			JackElement.Frost => new Color(120, 215, 255),
 			JackElement.Volt => new Color(255, 230, 70),
 			JackElement.Shadow => new Color(155, 60, 230),
+			JackElement.Holy => new Color(255, 215, 90),
 			_ => new Color(255, 130, 215),
 		};
 
@@ -35,6 +38,7 @@ namespace RobotJack.Common
 			JackElement.Frost => new Color(235, 250, 255),
 			JackElement.Volt => new Color(255, 255, 220),
 			JackElement.Shadow => new Color(230, 180, 255),
+			JackElement.Holy => new Color(255, 252, 230),
 			_ => new Color(255, 245, 200),
 		};
 
@@ -43,6 +47,7 @@ namespace RobotJack.Common
 			JackElement.Frost => DustID.IceTorch,
 			JackElement.Volt => DustID.Electric,
 			JackElement.Shadow => DustID.Corruption,
+			JackElement.Holy => DustID.Enchanted_Gold,
 			_ => DustID.Enchanted_Pink,
 		};
 
@@ -51,6 +56,7 @@ namespace RobotJack.Common
 			JackElement.Frost => BuffID.Frostburn,
 			JackElement.Volt => BuffID.Electrified,
 			JackElement.Shadow => BuffID.ShadowFlame,
+			JackElement.Holy => BuffID.OnFire3, // holy fire
 			_ => BuffID.Ichor,
 		};
 
@@ -61,6 +67,7 @@ namespace RobotJack.Common
 			JackElement.Frost => RobotFormType.FrostJack,
 			JackElement.Volt => RobotFormType.VoltJack,
 			JackElement.Shadow => RobotFormType.ShadowJack,
+			JackElement.Holy => RobotFormType.GodJack,
 			_ => RobotFormType.NovaJack,
 		};
 	}

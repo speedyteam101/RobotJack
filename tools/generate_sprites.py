@@ -744,8 +744,9 @@ def jack_variant_icons():
     symbols = {"Bolt": bolt, "Beam": beam, "Eruption": eruption, "Rain": rain, "Blast": blast, "Dash": dash, "Aura": aura, "Orbit": orbit, "Power": power_icon}
     import json
     spec = json.load(open("tools/jack_abilities.json"))
+    ability_colors = dict(ELEMENT_COLORS, Holy=((255, 215, 90, 255), (255, 252, 230, 255), (170, 125, 30, 255)))
     for name, (element, kind, _tip) in spec.items():
-        main, core, dark = ELEMENT_COLORS[element]
+        main, core, dark = ability_colors[element]
         ability_icon("Content/Abilities/%s.png" % name, lambda d, f=symbols[kind], m=main, c=core, k=dark: f(d, m, c, k))
 
     for name in ("ElementBolt", "ElementBlast", "ElementPillar", "ElementAura", "ElementOrbiter"):
@@ -967,6 +968,12 @@ def god_icons():
             d.line([8 + math.cos(r) * 4, 8 + math.sin(r) * 4, 8 + math.cos(r) * 6, 8 + math.sin(r) * 6], fill=(255, 150, 40, 255))
         d.ellipse([4, 4, 11, 11], fill=gold); d.ellipse([6, 6, 9, 9], fill=white)
     ability_icon("Content/Abilities/GodsWrathAbility.png", wrath)
+
+    def shield(d):
+        d.polygon([(8, 1), (14, 4), (13, 10), (8, 14), (3, 10), (2, 4)], fill=gold)
+        d.polygon([(8, 3), (12, 5), (11, 9), (8, 12), (5, 9), (4, 5)], fill=(255, 252, 230, 255))
+        d.line([8, 4, 8, 11], fill=gold); d.line([5, 7, 11, 7], fill=gold)
+    buff_icon("Content/Buffs/DivineShield.png", shield)
 
     for name in ("GodsWrathCharge", "GodsWrathBlast"):
         invisible("Content/Projectiles/%s.png" % name)

@@ -51,4 +51,19 @@ namespace RobotJack.Content.Buffs
 			player.GetDamage(DamageClass.Generic) += 0.15f;
 		}
 	}
+
+	// God Jack's Divine Shield: completely invulnerable while it lasts, wrapped in golden light.
+	public class DivineShield : JackPowerBuff
+	{
+		public override void Update(Player player, ref int buffIndex) {
+			player.immune = true;
+			player.immuneTime = System.Math.Max(player.immuneTime, 2);
+			if (Main.rand.NextBool(2)) {
+				Dust dust = Dust.NewDustDirect(player.position - new Microsoft.Xna.Framework.Vector2(8f), player.width + 16, player.height + 16, Terraria.ID.DustID.Enchanted_Gold);
+				dust.noGravity = true;
+				dust.velocity *= 0.3f;
+			}
+			Lighting.AddLight(player.Center, 1.2f, 1f, 0.5f);
+		}
+	}
 }

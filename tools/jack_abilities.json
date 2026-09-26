@@ -198,5 +198,45 @@
   "Nova",
   "Power",
   "Celestial Blessing for 10 seconds: +10 health per second and +15% damage"
+ ],
+ "HolyLances": [
+  "Holy",
+  "Bolt",
+  "Three huge homing lances of light that pierce through enemies"
+ ],
+ "HeavensBeam": [
+  "Holy",
+  "Beam",
+  "Hold left click: a beam of pure heavenly light"
+ ],
+ "DivineJudgement": [
+  "Holy",
+  "Eruption",
+  "Nine pillars of holy light strike down across the cursor"
+ ],
+ "RainOfHeaven": [
+  "Holy",
+  "Rain",
+  "Sixteen exploding bolts of light fall from the heavens onto the cursor"
+ ],
+ "Radiance": [
+  "Holy",
+  "Blast",
+  "A huge burst of radiance all around you"
+ ],
+ "SeraphDash": [
+  "Holy",
+  "Dash",
+  "Dash toward the cursor on wings of light, invincible for a second"
+ ],
+ "HaloOfBlades": [
+  "Holy",
+  "Orbit",
+  "Eight holy blades circle you for 10 seconds"
+ ],
+ "DivineShieldAbility": [
+  "Holy",
+  "Power",
+  "A divine shield: you can't be hurt at all for 5 seconds"
  ]
 }
