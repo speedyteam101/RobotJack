@@ -18,9 +18,9 @@ namespace RobotJack.Content.Abilities
 
 		public override RobotFormType Form => Elements.Form(Element);
 
-		// Blaze and Frost are pre-Hardmode, Volt and Shadow Hardmode, Nova post-Moon Lord, God Jack's Holy far beyond.
+		// Blaze and Frost are pre-Hardmode, Volt, Shadow and Spider Jack's Blight Hardmode, Nova post-Moon Lord, God Jack's Holy far beyond.
 		public float TierMultiplier => Element switch {
-			JackElement.Volt or JackElement.Shadow => 2f,
+			JackElement.Volt or JackElement.Shadow or JackElement.Blight => 2f,
 			JackElement.Nova => 3.5f,
 			JackElement.Holy => 7f,
 			_ => 1f,

@@ -16,6 +16,7 @@ namespace RobotJack.Common
 		OmegaJack,
 		GodJack,
 		ShiftTitan, // the giant titan from the Shift Trigger
+		SpiderJack, // the spider robot from the Spider Trigger (Akutoku-ō's drop)
 	}
 
 	public static class RobotFormTypeExtensions
@@ -44,6 +45,9 @@ namespace RobotJack.Common
 			}
 			if (form == RobotFormType.GodJack) {
 				return GodGold;
+			}
+			if (form == RobotFormType.SpiderJack) {
+				return Elements.Main(JackElement.Blight);
 			}
 			JackElement? element = form.Element();
 			return element.HasValue ? Elements.Main(element.Value) : new Color(90, 230, 255);

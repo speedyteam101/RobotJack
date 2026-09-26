@@ -174,6 +174,36 @@ Every titan gets nine abilities of these kinds, named after it (Inferno Arm, Gla
 | **Aura** | 18 | The element surrounds the whole titan for 8 s. 15 s cooldown. |
 | **Overdrive** | 120 | The core overloads: an enormous blast (about 125 blocks across), pillars all around and bolts in every direction. 45 s cooldown. |
 
+## Akutoku-ō (boss)
+
+**Akutoku-ō** is a colossal robot spider (about 30 blocks long). He created the world's Corruption or Crimson, and was then consumed by its infection himself: his glowing cracks, eyes and egg sacs are purple in a Corruption world and red in a Crimson one. **Early Hardmode**, 40,000 life (more in Expert and Master).
+
+- **Summon:** craft an **Infected Core** (15 Rotten Chunks or Vertebrae, 6 Souls of Night, 10 Iron/Lead Bars at a Mythril/Orichalcum Anvil) and use it **in the Corruption or Crimson**.
+- **Ten legs:** eight walking legs that plant their feet on the ground and step as he moves (he climbs up after you and straddles gaps), and **two front legs that are weapon slots**.
+- **Leg weapons:** Rocket Launcher (homing rockets), Laser Cannon (a warning line, then a huge laser), Axe (a chop that cleaves the ground), Sword (swings up close, slash waves at range), **Flamethrower** (a cone of cursed or ichor fire), **Buzzsaw** (a thrown saw blade that bounces off walls and flies back) and **Tesla Coil** (marks a spot, then lightning strikes it). Every 8 seconds (6 in the second phase) both legs **transform** into new weapons: the leg folds in, panels open, the old weapon spins away into it in a shower of sparks, and the new one snaps out with a flash and a spinning ring.
+- **Siphoned (debuff):** anything he hits you with Siphons you for 8 seconds. While you're Siphoned, **you deal 50% less damage to him**, and **each hit you land gives him Stolen Power (+50% damage)**, shown as a pulsing aura. The Nurse can't cure it.
+- **Robitacons:** he births infected robots from his abdomen every 10 seconds (7 in the second phase): Robot, Blaze, Frost and Volt at first, then Shadow and Nova below 70% life, and Omega and God below 35%. Each one shoots bolts of its form's element. The first four also roam the Corruption and Crimson in Hardmode.
+- **Second phase (below 50%):** he roars, the screen shakes, he moves and attacks faster, fires three rockets at a time and spits spreads of infected bolts.
+
+**Drops** (the treasure bag in Expert/Master has the same): the **Spider Trigger**, one leg weapon (the bag has two), 20–35 **Robitacon Parts**, the mask (1 in 7), the trophy (1 in 10) and Greater Healing Potions.
+
+| Leg weapon | Class | What it does |
+| --- | --- | --- |
+| Spider Rocket Launcher | ranged | Homing micro-rockets that explode |
+| Spider Laser Cannon | magic | Hold to fire a continuous infected laser |
+| Spider Axe | melee / axe | A huge axe (150% axe power) that inflicts the infection |
+| Spider Sword | melee | Swings fire piercing infected bolts |
+| Spider Flamethrower | ranged | A stream of fire, no gel needed |
+| Spider Buzzsaw | melee | A thrown saw blade that comes back |
+| Spider Tesla Coil | magic | Three homing lightning bolts |
+
+**Spider Jack** (Spider Trigger): you become a small robot spider built from Akutoku-ō's design, walking on its own legs. +30% damage, +25 defense, 12% damage reduction, +40% movement speed, **climb walls**, immune to Cursed Inferno, Ichor and poison. **Your front leg turns into the weapon that matches the ability you're holding**, with the same transformation animation. Eight abilities in the infection's colour: Venom Spit, Infection Laser, Blight Spikes, Acid Rain, Web Burst (holds enemies in place), Pounce, Buzzsaw Ring and Hive Mind (+25% damage, +15% crit for 10 s).
+
+**Robot NPCs from Robitacon Parts:**
+
+- **Robot Assembly Kit** (20 parts, 10 Iron/Lead Bars, 25 Wire): builds the **Robo-Mechanic**, a town robot that moves into a free house. It sells the Robot Jetpack, the Robot Trigger, Wire and Cogs, and after Akutoku-ō is defeated, Robitacon Parts and Infected Cores. It defends town with fire bolts.
+- **Robitacon Remote** (25 parts, 8 Souls of Night): summons cleansed Robitacons that fly beside you, each in a different Robot Jack form, shooting their element at enemies.
+
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
@@ -190,3 +220,5 @@ Replace any PNG with hand-made art at the same size whenever you like. The robot
 `tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants, Omega Jack and God Jack, and `tools/god_jack_preview.png` the heavenly gate opening, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.
 
 The Shift Titan, the laboratory tiles and the titan ability icons come from `tools/generate_titan_sprites.py` (run it from this folder too; `tools/titan_abilities.py` generates `Content/Abilities/TitanAbilityList.cs`). The titan is a rig of parts in `Content/Titan`, each with `_M` (armor colour), `_A` (accent colour), `_D` (untinted detail) and `_G` (glow) layers of the same size; the pivots are listed in `Common/Titan/TitanRenderer.cs`. `tools/titan_preview_3x.png` shows a few assembled titans and the car.
+
+Akutoku-ō's parts, weapons and the Robitacon, Robo-Mechanic and item sprites come from `tools/generate_akutoku_sprites.py` (`tools/akutoku_preview_3x.png` shows him assembled). He's drawn by `Common/Akutoku/SpiderRig.cs`; each part has a white `_Glow` layer that's tinted with the infection colour in game.

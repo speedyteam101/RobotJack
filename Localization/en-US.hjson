@@ -1263,6 +1263,172 @@ Mods: {
 					'''
 			}
 
+
+			InfectedCore: {
+				DisplayName: Infected Core
+				Tooltip:
+					'''
+					Summons Akutoku-ō
+					Only works in the Corruption or the Crimson
+					"It still beats."
+					'''
+			}
+
+			RobitaconParts: {
+				DisplayName: Robitacon Parts
+				Tooltip:
+					'''
+					Scrap from infected robots
+					Used to build robots
+					'''
+			}
+
+			AkutokuBag: {
+				DisplayName: Treasure Bag (Akutoku-ō)
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
+
+			AkutokuTrophy: {
+				DisplayName: Akutoku-ō Trophy
+			}
+
+			AkutokuMask: {
+				DisplayName: Akutoku-ō Mask
+			}
+
+			RobotAssemblyKit: {
+				DisplayName: Robot Assembly Kit
+				Tooltip:
+					'''
+					Builds the Robo-Mechanic, a town robot that moves into a free house
+					It sells robot gear
+					'''
+			}
+
+			RobitaconRemote: {
+				DisplayName: Robitacon Remote
+				Tooltip:
+					'''
+					Summons a cleansed Robitacon to fight for you
+					Each one wears a different Robot Jack form and shoots its element
+					'''
+			}
+
+			SpiderRocketLauncher: {
+				DisplayName: Spider Rocket Launcher
+				Tooltip:
+					'''
+					Fires homing micro-rockets that explode
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderLaserCannon: {
+				DisplayName: Spider Laser Cannon
+				Tooltip:
+					'''
+					Hold to fire a continuous infected laser
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderAxe: {
+				DisplayName: Spider Axe
+				Tooltip:
+					'''
+					A huge infected axe that also chops trees
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderSword: {
+				DisplayName: Spider Sword
+				Tooltip:
+					'''
+					Swings fire piercing infected bolts
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderFlamethrower: {
+				DisplayName: Spider Flamethrower
+				Tooltip:
+					'''
+					Sprays fire, no gel needed
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderBuzzsaw: {
+				DisplayName: Spider Buzzsaw
+				Tooltip:
+					'''
+					Throw a spinning saw blade that comes back to you
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderTeslaCoil: {
+				DisplayName: Spider Tesla Coil
+				Tooltip:
+					'''
+					Fires three homing bolts of lightning
+					Torn from Akutoku-ō's leg
+					'''
+			}
+
+			SpiderTrigger: {
+				DisplayName: Spider Trigger
+				Tooltip:
+					'''
+					Use to transform into Spider Jack, a robot spider; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed
+					Climb walls; immune to Cursed Inferno, Ichor and poison
+					Your front legs turn into weapons to match the ability you're using
+					While transformed you get Spider Jack's eight ability items
+					Dropped by Akutoku-ō
+					'''
+			}
+
+			VenomSpit: {
+				DisplayName: Venom Spit
+				Tooltip: Three piercing bolts of infected venom
+			}
+
+			InfectionLaser: {
+				DisplayName: Infection Laser
+				Tooltip: Hold left click: an infection laser from your leg cannon
+			}
+
+			BlightSpikes: {
+				DisplayName: Blight Spikes
+				Tooltip: Seven spikes of infection burst out of the ground across the cursor
+			}
+
+			AcidRain: {
+				DisplayName: Acid Rain
+				Tooltip: Twelve exploding globs of acid rain down onto the cursor
+			}
+
+			WebBurst: {
+				DisplayName: Web Burst
+				Tooltip: A burst of sticky web around you that holds enemies in place for a moment
+			}
+
+			Pounce: {
+				DisplayName: Pounce
+				Tooltip: Pounce at the cursor, slicing through everything on the way
+			}
+
+			BuzzsawRing: {
+				DisplayName: Buzzsaw Ring
+				Tooltip: Six buzzsaw blades circle you for 10 seconds
+			}
+
+			HiveMindAbility: {
+				DisplayName: Hive Mind
+				Tooltip: +25% damage and +15% crit chance for 10 seconds
+			}
 		}
 
 		Buffs: {
@@ -1355,6 +1521,31 @@ Mods: {
 				DisplayName: Shift Titan
 				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{4} max life; more damage from the merged trigger
 			}
+
+			Siphoned: {
+				DisplayName: Siphoned
+				Description: You deal 50% less damage to Akutoku-ō, and he steals it as power
+			}
+
+			StolenPower: {
+				DisplayName: Stolen Power
+				Description: +50% damage
+			}
+
+			RobitaconMinionBuff: {
+				DisplayName: Robitacons
+				Description: Cleansed Robitacons fight for you
+			}
+
+			SpiderJackForm: {
+				DisplayName: Spider Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed; climb walls
+			}
+
+			HiveMind: {
+				DisplayName: Hive Mind
+				Description: +25% damage, +15% crit chance
+			}
 		}
 
 		Projectiles: {
@@ -1379,6 +1570,57 @@ Mods: {
 			GodsWrathBlast.DisplayName: Gods Wrath
 			TitanSlash.DisplayName: Titan Slash
 			TitanCarRam.DisplayName: Titan Car
+			InfectedBolt.DisplayName: Infected Bolt
+			InfectedBlast.DisplayName: Infected Blast
+			InfectedRocket.DisplayName: Infected Rocket
+			InfectedLaser.DisplayName: Infected Laser
+			InfectedSwing.DisplayName: Akutoku-ō
+			InfectedSlashWave.DisplayName: Infected Slash
+			InfectedFlame.DisplayName: Infected Flame
+			InfectedSaw.DisplayName: Buzzsaw
+			InfectedTesla.DisplayName: Infected Lightning
+			SpiderSawBlade.DisplayName: Saw Blade
+			RobitaconMinion.DisplayName: Robitacon
+		}
+
+		NPCs: {
+			Akutokuo: {
+				DisplayName: Akutoku-ō
+			}
+
+			RobitaconRobot.DisplayName: Robitacon
+			RobitaconBlaze.DisplayName: Blaze Robitacon
+			RobitaconFrost.DisplayName: Frost Robitacon
+			RobitaconVolt.DisplayName: Volt Robitacon
+			RobitaconShadow.DisplayName: Shadow Robitacon
+			RobitaconNova.DisplayName: Nova Robitacon
+			RobitaconOmega.DisplayName: Omega Robitacon
+			RobitaconGod.DisplayName: God Robitacon
+
+			RoboMechanic: {
+				DisplayName: Robo-Mechanic
+			}
+		}
+
+		Bestiary: {
+			Akutokuo: A colossal robot spider. It created the world's Corruption and Crimson, and in the end was consumed by its own infection. Its front legs reshape themselves into any weapon, and every blow it lands drains your strength into its own.
+			Robitacon: Robots taken over by the world's infection, still wearing the shells and powers of the Robot Jack forms. Akutoku-ō births them from its abdomen.
+			RoboMechanic: A friendly robot built from the cleansed parts of Robitacons. It sells robot gear and keeps its wrench handy.
+		}
+
+		Dialogue: {
+			RoboMechanic: {
+				Line1: Beep boop. Just kidding. I don't actually talk like that.
+				Line2: Every Robitacon you bring down is another bolt for my collection.
+				Line3: Need a jetpack? I've got jetpacks.
+				Line4: My blueprints say I was made from at least four different robots. I try not to think about it.
+				Line5: Keep your triggers clean. Rust is the real enemy.
+				Warning: Something big is spinning webs in the infected lands. Its legs... they're weapons. All of them.
+			}
+		}
+
+		Conditions: {
+			DownedAkutoku: After Akutoku-ō has been defeated
 		}
 
 		DropConditions: {

@@ -17,6 +17,7 @@ namespace RobotJack.Common
 		Tech, // the unmerged Shift Titan's teal energy
 		Plasma, // the Robot Trigger-merged Shift Titan's cyan plasma
 		Prism, // the Omega Trigger-merged Shift Titan's shifting rainbow
+		Blight, // Akutoku-ō's infection: the world's Corruption (purple) or Crimson (red); also Spider Jack's element
 	}
 
 	public static class Elements
@@ -24,7 +25,7 @@ namespace RobotJack.Common
 		// The five variants' elements (Holy isn't counted: Omega Jack's rainbow cycles through these five).
 		public const int Count = 5;
 
-		public static JackElement FromAI(float ai) => (JackElement)System.Math.Clamp((int)ai, 0, (int)JackElement.Prism);
+		public static JackElement FromAI(float ai) => (JackElement)System.Math.Clamp((int)ai, 0, (int)JackElement.Blight);
 
 		// Main colour (glows, beams, rings).
 		public static Color Main(JackElement e) => e switch {
@@ -36,6 +37,7 @@ namespace RobotJack.Common
 			JackElement.Tech => new Color(70, 225, 190),
 			JackElement.Plasma => new Color(90, 230, 255),
 			JackElement.Prism => Terraria.Main.DiscoColor,
+			JackElement.Blight => WorldGen.crimson ? new Color(235, 60, 70) : new Color(170, 90, 235),
 			_ => new Color(255, 130, 215),
 		};
 
@@ -49,6 +51,7 @@ namespace RobotJack.Common
 			JackElement.Tech => new Color(210, 255, 245),
 			JackElement.Plasma => new Color(225, 250, 255),
 			JackElement.Prism => Color.White,
+			JackElement.Blight => WorldGen.crimson ? new Color(255, 200, 150) : new Color(220, 255, 140),
 			_ => new Color(255, 245, 200),
 		};
 
@@ -61,6 +64,7 @@ namespace RobotJack.Common
 			JackElement.Tech => DustID.GemEmerald,
 			JackElement.Plasma => DustID.Electric,
 			JackElement.Prism => Dust((JackElement)Terraria.Main.rand.Next(Count)),
+			JackElement.Blight => WorldGen.crimson ? DustID.CrimsonSpray : DustID.Corruption,
 			_ => DustID.Enchanted_Pink,
 		};
 
@@ -73,6 +77,7 @@ namespace RobotJack.Common
 			JackElement.Tech => BuffID.Electrified,
 			JackElement.Plasma => BuffID.Electrified,
 			JackElement.Prism => Debuff((JackElement)Terraria.Main.rand.Next(Count)),
+			JackElement.Blight => WorldGen.crimson ? BuffID.Ichor : BuffID.CursedInferno,
 			_ => BuffID.Ichor,
 		};
 
@@ -85,6 +90,7 @@ namespace RobotJack.Common
 			JackElement.Shadow => RobotFormType.ShadowJack,
 			JackElement.Holy => RobotFormType.GodJack,
 			JackElement.Tech or JackElement.Plasma or JackElement.Prism => RobotFormType.ShiftTitan,
+			JackElement.Blight => RobotFormType.SpiderJack,
 			_ => RobotFormType.NovaJack,
 		};
 	}

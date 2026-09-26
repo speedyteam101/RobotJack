@@ -342,9 +342,11 @@ namespace RobotJack.Common
 			bool titan = ActiveForm == RobotFormType.ShiftTitan;
 			PlayerDrawLayer robotLayer = ModContent.GetInstance<RobotDrawLayer>();
 			PlayerDrawLayer titanLayer = ModContent.GetInstance<TitanDrawLayer>();
+			PlayerDrawLayer spiderLayer = ModContent.GetInstance<SpiderDrawLayer>();
 			foreach (PlayerDrawLayer layer in PlayerDrawLayerLoader.DrawOrder) {
 				if (layer == robotLayer
 					|| layer == titanLayer
+					|| layer == spiderLayer
 					|| (!titan && layer == PlayerDrawLayers.HeldItem)
 					|| layer == PlayerDrawLayers.ProjectileOverArm
 					|| (!titan && layer == PlayerDrawLayers.Wings)

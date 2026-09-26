@@ -14,6 +14,7 @@ namespace RobotJack.Content.Projectiles
 	// is held. It turns toward the cursor smoothly, stops at solid blocks, and hits everything along it every 6 ticks.
 	// ai[1] = element. ai[2] = 1: Omega Jack's Omega Cannon: three times as wide, twice as long, cuts through blocks,
 	// cycles through every element's colours and applies every element's debuff.
+	// ai[2] = 3: the same beam fired from an item (the Spider Laser Cannon), with no form needed.
 	// ai[2] = 2: the Shift Titan's Core Beam: fired from the titan's core, four times as wide and 1.5x as long,
 	// cutting through blocks.
 	public class ElementBeam : ModProjectile
@@ -22,6 +23,7 @@ namespace RobotJack.Content.Projectiles
 		private const float BaseWidth = 26f;
 		private bool Omega => Projectile.ai[2] == 1f;
 		private bool Titan => Projectile.ai[2] == 2f;
+		private bool ItemMode => Projectile.ai[2] == 3f; // fired by an item (the Laser Cannon leg weapon), not a form
 		private float BeamWidth => Omega ? BaseWidth * 3f : Titan ? BaseWidth * 4f : BaseWidth;
 		public const float TurnRate = 0.12f;
 
@@ -79,7 +81,7 @@ namespace RobotJack.Content.Projectiles
 
 			if (Projectile.owner == Main.myPlayer) {
 				bool holding = player.channel && !player.noItems && !player.CCed && !player.dead
-					&& player.HeldItem.shoot == Type && player.HeldItem.channel && player.GetModPlayer<RobotJackPlayer>().Transformed;
+					&& player.HeldItem.shoot == Type && player.HeldItem.channel && (ItemMode || player.GetModPlayer<RobotJackPlayer>().Transformed);
 				if (!holding) {
 					Projectile.Kill();
 					return;

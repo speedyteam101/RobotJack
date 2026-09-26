@@ -11,6 +11,7 @@ namespace RobotJack
 		internal enum MessageType : byte
 		{
 			TitanSync,
+			BuildMechanic, // a client used a Robot Assembly Kit
 		}
 
 		public override void Unload() {
@@ -27,6 +28,12 @@ namespace RobotJack
 					if (Main.netMode == NetmodeID.Server) {
 						// Forward to everyone else.
 						titan.SyncPlayer(-1, whoAmI, false);
+					}
+					break;
+				case MessageType.BuildMechanic:
+					if (Main.netMode == NetmodeID.Server) {
+						Common.Akutoku.AkutokuSystem.mechanicBuilt = true;
+						NetMessage.SendData(MessageID.WorldData);
 					}
 					break;
 			}
