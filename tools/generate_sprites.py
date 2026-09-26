@@ -647,9 +647,9 @@ ELEMENT_COLORS = {  # main, core, dark (matches Elements.cs)
 
 def robot_variant_sheets():
     base = {k: globals()[k] for k in JACK_VARIANTS["BlazeJack"]}
-    preview = Image.new("RGBA", (FRAME_W * 3 * (len(JACK_VARIANTS) + 1), FRAME_H), (28, 32, 46, 255))
+    preview = Image.new("RGBA", (FRAME_W * 3 * (len(JACK_VARIANTS) + 2), FRAME_H), (28, 32, 46, 255))
     x = 0
-    for name, pal in [("Robot", base)] + list(JACK_VARIANTS.items()):
+    for name, pal in [("Robot", base)] + list(JACK_VARIANTS.items()) + [("OmegaJack", OMEGA_PALETTE)]:
         globals().update(pal)
         body, bd = canvas(FRAME_W, FRAME_H * FRAMES)
         body_glow, bg = canvas(FRAME_W, FRAME_H * FRAMES)
@@ -748,11 +748,103 @@ def jack_variant_icons():
         invisible("Content/Projectiles/%s.png" % name)
 
 
+
+def _decor_omega(d, g, ox, y, frame):
+    # Every Robot Jack combined: Shadow's horns, Nova's halo and chest star, Frost's shoulder crystal,
+    # and the chest core ringed in all five element colours.
+    _decor_horns(d, g, ox, y, frame)
+    _decor_halo(d, g, ox, y, frame)
+    d.line([ox + 12, y + 10, ox + 14, y + 8], fill=(235, 250, 255, 255))
+    g.point((ox + 14, y + 8), fill=(200, 245, 255, 220))
+    for (dx, dy), col in zip(((-1, -1), (1, -1), (1, 1), (-1, 1), (0, -2)),
+                              [c[0] for c in ELEMENT_COLORS.values()]):
+        g.point((ox + 10 + dx, y + 13 + dy), fill=col[:3] + (230,))
+
+
+OMEGA_PALETTE = dict(RJ_HI=(252, 220, 125, 255), RJ=(72, 68, 88, 255), RJ_MID=(50, 47, 64, 255), RJ_D=(30, 28, 40, 255),
+                     RJ_NAVY=(190, 150, 55, 255), RJ_NAVY_L=(250, 215, 120, 255), RJ_VISOR=(8, 8, 14, 255),
+                     RJ_GLOW=(255, 255, 255, 255), RJ_GLOW_D=(200, 200, 230, 255), RJ_HALO=(255, 255, 255, 110),
+                     SCARF=(245, 245, 255, 255), SCARF_L=(255, 255, 255, 255), SCARF_D=(200, 170, 90, 255), RJ_DECOR=_decor_omega)
+
+
+def omega_icons():
+    rainbow = [c[0] for c in ELEMENT_COLORS.values()]
+    gold, white = (252, 220, 125, 255), WHITE
+
+    # Omega Trigger: a black and gold trigger with a rainbow button.
+    img, d = canvas(14, 16)
+    d.rounded_rectangle([3, 5, 10, 15], radius=2, fill=OUTLINE)
+    d.rounded_rectangle([4, 6, 9, 14], radius=1, fill=(50, 47, 64, 255))
+    d.line([4, 6, 4, 14], fill=gold)
+    d.rectangle([4, 0, 9, 5], fill=OUTLINE)
+    for i, col in enumerate(rainbow):
+        d.point((5 + i % 4, 1 + i // 4 * 2), fill=col)
+    d.rectangle([6, 2, 7, 3], fill=white)
+    d.rectangle([5, 8, 8, 11], fill=OUTLINE)
+    for i, col in enumerate(rainbow[:4]):
+        d.point((5 + i % 2 * 3, 8 + i // 2 * 3), fill=col)
+    d.rectangle([6, 9, 7, 10], fill=white)
+    save(img, "Content/Items/OmegaTrigger.png")
+
+    def form_inner(d):
+        d.rounded_rectangle([3, 3, 12, 11], radius=2, fill=(50, 47, 64, 255))
+        d.rectangle([6, 6, 12, 7], fill=white)
+        for i, col in enumerate(rainbow):
+            d.point((3 + i * 2, 2), fill=col)
+        d.rectangle([5, 12, 10, 14], fill=gold)
+    buff_icon("Content/Buffs/OmegaJackForm.png", form_inner)
+
+    def ring(d):
+        for i, col in enumerate(rainbow):
+            d.arc([0, 0, 15, 15], i * 72, i * 72 + 72, fill=col)
+
+    def cannon(d):
+        d.rectangle([0, 4, 5, 12], fill=OUTLINE); d.rectangle([1, 5, 4, 11], fill=gold)
+        for i, col in enumerate(rainbow):
+            d.line([5, 4 + i * 2, 15, 4 + i * 2], fill=col)
+        d.line([5, 8, 15, 8], fill=white)
+    def prism(d):
+        for i in range(10):
+            a = math.radians(i * 36)
+            col = rainbow[i % 5]
+            d.line([8 + math.cos(a) * 3, 8 + math.sin(a) * 3, 8 + math.cos(a) * 7, 8 + math.sin(a) * 7], fill=col)
+        d.ellipse([6, 6, 9, 9], fill=white)
+    def cataclysm(d):
+        d.rectangle([0, 13, 15, 15], fill=(120, 80, 45, 255))
+        for i, col in enumerate(rainbow):
+            x = 1 + i * 3
+            d.rectangle([x, 2 + (i % 2) * 3, x + 1, 12], fill=col)
+    def barrage(d):
+        for i, col in enumerate(rainbow):
+            x = 1 + i * 3
+            d.line([x, 0, x, 13], fill=col); d.point((x, 14), fill=white)
+        d.rectangle([4, 0, 11, 2], fill=STEEL)
+    def singularity(d):
+        ring(d)
+        d.ellipse([3, 3, 12, 12], outline=(200, 120, 255, 255)); d.ellipse([5, 5, 10, 10], fill=OUTLINE)
+    def timestop(d):
+        d.ellipse([1, 1, 14, 14], fill=OUTLINE); d.ellipse([2, 2, 13, 13], fill=(230, 235, 255, 255))
+        d.line([7, 7, 7, 3], fill=OUTLINE); d.line([7, 7, 10, 9], fill=OUTLINE)
+        ring(d)
+    def dash(d):
+        d.polygon([(15, 8), (8, 2), (8, 14)], fill=white)
+        for i, col in enumerate(rainbow):
+            d.line([0, 4 + i * 2, 7, 4 + i * 2], fill=col)
+    def ascension(d):
+        ring(d)
+        d.polygon([(7, 1), (12, 7), (9, 7), (9, 13), (6, 13), (6, 7), (3, 7)], fill=gold); d.line([7, 3, 7, 12], fill=white)
+    for name, fn in (("OmegaCannon", cannon), ("PrismStorm", prism), ("ElementalCataclysm", cataclysm), ("OmegaBarrage", barrage),
+                     ("SingularityAbility", singularity), ("TimeStop", timestop), ("OmegaDash", dash), ("Ascension", ascension)):
+        ability_icon("Content/Abilities/%s.png" % name, fn)
+    invisible("Content/Projectiles/Singularity.png")
+
+
 if __name__ == "__main__":
     robot_sheets()
     robot_variant_sheets()
     jack_variant_icons()
     stunned_buff()
+    omega_icons()
     robot_trigger()
     orbital_icon(); plasma_icon(); missiles_icon(); thruster_icon()
     robot_form_buff(); orbital_cooldown_buff()

@@ -1,6 +1,7 @@
 using RobotJack.Common;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RobotJack.Content.Buffs
 {
@@ -89,6 +90,45 @@ namespace RobotJack.Content.Buffs
 		public override void Update(Player player, ref int buffIndex) {
 			base.Update(player, ref buffIndex);
 			player.lifeRegen += 10; // +5 health per second
+		}
+	}
+
+	// Omega Jack: every Robot Jack combined. All the variants' perks, and far stronger stats.
+	public class OmegaJackForm : JackFormBuff
+	{
+		public override RobotFormType Form => RobotFormType.OmegaJack;
+		public override int DamageBonus => 80;
+		public override int DefenseBonus => 60;
+		public override int DamageReduction => 30;
+		public override int MoveSpeedBonus => 60;
+		public override int MaxLifeBonus => 200;
+		public override int CritBonus => 20;
+
+		// Jetpack sparks in every element.
+		protected override int JetSparkDust => Elements.Dust((JackElement)Main.rand.Next(Elements.Count));
+
+		public override void Update(Player player, ref int buffIndex) {
+			base.Update(player, ref buffIndex);
+			// Blaze
+			player.buffImmune[BuffID.OnFire] = true;
+			player.buffImmune[BuffID.OnFire3] = true;
+			player.buffImmune[BuffID.Burning] = true;
+			player.lavaImmune = true;
+			player.fireWalk = true;
+			// Frost
+			player.buffImmune[BuffID.Frostburn] = true;
+			player.buffImmune[BuffID.Chilled] = true;
+			player.iceSkate = true;
+			// Volt
+			player.buffImmune[BuffID.Electrified] = true;
+			player.GetAttackSpeed(DamageClass.Generic) += 0.2f;
+			// Shadow
+			player.buffImmune[BuffID.ShadowFlame] = true;
+			player.blackBelt = true;
+			// Nova
+			player.lifeRegen += 20; // +10 health per second
+
+			Lighting.AddLight(player.Center, Main.DiscoColor.ToVector3() * 0.5f);
 		}
 	}
 }

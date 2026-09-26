@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace RobotJack.Common
 {
@@ -12,12 +13,13 @@ namespace RobotJack.Common
 		VoltJack,
 		ShadowJack,
 		NovaJack,
+		OmegaJack,
 	}
 
 	public static class RobotFormTypeExtensions
 	{
-		// Robot Jack and his five elemental variants (same size and body, different colours and abilities).
-		public static bool IsJack(this RobotFormType form) => form == RobotFormType.RobotJack || form.Element() != null;
+		// Robot Jack, his five elemental variants and Omega Jack (same size and body, different colours and abilities).
+		public static bool IsJack(this RobotFormType form) => form == RobotFormType.RobotJack || form == RobotFormType.OmegaJack || form.Element() != null;
 
 		// The element of a Robot Jack variant, or null for every other form.
 		public static JackElement? Element(this RobotFormType form) => form switch {
@@ -29,8 +31,11 @@ namespace RobotJack.Common
 			_ => null,
 		};
 
-		// Colour of the form's glow (afterimages, transformation burst). Robot Jack is cyan.
+		// Colour of the form's glow (afterimages, transformation burst). Robot Jack is cyan, Omega Jack cycles the rainbow.
 		public static Color GlowColor(this RobotFormType form) {
+			if (form == RobotFormType.OmegaJack) {
+				return Main.DiscoColor;
+			}
 			JackElement? element = form.Element();
 			return element.HasValue ? Elements.Main(element.Value) : new Color(90, 230, 255);
 		}

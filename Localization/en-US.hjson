@@ -326,6 +326,76 @@ Mods: {
 				Tooltip: Celestial Blessing for 10 seconds: +10 health per second and +15% damage
 			}
 
+			OmegaTrigger: {
+				DisplayName: Omega Trigger
+				Tooltip:
+					'''
+					Use to transform into Omega Jack, every Robot Jack combined; use again to turn back
+					Form: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+					Has every variant's perk: immune to fire, lava, cold, electricity and shadowflame,
+					no slipping on ice, +20% attack speed, a chance to dodge and +10 health per second
+					While transformed you get Omega Jack's eight ability items
+					Crafted from the Robot Trigger and all five variant triggers, which you keep
+					"All of them. At once."
+					'''
+			}
+
+			OmegaCannon: {
+				DisplayName: Omega Cannon
+				Tooltip:
+					'''
+					Hold left click: a colossal rainbow beam from your arm cannon
+					It cuts through blocks, reaches across the screen and applies every element
+					'''
+			}
+
+			PrismStorm: {
+				DisplayName: Prism Storm
+				Tooltip: Thirty homing, exploding bolts of every element burst out in all directions
+			}
+
+			ElementalCataclysm: {
+				DisplayName: Elemental Cataclysm
+				Tooltip: Twenty-five eruptions of every element tear across the ground around the cursor
+			}
+
+			OmegaBarrage: {
+				DisplayName: Omega Barrage
+				Tooltip: Five satellites fire orbital strikes in a row across the cursor
+			}
+
+			SingularityAbility: {
+				DisplayName: Singularity
+				Tooltip:
+					'''
+					Open a black hole at the cursor that drags in and shreds everything nearby, even bosses
+					After 4 seconds it collapses into five huge elemental explosions
+					'''
+			}
+
+			TimeStop: {
+				DisplayName: Time Stop
+				Tooltip: Freeze every enemy on screen in place for 6 seconds (not bosses)
+			}
+
+			OmegaDash: {
+				DisplayName: Omega Dash
+				Tooltip:
+					'''
+					Dash toward the cursor, invincible for a second,
+					leaving a line of explosions of every element behind you
+					'''
+			}
+
+			Ascension: {
+				DisplayName: Ascension
+				Tooltip:
+					'''
+					Ascend for 15 seconds: every variant's power-up at once
+					(Overheat, Cryo Armor, Overcharge, Vampiric Shroud and Celestial Blessing)
+					'''
+			}
+
 			RobotJetpack: {
 				DisplayName: Robot Jetpack
 				Tooltip:
@@ -370,6 +440,11 @@ Mods: {
 
 			NovaJackForm: {
 				DisplayName: Nova Jack
+				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
+			}
+
+			OmegaJackForm: {
+				DisplayName: Omega Jack
 				Description: +{0}% damage, +{1} defense, {2}% damage reduction, +{3}% movement speed, +{4} max life, +{5}% crit chance
 			}
 
@@ -425,6 +500,7 @@ Mods: {
 			ElementPillar.DisplayName: Eruption
 			ElementAura.DisplayName: Element Aura
 			ElementOrbiter.DisplayName: Orbiting Orb
+			Singularity.DisplayName: Singularity
 		}
 
 		DropConditions: {

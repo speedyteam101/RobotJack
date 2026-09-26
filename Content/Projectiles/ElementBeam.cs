@@ -11,16 +11,21 @@ namespace RobotJack.Content.Projectiles
 {
 	// A Robot Jack variant's element beam: fired continuously from the arm cannon toward the cursor while left click
 	// is held. It turns toward the cursor smoothly, stops at solid blocks, and hits everything along it every 6 ticks.
-	// ai[1] = element.
+	// ai[1] = element. ai[2] = 1: Omega Jack's Omega Cannon: three times as wide, twice as long, cuts through blocks,
+	// cycles through every element's colours and applies every element's debuff.
 	public class ElementBeam : ModProjectile
 	{
 		public const float MaxLength = 1400f;
-		public const float BeamWidth = 26f;
+		private const float BaseWidth = 26f;
+		private bool Omega => Projectile.ai[2] == 1f;
+		private float BeamWidth => Omega ? BaseWidth * 3f : BaseWidth;
 		public const float TurnRate = 0.12f;
 
 		private JackElement Element => Elements.FromAI(Projectile.ai[1]);
-		private Color Outer => Elements.Main(Element);
-		private Color Mid => Elements.Core(Element);
+		// Omega shifts colour through the elements over time.
+		private JackElement DrawElement => Omega ? (JackElement)((int)(Main.GameUpdateCount / 8) % Elements.Count) : Element;
+		private Color Outer => Omega ? Main.DiscoColor : Elements.Main(DrawElement);
+		private Color Mid => Elements.Core(DrawElement);
 
 		private static Asset<Texture2D> beamTex, glowTex;
 
@@ -30,7 +35,7 @@ namespace RobotJack.Content.Projectiles
 		private float length;
 
 		public override void SetStaticDefaults() {
-			ProjectileID.Sets.DrawScreenCheckFluff[Type] = (int)MaxLength + 200;
+			ProjectileID.Sets.DrawScreenCheckFluff[Type] = (int)MaxLength * 2 + 200;
 			if (!Main.dedServ) {
 				beamTex = ModContent.Request<Texture2D>("RobotJack/Content/Projectiles/OrbitalBeam");
 				glowTex = ModContent.Request<Texture2D>("RobotJack/Content/Projectiles/OrbitalGlow");
@@ -97,7 +102,7 @@ namespace RobotJack.Content.Projectiles
 			player.itemAnimation = 2;
 			player.itemRotation = (dir * Projectile.direction).ToRotation();
 
-			length = MeasureLength(Projectile.Center, dir);
+			length = Omega ? MaxLength * 2f : MeasureLength(Projectile.Center, dir);
 
 			if (Timer % 20 == 1) {
 				SoundEngine.PlaySound(SoundID.Item15 with { Pitch = 0.3f, Volume = 0.7f }, Projectile.Center);
@@ -106,7 +111,7 @@ namespace RobotJack.Content.Projectiles
 			// Sparks where it hits.
 			Vector2 end = Projectile.Center + dir * length;
 			for (int i = 0; i < 2; i++) {
-				Dust dust = Dust.NewDustPerfect(end, Elements.Dust(Element), -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
+				Dust dust = Dust.NewDustPerfect(end, Elements.Dust(DrawElement), -dir.RotatedByRandom(1f) * Main.rand.NextFloat(2f, 6f), Scale: 1.2f);
 				dust.noGravity = true;
 			}
 			for (float d = 0; d < length; d += 48f) {
@@ -135,7 +140,14 @@ namespace RobotJack.Content.Projectiles
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-			ElementFX.Hit(target, Element);
+			if (Omega) {
+				for (int i = 0; i < Elements.Count; i++) {
+					ElementFX.Hit(target, (JackElement)i);
+				}
+			}
+			else {
+				ElementFX.Hit(target, Element);
+			}
 		}
 
 		private static Color Glow(Color color, float opacity) => new Color(color.R, color.G, color.B, 0) * opacity;

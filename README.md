@@ -1,6 +1,6 @@
 # Robot Jack — a tModLoader mod for Terraria
 
-A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants), and use ability items, headlined by the **Orbital Cannon Strike**.
+A small standalone mod for **tModLoader 1.4.4**: find the **Robot Trigger**, transform into a sci-fi combat robot (or one of five elemental variants, or Omega Jack, all of them combined), and use ability items, headlined by the **Orbital Cannon Strike**.
 
 ## Installing (from source)
 
@@ -78,6 +78,27 @@ Their abilities are built from these kinds, each in the variant's element (fire 
 
 Base damage is higher for the later variants (Volt and Shadow ×2, Nova ×3.5 of Blaze/Frost's), and everything still scales with bosses beaten.
 
+## Omega Jack
+
+**Every Robot Jack combined.** The **Omega Trigger** is crafted from the Robot Trigger and all five variant triggers (none of them are used up, so you keep every form) plus **25 Luminite Bar and 10 Solar Fragment** at the Ancient Manipulator (post-Moon Lord).
+
+- **Look:** black and gold armor with a white visor and scarf, Shadow Jack's horns, Nova Jack's halo, Frost Jack's shoulder crystal and a chest core ringed in all five element colors. Its afterimages, jetpack sparks and bigger transformation burst cycle through the rainbow.
+- **Stats:** +80% damage, +20% crit, +60 defense, 30% damage reduction, +60% movement speed, +200 max life.
+- **Every variant's perk:** immune to fire, lava, cold, electricity and shadowflame, no slipping on ice, +20% attack speed, a chance to dodge attacks, +10 health per second.
+
+| Ability | Base damage | What it does |
+| --- | --- | --- |
+| **Omega Cannon** | 160 every 6 ticks | **Hold left click**: a colossal rainbow beam, three times as wide as the variants' beams and twice as long. It **cuts through blocks** and applies every element's debuff. |
+| **Prism Storm** | 140 ×30 | Thirty homing, exploding bolts of every element burst out in all directions (auto-fire). |
+| **Elemental Cataclysm** | 450 per pillar | Twenty-five eruptions of every element ripple out across 100 tiles of ground around the cursor. **12 s cooldown.** |
+| **Omega Barrage** | 1,500 per hit | Five satellites fire orbital strikes in a row across the cursor, each beam hitting about ten times. **20 s cooldown.** |
+| **Singularity** | 200 every 10 ticks, collapse 1,200 ×5 | A black hole at the cursor drags in everything within ~44 tiles, **bosses included** (at a third of the speed), swallows enemy projectiles and shreds anything near its core. After 4 s it collapses into five huge elemental explosions. **25 s cooldown.** |
+| **Time Stop** | none | Freezes every enemy within ~110 tiles in place for 6 s. Bosses aren't frozen. **40 s cooldown.** |
+| **Omega Dash** | 400 (melee) | Dash toward the cursor, invincible for a second, leaving a line of six explosions of every element. |
+| **Ascension** | none | For 15 s, all five variant power-ups at once: +45% damage, +25 defense, 20% damage reduction, +40% speed, +25% attack speed, burning hits, life steal and +10 health per second. **60 s cooldown.** |
+
+All of them still scale with bosses beaten, on top of Omega Jack's +80% damage.
+
 ## Robot Jetpack
 
 An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
@@ -91,4 +112,4 @@ An accessory worn in the **wings slot**. Anyone can wear it, transformed or not.
 All sprites are placeholders drawn by `tools/generate_sprites.py` (needs Pillow: `pip install pillow`; run it from this folder).
 Replace any PNG with hand-made art at the same size whenever you like. The robot sheets (`Content/Players/RobotBody*.png`, `RobotLegs*.png`) use the vanilla player sheet layout: 20 frames of 40×56 stacked vertically (0 idle, 1–4 arm aiming up → down, 5 jump, 6–19 walk cycle). The `_Glow` sheets are drawn full-bright on top.
 
-`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.
+`tools/robot_preview_8x.png` is an enlarged preview of a few robot frames, and `tools/jack_variants_preview_6x.png` shows Robot Jack next to his five variants and Omega Jack, whose sheets (`Content/Players/<Variant>Body*.png`, `<Variant>Legs*.png`) use the same layout.
